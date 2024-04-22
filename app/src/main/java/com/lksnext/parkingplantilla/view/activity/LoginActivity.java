@@ -1,13 +1,23 @@
 package com.lksnext.parkingplantilla.view.activity;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
+import android.util.TypedValue;
+import android.view.ContextThemeWrapper;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.lksnext.parkingplantilla.databinding.ActivityLoginBinding;
 import com.lksnext.parkingplantilla.viewmodel.LoginViewModel;
+import com.lksnext.parkingplantilla.R;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -51,5 +61,25 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
+        setSpannedTitle();
+    }
+
+    private void setSpannedTitle(){
+        TextView title = findViewById(R.id.title);
+        String text = title.getText().toString();
+        SpannableString spannableString = new SpannableString(text);
+
+        Resources.Theme theme = getTheme();
+        TypedValue typedValue = new TypedValue();
+        theme.resolveAttribute(R.attr.colorPrimary, typedValue, true);
+        int color = typedValue.data;
+
+        spannableString.setSpan(new ForegroundColorSpan(color), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        int secondWordStart = text.indexOf("S");
+        spannableString.setSpan(new ForegroundColorSpan(color), secondWordStart, secondWordStart + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        title.setText(spannableString);
     }
 }

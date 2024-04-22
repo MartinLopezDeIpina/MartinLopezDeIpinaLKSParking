@@ -1,5 +1,14 @@
 <resources>
-    <string name="app_name">ParkingPlantilla</string>
+    <string name="app_name">QuickSpot</string>
+
+    <string name="usuario_hint">Usuario</string>
+    <string name="usuario_helper">Introduce el correo o nombre de usuario</string>
+    <string name="password_hint">Contraseña</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="forgot_password">He olvidado mi contraseña</string>
+    <string name="google_login">Continuar con Google</string>
+    <string name="not_registered">¿No estás registrado?</string>
+    <string name="register">Registrarse</string>
 
     <string name="selectDate">Selecciona una fecha</string>
 

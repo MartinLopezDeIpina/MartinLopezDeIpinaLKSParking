@@ -70,6 +70,9 @@
     </style>
 
     <style name="GreenDark" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:fontFamily">@font/robotoregular</item>
+        <item name="android:statusBarColor">@color/greenDark_surface</item>
+
         <item name="colorPrimary">@color/greenDark_primary</item>
         <item name="colorOnPrimary">@color/greenDark_onPrimary</item>
         <item name="colorPrimaryContainer">@color/greenDark_primaryContainer</item>

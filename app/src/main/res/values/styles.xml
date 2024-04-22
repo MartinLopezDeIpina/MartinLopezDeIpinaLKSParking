@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TextInputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeWidthFocused">4dp</item>
+    </style>
+    <style name="HeadingStyle">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textSize">36sp</item>
+        <item name="fontFamily">@font/robotobold</item>
+    </style>
+    <style name="PrimaryButton">
+        <item name="fontFamily">@font/robotobold</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="backgroundTint">?attr/colorPrimaryContainer</item>
+        <item name="textFillColor">?attr/colorOnPrimary</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:paddingLeft">32dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingRight">32dp</item>
+        <item name="android:paddingBottom">16dp</item>
+    </style>
+</resources>
