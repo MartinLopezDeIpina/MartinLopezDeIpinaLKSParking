@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/newres"
-        android:title="Nueva reserva"
-        android:icon="@drawable/ic_newres_foreground"/>
+        android:title="Inicio"
+        android:icon="@drawable/iconocasa"/>
     <item
         android:id="@+id/reservations"
-        android:title="Mis reservas"
-        android:icon="@drawable/ic_reservations_foreground"/>
+        android:title="Reservas"
+        android:icon="@drawable/iconoreserva"/>
     <item
         android:id="@+id/person"
-        android:title="Perfil"
-        android:icon="@drawable/ic_person_foreground"/>
+        android:title="Tú"
+        android:icon="@drawable/iconotu"/>
 </menu>

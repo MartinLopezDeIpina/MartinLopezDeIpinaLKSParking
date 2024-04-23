@@ -10,6 +10,11 @@
     <string name="not_registered">¿No estás registrado?</string>
     <string name="register">Registrarse</string>
 
+    <string name="active_reservations">Reservas activas</string>
+    <string name="add_reservation">Añadir reserva</string>
+    <string name="settings">Ajustes</string>
+
+
     <string name="selectDate">Selecciona una fecha</string>
 
     <string name="fragment_main">Main</string>

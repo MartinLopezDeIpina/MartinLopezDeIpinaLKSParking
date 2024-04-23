@@ -11,4 +11,13 @@
         android:label="@string/fragment_main"
         tools:layout="@layout/fragment_main">
     </fragment>
+    <fragment
+        android:id="@+id/bookFragment"
+        android:name="com.lksnext.parkingplantilla.view.fragment.BookFragment"
+        tools:layout="@layout/fragment_book"/>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.lksnext.parkingplantilla.view.fragment.ProfileFragment"
+        tools:layout="@layout/fragment_profile"/>
+
 </navigation>
