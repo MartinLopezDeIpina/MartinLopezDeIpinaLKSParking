@@ -26,6 +26,7 @@
         app:itemTextAppearanceInactive="@style/NavStyleUnselected"
         app:itemTextColor="@color/bottom_nav_text_colors"
         app:itemIconTint="@color/bottom_nav_icon_colors"
+        app:backgroundTint="?attr/colorSurfaceContainerLow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_nav_menu"/>
 

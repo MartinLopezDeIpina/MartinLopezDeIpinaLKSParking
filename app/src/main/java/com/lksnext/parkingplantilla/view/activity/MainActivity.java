@@ -1,9 +1,12 @@
 package com.lksnext.parkingplantilla.view.activity;
 
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.TypedValue;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -52,6 +55,14 @@ public class MainActivity extends BaseActivity {
             }
             return false;
         });
+
+
+        TypedValue typedValue = new TypedValue();
+        getTheme().resolveAttribute(R.attr.colorSurfaceContainerLow, typedValue, true);
+        int color = typedValue.data;
+
+        // Establece el color de la barra de navegación
+        getWindow().setNavigationBarColor(color);
     }
 
     @Override

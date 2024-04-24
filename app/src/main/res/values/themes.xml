@@ -25,6 +25,11 @@
     </style>
 
     <style name="Light" parent="Theme.Material3.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/greenLight_surface</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/greenLight_surface</item>
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
+
         <item name="colorPrimary">@color/greenLight_primary</item>
         <item name="colorOnPrimary">@color/greenLight_onPrimary</item>
         <item name="colorPrimaryContainer">@color/greenLight_primaryContainer</item>
@@ -75,6 +80,9 @@
 
     <style name="Dark" parent="Theme.Material3.Dark.NoActionBar">
         <item name="android:statusBarColor">@color/greenDark_surface</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/greenDark_surface</item>
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
 
         <item name="colorPrimary">@color/greenDark_primary</item>
         <item name="colorOnPrimary">@color/greenDark_onPrimary</item>
