@@ -8,6 +8,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.widget.TextView;
@@ -64,6 +65,7 @@ public class LoginActivity extends BaseActivity {
         });
 
         setSpannedTitle();
+        setUnderlinedForgotPassword();
     }
 
     private void setSpannedTitle(){
@@ -82,5 +84,12 @@ public class LoginActivity extends BaseActivity {
         spannableString.setSpan(new ForegroundColorSpan(color), secondWordStart, secondWordStart + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         title.setText(spannableString);
+    }
+
+    private void setUnderlinedForgotPassword(){
+        TextView forgotPassButton = findViewById(R.id.forgotPassButton);
+        SpannableString content = new SpannableString(forgotPassButton.getText().toString());
+        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+        forgotPassButton.setText(content);
     }
 }
