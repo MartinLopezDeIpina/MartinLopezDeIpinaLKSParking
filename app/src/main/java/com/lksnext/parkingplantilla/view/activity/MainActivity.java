@@ -1,5 +1,6 @@
 package com.lksnext.parkingplantilla.view.activity;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.lksnext.parkingplantilla.R;
 import com.lksnext.parkingplantilla.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     BottomNavigationView bottomNavigationView;
     ActivityMainBinding binding;

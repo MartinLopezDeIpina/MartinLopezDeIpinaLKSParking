@@ -1,6 +1,7 @@
 package com.lksnext.parkingplantilla.view.activity;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -19,7 +20,7 @@ import com.lksnext.parkingplantilla.databinding.ActivityLoginBinding;
 import com.lksnext.parkingplantilla.viewmodel.LoginViewModel;
 import com.lksnext.parkingplantilla.R;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     private ActivityLoginBinding binding;
     private LoginViewModel loginViewModel;

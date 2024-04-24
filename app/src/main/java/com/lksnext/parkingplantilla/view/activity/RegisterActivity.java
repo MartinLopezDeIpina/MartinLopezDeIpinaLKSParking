@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.lksnext.parkingplantilla.databinding.ActivityRegisterBinding;
 import com.lksnext.parkingplantilla.viewmodel.RegisterViewModel;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends BaseActivity {
 
     private ActivityRegisterBinding binding;
     private RegisterViewModel registerViewModel;

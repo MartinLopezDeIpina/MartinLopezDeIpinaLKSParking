@@ -20,7 +20,11 @@
         <item name="hintTextColor">@color/orangeDark</item>
     </style>
 
-    <style name="GreenLight" parent="Theme.Material3.Light.NoActionBar">
+    <style name="AppTheme">
+        <item name="android:fontFamily">@font/robotoregular</item>
+    </style>
+
+    <style name="Light" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/greenLight_primary</item>
         <item name="colorOnPrimary">@color/greenLight_onPrimary</item>
         <item name="colorPrimaryContainer">@color/greenLight_primaryContainer</item>
@@ -69,8 +73,7 @@
         <item name="colorSurfaceContainerHighest">@color/greenLight_surfaceContainerHighest</item>
     </style>
 
-    <style name="GreenDark" parent="Theme.Material3.Dark.NoActionBar">
-        <item name="android:fontFamily">@font/robotoregular</item>
+    <style name="Dark" parent="Theme.Material3.Dark.NoActionBar">
         <item name="android:statusBarColor">@color/greenDark_surface</item>
 
         <item name="colorPrimary">@color/greenDark_primary</item>
