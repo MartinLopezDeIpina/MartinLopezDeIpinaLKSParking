@@ -6,7 +6,7 @@ public class Hora {
     long horaFin;
 
     public Hora() {
-        System.out.println("prueba");
+        System.out.println("otra prueba");
     }
     public Hora(long horaInicio, long horaFin) {
         this.horaInicio = horaInicio;
