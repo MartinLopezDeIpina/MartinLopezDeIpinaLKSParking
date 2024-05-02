@@ -1,5 +1,14 @@
 apply plugin: 'com.android.application'
 apply plugin: 'androidx.navigation.safeargs'
+apply plugin: 'org.sonarqube'
+
+sonar {
+    properties {
+        property "sonar.projectKey", "martinaulalks_parkinglks-martin-lopez-de-ipina"
+        property "sonar.organization", "martinaulalks"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
+}
 
 android {
     compileSdk 34
