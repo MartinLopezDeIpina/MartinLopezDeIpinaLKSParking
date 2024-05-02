@@ -18,6 +18,7 @@ public class Plaza {
         return tipo;
     }
 
+
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
