@@ -27,7 +27,7 @@ public class MainFragment extends Fragment {
 
         BookContainerFragment bookContainerFragment = new BookContainerFragment();
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.add(R.id.book_container, bookContainerFragment);
+        transaction.replace(R.id.book_container, bookContainerFragment);
         transaction.commit();
 
         return inflater.inflate(R.layout.fragment_main, container, false);

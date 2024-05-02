@@ -28,16 +28,13 @@ public class BookContainerFragment extends Fragment {
         // Es necesario un constructor vacio
     }
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_bookcontainer, container, false);
-    }
+        com.lksnext.parkingplantilla.databinding.FragmentBookcontainerBinding binding =
+            com.lksnext.parkingplantilla.databinding.FragmentBookcontainerBinding.inflate(inflater, container, false);
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        recyclerView = view.findViewById(R.id.bookRecyclerView);
+        recyclerView = binding.bookRecyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         List<Reserva> reservations = new ArrayList<>();
@@ -50,5 +47,12 @@ public class BookContainerFragment extends Fragment {
 
         adapter = new ReservationAdapter(reservations);
         recyclerView.setAdapter(adapter);
+
+        return binding.getRoot();
+    }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
     }
 }
