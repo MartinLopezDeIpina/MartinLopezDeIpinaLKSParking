@@ -23,6 +23,75 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/heading"
         />
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/book_container"
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginEnd="50dp"
+            >
+
+            <ImageButton
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:contentDescription="@string/add"
+                app:backgroundTint="?attr/colorPrimaryContainer"
+                android:background="@drawable/main_button"
+                android:src="@drawable/addicon"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="16sp"
+                android:text="@string/add"
+                android:textColor="?attr/colorOnSecondaryContainer"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <ImageButton
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:contentDescription="@string/more"
+                app:backgroundTint="?attr/colorPrimaryContainer"
+                android:background="@drawable/main_button"
+                android:src="@drawable/moreicon"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="16sp"
+                android:text="@string/more"
+                android:textColor="?attr/colorOnSecondaryContainer"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                >
+            </TextView>
+
+    </LinearLayout>
+</LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

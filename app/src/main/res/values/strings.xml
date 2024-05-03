@@ -22,6 +22,8 @@
     <string name="fragment_step2">Step 2</string>
     <string name="fragment_end">End</string>
     <string name="buscar">Buscar plazas libres</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="add">Añadir</string>
+    <string name="more">Ver más</string>
+
 </resources>

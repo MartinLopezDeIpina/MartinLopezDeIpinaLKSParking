@@ -55,8 +55,8 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
         }
 
         public void bind(Reserva reservation) {
-            reservationPlaza.setText(Long.toString(reservation.getPlazaId().getId()));
-            reservationDate.setText(reservation.getFecha().toString());
+            reservationPlaza.setText(String.format("Plaza %s",reservation.getPlazaId().getId()));
+            reservationDate.setText(reservation.getFecha());
 
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
             String horaInicio = sdf.format(new Date(reservation.getHoraInicio().getHoraInicio()));
