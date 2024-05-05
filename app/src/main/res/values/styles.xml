@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TextInputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeWidthFocused">4dp</item>
+    </style>
+    <style name="HeadingStyle">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textSize">36sp</item>
+        <item name="fontFamily">@font/robotobold</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">36dp</item>
+    </style>
+    <style name="LoginHeadingStyle" parent="HeadingStyle">
+        <item name="android:layout_marginTop">48dp</item>
+        <item name="android:layout_marginStart">108dp</item>
+    </style>
+    <style name="PrimaryButton">
+        <item name="fontFamily">@font/robotobold</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="backgroundTint">?attr/colorPrimaryContainer</item>
+        <item name="textFillColor">?attr/colorOnPrimary</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:paddingLeft">28dp</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingRight">28dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:layout_width">250dp</item>
+    </style>
+    <style name="NavStyleUnselected" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/robotomedium</item>
+    </style>
+    <style name="NavStyleSelected" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">15sp</item>
+        <item name="android:fontFamily">@font/robotobold</item>
+    </style>
+</resources>

@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">QuickSpot</string>
+
+    <string name="usuario_hint">Usuario</string>
+    <string name="usuario_helper">Introduce el correo o nombre de usuario</string>
+    <string name="password_hint">Contraseña</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="forgot_password">He olvidado mi contraseña</string>
+    <string name="google_login">Continuar con Google</string>
+    <string name="not_registered">¿No estás registrado?</string>
+    <string name="register">Registrarse</string>
+
+    <string name="active_reservations">Reservas activas</string>
+    <string name="add_reservation">Añadir reserva</string>
+    <string name="settings">Ajustes</string>
+
+
+    <string name="selectDate">Selecciona una fecha</string>
+
+    <string name="fragment_main">Main</string>
+    <string name="fragment_step1">Step 1</string>
+    <string name="fragment_step2">Step 2</string>
+    <string name="fragment_end">End</string>
+    <string name="buscar">Buscar plazas libres</string>
+
+    <string name="add">Añadir</string>
+    <string name="more">Ver más</string>
+
+</resources>

@@ -1,0 +1,135 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.ParkingLKS" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/orange</item>
+        <item name="colorPrimaryVariant">@color/orange</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="android:textColorHint">@color/orangeDark</item>
+    </style>
+
+    <style name="Theme.ParkingLKS.TextInputLayout">
+        <item name="android:textColorHint">@color/orange</item>
+        <item name="hintTextColor">@color/orangeDark</item>
+    </style>
+
+    <style name="AppTheme">
+        <item name="android:fontFamily">@font/robotoregular</item>
+    </style>
+
+    <style name="Light" parent="Theme.Material3.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/greenLight_surface</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/greenLight_surface</item>
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
+
+        <item name="colorPrimary">@color/greenLight_primary</item>
+        <item name="colorOnPrimary">@color/greenLight_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/greenLight_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/greenLight_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/greenLight_secondary</item>
+        <item name="colorOnSecondary">@color/greenLight_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/greenLight_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/greenLight_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/greenLight_tertiary</item>
+        <item name="colorOnTertiary">@color/greenLight_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/greenLight_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/greenLight_onTertiaryContainer</item>
+        <item name="colorError">@color/greenLight_error</item>
+        <item name="colorOnError">@color/greenLight_onError</item>
+        <item name="colorErrorContainer">@color/greenLight_errorContainer</item>
+        <item name="colorOnErrorContainer">@color/greenLight_onErrorContainer</item>
+        <item name="android:colorBackground">@color/greenLight_background</item>
+        <item name="colorOnBackground">@color/greenLight_onBackground</item>
+        <item name="colorSurface">@color/greenLight_surface</item>
+        <item name="colorOnSurface">@color/greenLight_onSurface</item>
+        <item name="colorSurfaceVariant">@color/greenLight_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/greenLight_onSurfaceVariant</item>
+        <item name="colorOutline">@color/greenLight_outline</item>
+        <item name="colorOutlineVariant">@color/greenLight_outlineVariant</item>
+        <item name="colorSurfaceInverse">@color/greenLight_inverseSurface</item>
+        <item name="colorOnSurfaceInverse">@color/greenLight_inverseOnSurface</item>
+        <item name="colorPrimaryInverse">@color/greenLight_inversePrimary</item>
+        <item name="colorPrimaryFixed">@color/greenLight_primaryFixed</item>
+        <item name="colorOnPrimaryFixed">@color/greenLight_onPrimaryFixed</item>
+        <item name="colorPrimaryFixedDim">@color/greenLight_primaryFixedDim</item>
+        <item name="colorOnPrimaryFixedVariant">@color/greenLight_onPrimaryFixedVariant</item>
+        <item name="colorSecondaryFixed">@color/greenLight_secondaryFixed</item>
+        <item name="colorOnSecondaryFixed">@color/greenLight_onSecondaryFixed</item>
+        <item name="colorSecondaryFixedDim">@color/greenLight_secondaryFixedDim</item>
+        <item name="colorOnSecondaryFixedVariant">@color/greenLight_onSecondaryFixedVariant</item>
+        <item name="colorTertiaryFixed">@color/greenLight_tertiaryFixed</item>
+        <item name="colorOnTertiaryFixed">@color/greenLight_onTertiaryFixed</item>
+        <item name="colorTertiaryFixedDim">@color/greenLight_tertiaryFixedDim</item>
+        <item name="colorOnTertiaryFixedVariant">@color/greenLight_onTertiaryFixedVariant</item>
+        <item name="colorSurfaceDim">@color/greenLight_surfaceDim</item>
+        <item name="colorSurfaceBright">@color/greenLight_surfaceBright</item>
+        <item name="colorSurfaceContainerLowest">@color/greenLight_surfaceContainerLowest</item>
+        <item name="colorSurfaceContainerLow">@color/greenLight_surfaceContainerLow</item>
+        <item name="colorSurfaceContainer">@color/greenLight_surfaceContainer</item>
+        <item name="colorSurfaceContainerHigh">@color/greenLight_surfaceContainerHigh</item>
+        <item name="colorSurfaceContainerHighest">@color/greenLight_surfaceContainerHighest</item>
+    </style>
+
+    <style name="Dark" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:statusBarColor">@color/greenDark_surface</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/greenDark_surface</item>
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
+
+        <item name="colorPrimary">@color/greenDark_primary</item>
+        <item name="colorOnPrimary">@color/greenDark_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/greenDark_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/greenDark_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/greenDark_secondary</item>
+        <item name="colorOnSecondary">@color/greenDark_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/greenDark_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/greenDark_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/greenDark_tertiary</item>
+        <item name="colorOnTertiary">@color/greenDark_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/greenDark_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/greenDark_onTertiaryContainer</item>
+        <item name="colorError">@color/greenDark_error</item>
+        <item name="colorOnError">@color/greenDark_onError</item>
+        <item name="colorErrorContainer">@color/greenDark_errorContainer</item>
+        <item name="colorOnErrorContainer">@color/greenDark_onErrorContainer</item>
+        <item name="android:colorBackground">@color/greenDark_background</item>
+        <item name="colorOnBackground">@color/greenDark_onBackground</item>
+        <item name="colorSurface">@color/greenDark_surface</item>
+        <item name="colorOnSurface">@color/greenDark_onSurface</item>
+        <item name="colorSurfaceVariant">@color/greenDark_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/greenDark_onSurfaceVariant</item>
+        <item name="colorOutline">@color/greenDark_outline</item>
+        <item name="colorOutlineVariant">@color/greenDark_outlineVariant</item>
+        <item name="colorSurfaceInverse">@color/greenDark_inverseSurface</item>
+        <item name="colorOnSurfaceInverse">@color/greenDark_inverseOnSurface</item>
+        <item name="colorPrimaryInverse">@color/greenDark_inversePrimary</item>
+        <item name="colorPrimaryFixed">@color/greenDark_primaryFixed</item>
+        <item name="colorOnPrimaryFixed">@color/greenDark_onPrimaryFixed</item>
+        <item name="colorPrimaryFixedDim">@color/greenDark_primaryFixedDim</item>
+        <item name="colorOnPrimaryFixedVariant">@color/greenDark_onPrimaryFixedVariant</item>
+        <item name="colorSecondaryFixed">@color/greenDark_secondaryFixed</item>
+        <item name="colorOnSecondaryFixed">@color/greenDark_onSecondaryFixed</item>
+        <item name="colorSecondaryFixedDim">@color/greenDark_secondaryFixedDim</item>
+        <item name="colorOnSecondaryFixedVariant">@color/greenDark_onSecondaryFixedVariant</item>
+        <item name="colorTertiaryFixed">@color/greenDark_tertiaryFixed</item>
+        <item name="colorOnTertiaryFixed">@color/greenDark_onTertiaryFixed</item>
+        <item name="colorTertiaryFixedDim">@color/greenDark_tertiaryFixedDim</item>
+        <item name="colorOnTertiaryFixedVariant">@color/greenDark_onTertiaryFixedVariant</item>
+        <item name="colorSurfaceDim">@color/greenDark_surfaceDim</item>
+        <item name="colorSurfaceBright">@color/greenDark_surfaceBright</item>
+        <item name="colorSurfaceContainerLowest">@color/greenDark_surfaceContainerLowest</item>
+        <item name="colorSurfaceContainerLow">@color/greenDark_surfaceContainerLow</item>
+        <item name="colorSurfaceContainer">@color/greenDark_surfaceContainer</item>
+        <item name="colorSurfaceContainerHigh">@color/greenDark_surfaceContainerHigh</item>
+        <item name="colorSurfaceContainerHighest">@color/greenDark_surfaceContainerHighest</item>
+    </style>
+
+</resources>

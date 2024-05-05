@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/newres"
+        android:title="Inicio"
+        android:icon="@drawable/iconocasa"/>
+    <item
+        android:id="@+id/reservations"
+        android:title="Reservas"
+        android:icon="@drawable/iconoreserva"/>
+    <item
+        android:id="@+id/person"
+        android:title="Tú"
+        android:icon="@drawable/iconotu"/>
+</menu>
