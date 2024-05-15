@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="50dp"
     android:orientation="vertical"
     tools:context=".view.fragment.ProfileFragment">
@@ -70,17 +71,16 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/profileAndButtonsLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Prueba"
+        <include
+            layout="@layout/profile_layout_layout"
+            app:headerText="@{@string/profile_info_name}"
+            app:nameText="Martín"
             />
     </LinearLayout>
 
