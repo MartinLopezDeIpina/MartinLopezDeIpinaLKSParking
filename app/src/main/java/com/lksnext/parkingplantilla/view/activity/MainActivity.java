@@ -7,6 +7,7 @@ import android.util.TypedValue;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -15,6 +16,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.lksnext.parkingplantilla.R;
 import com.lksnext.parkingplantilla.databinding.ActivityMainBinding;
+import com.lksnext.parkingplantilla.viewmodel.MainViewModel;
 
 public class MainActivity extends BaseActivity {
 
@@ -29,6 +31,9 @@ public class MainActivity extends BaseActivity {
 
         //Asignamos la vista/interfaz main (layout)
         binding = ActivityMainBinding.inflate(getLayoutInflater());
+        MainViewModel viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        binding.setMainViewModel(viewModel);
+
         setContentView(binding.getRoot());
 
         //Con el NavigationHost podremos movernos por distintas pestañas dentro de la misma pantalla

@@ -38,10 +38,10 @@
     </style>
     <style name="ProfileInfoHeader">
         <item name="android:textColor">?attr/colorSurfaceVariant</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
     <style name="ProfileInfo">
         <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
-        <item name="android:textSize">24sp</item>
+        <item name="android:textSize">18sp</item>
     </style>
 </resources>
