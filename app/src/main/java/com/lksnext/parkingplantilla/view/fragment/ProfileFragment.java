@@ -1,5 +1,6 @@
 package com.lksnext.parkingplantilla.view.fragment;
 
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -13,9 +14,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lksnext.parkingplantilla.R;
+import com.lksnext.parkingplantilla.databinding.ActivityMainBinding;
+import com.lksnext.parkingplantilla.databinding.FragmentMainBinding;
+import com.lksnext.parkingplantilla.databinding.FragmentProfileBinding;
+import com.lksnext.parkingplantilla.viewmodel.MainViewModel;
 import com.lksnext.parkingplantilla.viewmodel.ProfileViewModel;
 
 public class ProfileFragment extends Fragment {
+
+    private FragmentProfileBinding binding;
 
     public ProfileFragment() {
         // Es necesario un constructor vacio
@@ -24,7 +31,19 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+
+        binding = FragmentProfileBinding.inflate(inflater, container, false);
+        MainViewModel viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+        binding.setMainViewModel(viewModel);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ProfileViewModel mViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+
+
     }
 
 }
