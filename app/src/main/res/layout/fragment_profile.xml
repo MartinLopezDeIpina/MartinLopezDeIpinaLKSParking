@@ -81,6 +81,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="27dp"
+            android:layout_marginStart="30dp"
             app:layout_constraintTop_toBottomOf="@id/profileAndButtonsLayout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -101,6 +102,14 @@
                 bind:headerText="@{@string/profile_info_phone_number}"
                 bind:nameText="@{mainViewModel.getUser().getTelefono()}"
                 />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                style="@style/HeadingSecondaryStyle"
+                android:text="@string/booking_statistics"
+                >
+            </TextView>
+
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
