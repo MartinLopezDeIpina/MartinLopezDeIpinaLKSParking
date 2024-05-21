@@ -29,5 +29,7 @@
     <string name="profile_info_name">Nombre</string>
     <string name="profile_info_email">Correo electrónico</string>
     <string name="profile_info_phone_number">Número de teléfono</string>
+    
+    <string name="booking_statistics">Estadísticas de reserva</string>
 
 </resources>
