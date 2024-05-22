@@ -3,23 +3,23 @@ package com.lksnext.parkingplantilla.domain;
 public class Plaza {
 
     long id;
-    String tipo;
+    TipoPlaza tipo;
 
     public Plaza() {
 
     }
 
-    public Plaza(long id, String tipo) {
+    public Plaza(long id, TipoPlaza tipo) {
         this.id = id;
         this.tipo = tipo;
     }
 
-    public String getTipo() {
+    public TipoPlaza getTipo() {
         return tipo;
     }
 
 
-    public void setTipo(String tipo) {
+    public void setTipo(TipoPlaza tipo) {
         this.tipo = tipo;
     }
 

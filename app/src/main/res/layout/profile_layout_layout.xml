@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="headerText"
+            type="String" />
+
+        <variable
+            name="nameText"
+            type="String" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:layout_marginStart="12dp"
+        >
+
+        <TextView
+            android:id="@+id/profile_info_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{headerText}"
+            style="@style/ProfileInfoHeader"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+        </TextView>
+        <TextView
+            android:id="@+id/profile_info_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{nameText}"
+            style="@style/ProfileInfo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profile_info_header"
+            >
+        </TextView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

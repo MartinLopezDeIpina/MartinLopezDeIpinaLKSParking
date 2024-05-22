@@ -1,16 +1,176 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".view.fragment.ProfileFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/heading"
-        style="@style/HeadingStyle"
-        android:text="@string/settings"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <data>
+        <variable
+            name="mainViewModel"
+            type="com.lksnext.parkingplantilla.viewmodel.MainViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:bind="http://schemas.android.com/apk/res-auto"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical"
+        tools:context=".view.fragment.ProfileFragment">
+
+        <LinearLayout
+            android:id="@+id/profileAndButtonsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageButton
+                    android:id="@+id/button_notifications"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@drawable/profile_button"
+                    android:src="@drawable/notificationsicon" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/profile_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="137.5dp"
+                    android:layout_height="137.5dp"
+                    android:src="@drawable/profile">
+
+                </ImageView>
+
+                <TextView
+                    android:id="@+id/heading"
+                    style="@style/HeadingStyle"
+                    android:layout_marginTop="10dp"
+                    android:text="Martín" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageButton
+                    android:id="@+id/button_settings"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@drawable/profile_button"
+                    android:src="@drawable/ajuestesicon" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="27dp"
+            android:layout_marginStart="30dp"
+            app:layout_constraintTop_toBottomOf="@id/profileAndButtonsLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
+
+            <include
+                layout="@layout/profile_layout_layout"
+                bind:headerText="@{@string/profile_info_name}"
+                bind:nameText="@{mainViewModel.getUser().getNombre()}"
+                />
+            <include
+                layout="@layout/profile_layout_layout"
+                bind:headerText="@{@string/profile_info_email}"
+                bind:nameText="@{mainViewModel.getUser().getEmail()}"
+                />
+            <include
+                layout="@layout/profile_layout_layout"
+                bind:headerText="@{@string/profile_info_phone_number}"
+                bind:nameText="@{mainViewModel.getUser().getTelefono()}"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                style="@style/HeadingSecondaryStyle"
+                android:text="@string/booking_statistics"
+                >
+            </TextView>
+
+            <!--TODO: poner estos con los datos reales del modelo-->
+            <include
+                layout="@layout/vehicle_statistics_layout"
+                bind:number='@{"3"}'
+                bind:vehicleName='@{"Coche"}'
+                bind:vehicleIcon="@{@drawable/cocheicono}"
+                >
+            </include>
+            <include
+                layout="@layout/vehicle_statistics_layout"
+                bind:number='@{"1"}'
+                bind:vehicleName='@{"Moto"}'
+                bind:vehicleIcon="@{@drawable/motoicono}"
+                >
+            </include>
+            <include
+                layout="@layout/vehicle_statistics_layout"
+                bind:number='@{"0"}'
+                bind:vehicleName='@{"Electrico"}'
+                bind:vehicleIcon="@{@drawable/electricoicono}"
+                >
+            </include>
+            <include
+                layout="@layout/vehicle_statistics_layout"
+                bind:number='@{"0"}'
+                bind:vehicleName='@{"Especial"}'
+                bind:vehicleIcon="@{@drawable/especialicono}"
+                >
+            </include>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="20dp"
+                >
+                <TextView
+                    android:id="@+id/totalTextView"
+                    style="@style/ProfileInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:text="@string/total"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+                <!--TODO: poner estos con los datos reales del modelo-->
+                <TextView
+                    style="@style/ProfileInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4"
+                    app:layout_constraintStart_toStartOf="@id/totalTextView"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginStart="100dp"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+

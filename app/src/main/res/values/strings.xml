@@ -26,4 +26,15 @@
     <string name="add">Añadir</string>
     <string name="more">Ver más</string>
 
+    <string name="profile_info_name">Nombre</string>
+    <string name="profile_info_email">Correo electrónico</string>
+    <string name="profile_info_phone_number">Número de teléfono</string>
+    
+    <string name="booking_statistics">Estadísticas de reserva</string>
+    <string name="car">Coche</string>
+    <string name="motorcycle">Moto</string>
+    <string name="electric">Eléctrico</string>
+    <string name="special">Especial</string>
+    <string name="total">Total</string>
+
 </resources>
