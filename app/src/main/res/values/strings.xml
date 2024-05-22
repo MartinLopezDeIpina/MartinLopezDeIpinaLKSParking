@@ -31,5 +31,10 @@
     <string name="profile_info_phone_number">Número de teléfono</string>
     
     <string name="booking_statistics">Estadísticas de reserva</string>
+    <string name="car">Coche</string>
+    <string name="motorcycle">Moto</string>
+    <string name="electric">Eléctrico</string>
+    <string name="special">Especial</string>
+    <string name="total">Total</string>
 
 </resources>

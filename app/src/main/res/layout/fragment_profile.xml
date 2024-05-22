@@ -110,6 +110,65 @@
                 >
             </TextView>
 
+            <!--TODO: poner estos con los datos reales del modelo-->
+            <include
+                layout="@layout/vehicle_statistics_layout"
+                bind:number='@{"3"}'
+                bind:vehicleName='@{"Coche"}'
+                bind:vehicleIcon="@{@drawable/cocheicono}"
+                >
+            </include>
+            <include
+                layout="@layout/vehicle_statistics_layout"
+                bind:number='@{"1"}'
+                bind:vehicleName='@{"Moto"}'
+                bind:vehicleIcon="@{@drawable/motoicono}"
+                >
+            </include>
+            <include
+                layout="@layout/vehicle_statistics_layout"
+                bind:number='@{"0"}'
+                bind:vehicleName='@{"Electrico"}'
+                bind:vehicleIcon="@{@drawable/electricoicono}"
+                >
+            </include>
+            <include
+                layout="@layout/vehicle_statistics_layout"
+                bind:number='@{"0"}'
+                bind:vehicleName='@{"Especial"}'
+                bind:vehicleIcon="@{@drawable/especialicono}"
+                >
+            </include>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="20dp"
+                >
+                <TextView
+                    android:id="@+id/totalTextView"
+                    style="@style/ProfileInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:text="@string/total"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+                <!--TODO: poner estos con los datos reales del modelo-->
+                <TextView
+                    style="@style/ProfileInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4"
+                    app:layout_constraintStart_toStartOf="@id/totalTextView"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginStart="100dp"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

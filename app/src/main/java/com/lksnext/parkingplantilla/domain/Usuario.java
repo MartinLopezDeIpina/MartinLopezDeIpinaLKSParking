@@ -1,5 +1,7 @@
 package com.lksnext.parkingplantilla.domain;
 
+import java.util.List;
+
 public class Usuario {
 
         private String nombre;
@@ -8,15 +10,17 @@ public class Usuario {
         private String password;
         private String telefono;
         private String direccion;
+        private List<Reserva> listaReservas;
         public Usuario() {
         }
 
-        public Usuario(String nombre, String apellido, String email, String password, String telefono) {
+        public Usuario(String nombre, String apellido, String email, String password, String telefono, List<Reserva> listaReservas) {
             this.nombre = nombre;
             this.apellido = apellido;
             this.email = email;
             this.password = password;
             this.telefono = telefono;
+            this.listaReservas = listaReservas;
         }
 
         public String getNombre() {
