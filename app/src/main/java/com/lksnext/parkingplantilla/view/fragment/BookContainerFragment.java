@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.lksnext.parkingplantilla.domain.Hora;
 import com.lksnext.parkingplantilla.domain.Plaza;
 import com.lksnext.parkingplantilla.domain.Reserva;
+import com.lksnext.parkingplantilla.domain.TipoPlaza;
 import com.lksnext.parkingplantilla.view.adapter.ReservationAdapter;
 
 import java.util.ArrayList;
@@ -37,12 +38,12 @@ public class BookContainerFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         List<Reserva> reservations = new ArrayList<>();
-        reservations.add(new Reserva("2021-06-01", "usuario1", "1", new Plaza(3, "a"), new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
-        reservations.add(new Reserva("2021-08-01", "usuario1", "1", new Plaza(5, "a"), new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
-        reservations.add(new Reserva("2021-09-01", "usuario1", "1", new Plaza(7, "a"), new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
-        reservations.add(new Reserva("2021-09-01", "usuario1", "1", new Plaza(7, "a"), new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
-        reservations.add(new Reserva("2021-09-01", "usuario1", "1", new Plaza(7, "a"), new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
-        reservations.add(new Reserva("2021-09-01", "usuario1", "1", new Plaza(7, "a"), new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
+        reservations.add(new Reserva("2021-06-01", "usuario1", "1", new Plaza(3, TipoPlaza.COCHE), new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
+        reservations.add(new Reserva("2021-08-01", "usuario1", "1", new Plaza(5, TipoPlaza.COCHE), new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
+        reservations.add(new Reserva("2021-09-01", "usuario1", "1", new Plaza(7, TipoPlaza.COCHE), new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
+        reservations.add(new Reserva("2021-09-01", "usuario1", "1", new Plaza(7, TipoPlaza.COCHE), new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
+        reservations.add(new Reserva("2021-09-01", "usuario1", "1", new Plaza(7, TipoPlaza.COCHE), new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
+        reservations.add(new Reserva("2021-09-01", "usuario1", "1", new Plaza(7, TipoPlaza.COCHE), new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
 
         adapter = new ReservationAdapter(reservations);
         recyclerView.setAdapter(adapter);
