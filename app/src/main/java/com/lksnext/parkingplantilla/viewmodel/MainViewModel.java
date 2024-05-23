@@ -17,7 +17,7 @@ public class MainViewModel extends ViewModel {
     List<Reserva> listaReservas = new ArrayList<>();
 
 
-    private final MutableLiveData<Usuario> user = new MutableLiveData<>(new Usuario("Martín", "López", "martinsaski@gmail.com", "123", "123123123", null));
+    private final MutableLiveData<Usuario> user = new MutableLiveData<>(new Usuario("Martín", "López", "martinsaski@gmail.com", "123", "123123123", null, null));
 
     public LiveData<Usuario> getUser() {
         return user;
