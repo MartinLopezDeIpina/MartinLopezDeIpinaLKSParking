@@ -1,6 +1,9 @@
-apply plugin: 'com.android.application'
-apply plugin: 'androidx.navigation.safeargs'
-apply plugin: 'org.sonarqube'
+plugins{
+    id 'com.android.application'
+    id 'androidx.navigation.safeargs'
+    id 'org.sonarqube'
+    id 'com.google.gms.google-services'
+}
 
 sonarqube {
     properties {
@@ -15,7 +18,7 @@ android {
     buildToolsVersion '34.0.0'
 
     defaultConfig {
-        applicationId "com.lksnext.parkingplantilla"
+        applicationId "com.lksnext.parking"
         minSdkVersion 24
         targetSdkVersion 34
         versionCode 1
@@ -40,10 +43,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    namespace 'com.lksnext.parkingplantilla'
+    namespace 'com.lksnext.parking'
 }
 
 dependencies {
+    implementation platform('com.google.firebase:firebase-bom:33.0.0')
+    implementation 'com.google.firebase:firebase-analytics'
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
@@ -64,5 +69,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     androidTestImplementation 'androidx.test:rules:1.5.0'
+
 
 }
