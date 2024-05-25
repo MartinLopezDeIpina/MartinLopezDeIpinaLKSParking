@@ -59,6 +59,26 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
+        loginViewModel.getErrorMessage().observe(this, error -> {
+            if (error == null) return;
+            switch (error) {
+                case EMPTY_EMAIL:
+                case INVALID_EMAIL:
+                case USER_NOT_FOUND:
+                    binding.email.setError(error.getMessage());
+                    break;
+                case EMPTY_PASSWORD:
+                case INVALID_PASSWORD:
+                case WRONG_PASSWORD:
+                    binding.password.setError(error.getMessage());
+                    break;
+                case UNKNOWN_ERROR:
+                    binding.email.setError("Error en el login");
+                    binding.password.setError("Error en el login");
+                    break;
+            }
+        });
+
         setSpannedTitle();
         setUnderlinedForgotPassword();
     }
