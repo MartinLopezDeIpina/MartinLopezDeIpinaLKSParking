@@ -3,8 +3,10 @@ package com.lksnext.parking.view.activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
 import android.util.TypedValue;
@@ -45,20 +47,75 @@ public class LoginActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        //Observamos la variable logged, la cual nos informara cuando el usuario intente hacer login y se
-        //cambia de pantalla en caso de login correcto
-        loginViewModel.isLogged().observe(this, logged -> {
-            if (logged != null) {
-                if (logged) {
-                    //Login Correcto
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                } else {
-                    //Login incorrecto
-                }
+        bindDisableInputErrorStates();
+        observeLogged();
+        observeLoginError();
+
+        setSpannedTitle();
+        setUnderlinedForgotPassword();
+    }
+
+    private void bindDisableInputErrorStates(){
+        disableInputErrorStateFocused();
+        disableInputErrorStateTextChanged();
+    }
+    private void disableInputErrorStateTextChanged(){
+        binding.emailText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // No action needed here
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                binding.email.setError(null);
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                // No action needed here
             }
         });
 
+        binding.passwordText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // No action needed here
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Clear the error when the text changes
+                binding.password.setError(null);
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                // No action needed here
+            }
+        });
+    }
+    private void disableInputErrorStateFocused(){
+        binding.emailText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                binding.email.setError(null);
+            }
+        });
+        binding.passwordText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                binding.password.setError(null);
+            }
+        });
+    }
+
+    private void observeLogged(){
+        loginViewModel.isLogged().observe(this, logged -> {
+            if (logged != null) {
+                if (logged) {
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+    }
+
+    private void observeLoginError(){
         loginViewModel.getErrorMessage().observe(this, error -> {
             if (error == null) return;
             switch (error) {
@@ -78,9 +135,6 @@ public class LoginActivity extends BaseActivity {
                     break;
             }
         });
-
-        setSpannedTitle();
-        setUnderlinedForgotPassword();
     }
 
     private void setSpannedTitle(){
