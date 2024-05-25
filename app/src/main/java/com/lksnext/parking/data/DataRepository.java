@@ -67,9 +67,7 @@ public class DataRepository {
 
     private LoginErrorType getErrorMessage(Exception exception) {
         LoginErrorType message;
-        if (exception instanceof FirebaseAuthInvalidUserException) {
-            message = LoginErrorType.USER_NOT_FOUND;
-        } else if (exception instanceof FirebaseAuthInvalidCredentialsException) {
+        if (exception instanceof FirebaseAuthInvalidCredentialsException ) {
             message = LoginErrorType.WRONG_PASSWORD;
         } else {
             message = LoginErrorType.UNKNOWN_ERROR;
