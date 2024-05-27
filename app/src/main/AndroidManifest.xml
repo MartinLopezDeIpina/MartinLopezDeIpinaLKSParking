@@ -10,9 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Dark">
         <activity
-            android:name=".view.activity.RegisterActivity"
-            android:exported="false" />
-        <activity
             android:name=".view.activity.LoginActivity"
             android:exported="true">
             <intent-filter>
