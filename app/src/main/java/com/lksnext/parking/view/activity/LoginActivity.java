@@ -10,13 +10,17 @@ import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
 import android.util.TypedValue;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.lksnext.parking.viewmodel.LoginViewModel;
 import com.lksnext.parking.R;
 import com.lksnext.parking.databinding.ActivityLoginBinding;
+import com.lksnext.parking.view.fragment.RegisterFragment;
 
 public class LoginActivity extends BaseActivity {
 
@@ -41,10 +45,18 @@ public class LoginActivity extends BaseActivity {
             loginViewModel.loginUser(email, password);
         });
 
-        //Acciones a realizar cuando el usuario clica el boton de crear cuenta (se cambia de pantalla)
+        //navegar a RegisterFragment
         binding.createAccount.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-            startActivity(intent);
+            RegisterFragment registerFragment = new RegisterFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            FrameLayout frameLayout = findViewById(R.id.container);
+            frameLayout.removeAllViews();
+
+            fragmentTransaction.replace(R.id.container, registerFragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
         });
 
         bindDisableInputErrorStates();
