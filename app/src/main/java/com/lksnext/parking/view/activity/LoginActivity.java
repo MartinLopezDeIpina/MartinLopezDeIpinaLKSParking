@@ -13,6 +13,7 @@ import android.util.TypedValue;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
@@ -58,6 +59,7 @@ public class LoginActivity extends BaseActivity {
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         });
+
 
         bindDisableInputErrorStates();
         observeLogged();
