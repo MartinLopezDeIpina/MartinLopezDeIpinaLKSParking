@@ -1,9 +1,6 @@
 package com.lksnext.parking.data;
 
-import android.app.Activity;
-import android.util.Log;
 import android.util.Patterns;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -12,9 +9,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
-import com.lksnext.parking.domain.Callback;
+import com.lksnext.parking.domain.LoginCallback;
+import com.lksnext.parking.domain.RegisterCallback;
 
 public class DataRepository {
 
@@ -33,7 +31,7 @@ public class DataRepository {
     }
 
     //Petición del login.
-    public void login( String email, String pass, Callback callback){
+    public void login( String email, String pass, LoginCallback callback){
         if(email.isEmpty()){
             callback.onFailure(LoginErrorType.EMPTY_EMAIL);
             return;
@@ -58,19 +56,46 @@ public class DataRepository {
                     FirebaseUser user = mAuth.getCurrentUser();
                     callback.onSuccess();
                 } else {
-                    LoginErrorType error = getErrorMessage(task.getException());
+                    LoginErrorType error = getLoginErrorMessage(task.getException());
                     callback.onFailure(error);
                 }
             }
         });
     }
 
-    private LoginErrorType getErrorMessage(Exception exception) {
+    private LoginErrorType getLoginErrorMessage(Exception exception) {
         LoginErrorType message;
         if (exception instanceof FirebaseAuthInvalidCredentialsException ) {
             message = LoginErrorType.WRONG_PASSWORD;
         } else {
             message = LoginErrorType.UNKNOWN_ERROR;
+        }
+        return message;
+    }
+
+    //Todo: gestionar como añadir esto a la base de datos
+    public void register(String email, String password, String name, String phone, RegisterCallback callback){
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            callback.onSuccess();
+                        } else {
+                            RegisterErrorType error = getRegisterErrorMessage(task.getException());
+                            callback.onRegisterFailure(error);
+                        }
+                    }
+                });
+    }
+
+    private RegisterErrorType getRegisterErrorMessage(Exception exception) {
+        RegisterErrorType message;
+        if (exception instanceof FirebaseAuthUserCollisionException) {
+            message = RegisterErrorType.EMAIL_ALREADY_REGISTERED;
+        } else {
+            message = RegisterErrorType.UNKNOWN_ERROR;
         }
         return message;
     }
