@@ -22,11 +22,13 @@ import com.lksnext.parking.R;
 import com.lksnext.parking.databinding.FragmentProfileBinding;
 import com.lksnext.parking.databinding.FragmentRegisterBinding;
 import com.lksnext.parking.viewmodel.MainViewModel;
+import com.lksnext.parking.viewmodel.RegisterViewModel;
 
 import java.util.regex.Pattern;
 
 public class RegisterFragment extends Fragment {
 
+        private RegisterViewModel registerViewModel;
         private FragmentRegisterBinding binding;
         public RegisterFragment() {
             // Es necesario un constructor vacio
@@ -38,9 +40,13 @@ public class RegisterFragment extends Fragment {
 
                 binding = com.lksnext.parking.databinding.FragmentRegisterBinding.inflate(inflater, container, false);
 
+                registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
+
                 bindReturnButton();
                 bindCreateAccountButton();
                 bindDisableInputErrorStates();
+                bindRegisteredEmail();
+                observeRegisterError();
 
                 return binding.getRoot();
         }
@@ -53,20 +59,34 @@ public class RegisterFragment extends Fragment {
 
         private void bindCreateAccountButton(){
                 binding.createAccountButton.setOnClickListener(v -> {
-                        if(validateInputs()){
-                                NavController navController = Navigation.findNavController(v);
-                                navController.navigate(R.id.login_fragment);
+
+                        String user = binding.userInputText.getText().toString();
+                        String password = binding.passwordInputText.getText().toString();
+                        String checkPassword = binding.checkInputText.getText().toString();
+                        String email = binding.emailInputText.getText().toString();
+                        String phone = binding.phoneInputText.getText().toString();
+
+                        boolean checked = binding.termsCheck.isChecked();
+                        if(validateInputs(email, password, checkPassword, user, phone, checked)){
+                                registerViewModel.registerUser(email, password, user, phone);
                         }
                 });
         }
-        private boolean validateInputs() {
 
-            String user = binding.userInputText.getText().toString();
-            String password = binding.passwordInputText.getText().toString();
-            String checkPassword = binding.checkInputText.getText().toString();
-            String email = binding.emailInputText.getText().toString();
-            String phone = binding.phoneInputText.getText().toString();
-            boolean checked = binding.termsCheck.isChecked();
+        private void bindRegisteredEmail(){
+            registerViewModel.getRegisteredEmail().observe(getViewLifecycleOwner(), email -> {
+                if (email == null) return;
+
+                View view = getView();
+                if (view != null) {
+                    NavController navController = Navigation.findNavController(view);
+                    navController.navigate(R.id.login_fragment);
+                }
+            });
+        }
+
+        private boolean validateInputs(String email, String password, String checkPassword, String user, String phone, boolean checked) {
+
 
             if(!validateUsername(user)){
                     return false;
@@ -136,7 +156,7 @@ public class RegisterFragment extends Fragment {
                 return true;
         }
         private boolean validatePhone(String phone) {
-                if (!phone.isEmpty() && !Pattern.matches("^[0-9]{10}$", phone)) {
+                if (!phone.isEmpty() && !Pattern.matches("^[0-9]{9}$", phone)) {
                         binding.phoneInput.setError("El número de teléfono no es válido");
                         return false;
                 }
@@ -145,6 +165,7 @@ public class RegisterFragment extends Fragment {
 
         private boolean validateTermsChecked(boolean checked) {
                 if (!checked) {
+                        binding.termsError.setText("Por favor acepta los términos de uso");
                         binding.termsError.setVisibility(View.VISIBLE);
                         return false;
                 }
@@ -270,6 +291,21 @@ public class RegisterFragment extends Fragment {
         private void disableCheckBoxErrorState() {
                 binding.termsCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
                         binding.termsError.setVisibility(View.INVISIBLE);
+                });
+        }
+
+        private void observeRegisterError(){
+                registerViewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
+                        if (error == null) return;
+                        switch (error) {
+                                case EMAIL_ALREADY_REGISTERED:
+                                        binding.emailInput.setError("El email ya está registrado");
+                                        break;
+                                case UNKNOWN_ERROR:
+                                        binding.termsError.setText("Error al registrar");
+                                        binding.termsError.setVisibility(View.VISIBLE);
+                                        break;
+                        }
                 });
         }
 

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.lksnext.parking.data.DataRepository;
 import com.lksnext.parking.data.LoginErrorType;
-import com.lksnext.parking.domain.Callback;
+import com.lksnext.parking.domain.LoginCallback;
 
 public class LoginViewModel extends ViewModel {
 
@@ -21,7 +21,7 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void loginUser(String email, String password) {
-        DataRepository.getInstance().login(email, password, new Callback() {
+        DataRepository.getInstance().login(email, password, new LoginCallback() {
             @Override
             public void onSuccess() {
                 logged.setValue(Boolean.TRUE);
