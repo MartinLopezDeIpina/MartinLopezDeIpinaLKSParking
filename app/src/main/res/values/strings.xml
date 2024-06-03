@@ -4,11 +4,20 @@
     <string name="usuario_hint">Usuario</string>
     <string name="usuario_helper">Introduce el correo o nombre de usuario</string>
     <string name="password_hint">Contraseña</string>
+    <string name="name_hint">Nombre de usuario</string>
+    <string name="confirm_pass_hint">Confirmar contraseña</string>
+    <string name="email_hint">Correo electrónico</string>
+    <string name="phone_hint">Número de teléfono  *opcional</string>
+
+
+    
     <string name="login">Iniciar sesión</string>
     <string name="forgot_password">He olvidado mi contraseña</string>
     <string name="google_login">Continuar con Google</string>
     <string name="not_registered">¿No estás registrado?</string>
     <string name="register">Registrarse</string>
+    <string name="create_account">Crear cuenta</string>
+
 
     <string name="active_reservations">Reservas activas</string>
     <string name="add_reservation">Añadir reserva</string>
@@ -37,5 +46,7 @@
     <string name="special">Especial</string>
     <string name="total">Total</string>
 
+    <string name="terms">He leído y acepto los términos
+        de uso de QuickSpot</string>
 
 </resources>
