@@ -145,7 +145,7 @@
         >
 
         <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/myCheckbox"
+            android:id="@+id/termsCheck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/terms"
@@ -154,7 +154,7 @@
             android:textSize="14sp" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/loginButton"
+            android:id="@+id/createAccountButton"
             style="@style/PrimaryButton"
             android:layout_height="wrap_content"
             android:text="@string/create_account"
@@ -162,6 +162,19 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password" />
+        <TextView
+            android:id="@+id/termsError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/accept_terms"
+            android:textColor="?attr/colorError"
+            android:textSize="14sp"
+            android:layout_marginTop="5dp"
+            android:textStyle="bold"
+            android:visibility="invisible"
+            >
+
+        </TextView>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

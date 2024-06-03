@@ -1,6 +1,8 @@
 package com.lksnext.parking.view.fragment;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,8 @@ import com.lksnext.parking.databinding.FragmentProfileBinding;
 import com.lksnext.parking.databinding.FragmentRegisterBinding;
 import com.lksnext.parking.viewmodel.MainViewModel;
 
+import java.util.regex.Pattern;
+
 public class RegisterFragment extends Fragment {
 
         private FragmentRegisterBinding binding;
@@ -35,6 +39,8 @@ public class RegisterFragment extends Fragment {
                 binding = com.lksnext.parking.databinding.FragmentRegisterBinding.inflate(inflater, container, false);
 
                 bindReturnButton();
+                bindCreateAccountButton();
+                bindDisableInputErrorStates();
 
                 return binding.getRoot();
         }
@@ -44,5 +50,216 @@ public class RegisterFragment extends Fragment {
                         navController.navigate(R.id.login_fragment);
                 });
         }
+
+        private void bindCreateAccountButton(){
+                binding.createAccountButton.setOnClickListener(v -> {
+                        if(validateInputs()){
+                                NavController navController = Navigation.findNavController(v);
+                                navController.navigate(R.id.login_fragment);
+                        }
+                });
+        }
+        private boolean validateInputs() {
+
+            String user = binding.userInputText.getText().toString();
+            String password = binding.passwordInputText.getText().toString();
+            String checkPassword = binding.checkInputText.getText().toString();
+            String email = binding.emailInputText.getText().toString();
+            String phone = binding.phoneInputText.getText().toString();
+            boolean checked = binding.termsCheck.isChecked();
+
+            if(!validateInputsNotEmpty(user, password, checkPassword, email)){
+                    return false;
+            }
+            if(!validateInputsFormat(user, password, checkPassword, email, phone)){
+                    return false;
+            }
+            if(!validatePasswordsMatch(password, checkPassword)){
+                    return false;
+            }
+            if(!validateTermsChecked(checked)){
+                    return false;
+            }
+
+            return true;
+        }
+
+        private boolean validateInputsNotEmpty(String user, String password, String checkPassword, String email) {
+                if (user.isEmpty()) {
+                        binding.userInput.setError("Ingrese un nombre de usuario");
+                        return false;
+                }
+                if (password.isEmpty()) {
+                        binding.passwordInput.setError("Ingrese una contraseña");
+                        return false;
+                }
+                if (checkPassword.isEmpty()) {
+                        binding.checkInput.setError("Confirme su contraseña");
+                        return false;
+                }
+                if (email.isEmpty()) {
+                        binding.emailInput.setError("Ingrese un correo electrónico");
+                        return false;
+                }
+                return true;
+        }
+
+        private boolean validateInputsFormat(String user, String password, String checkPassword, String email, String phone) {
+                if (!Pattern.matches("^[a-zA-Z0-9]{1,}$", user)) {
+                        binding.userInput.setError("El nombre de usuario debe tener solo letras y números");
+                        return false;
+                }
+                if (password.length() < 6) {
+                        binding.passwordInput.setError("La contraseña debe tener al menos 6 caracteres");
+                        return false;
+                }
+                if (!Pattern.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", email)) {
+                        binding.emailInput.setError("Ingrese un correo electrónico válido");
+                        return false;
+                }
+                if (!phone.isEmpty() && !Pattern.matches("^\\+?[1-9]\\d{1,14}$", phone)) {
+                        binding.phoneInput.setError("El número de teléfono no es válido");
+                        return false;
+                }
+                return true;
+        }
+        private boolean validatePasswordsMatch(String password, String checkPassword) {
+                if (!password.equals(checkPassword)) {
+                        binding.checkInput.setError("Las contraseñas deben coincidir");
+                        return false;
+                }
+                return true;
+        }
+
+        private boolean validateTermsChecked(boolean checked) {
+                if (!checked) {
+                        binding.termsError.setVisibility(View.VISIBLE);
+                        return false;
+                }
+                return true;
+        }
+
+
+        private void bindDisableInputErrorStates(){
+                disableInputErrorStateFocused();
+                disableInputErrorStateTextChanged();
+                disableCheckBoxErrorState();
+        }
+
+        private void disableInputErrorStateTextChanged() {
+                binding.userInputText.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                // No action needed here
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                binding.userInput.setError(null);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                                // No action needed here
+                        }
+                });
+                binding.passwordInputText.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                // No action needed here
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                binding.passwordInput.setError(null);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                                // No action needed here
+                        }
+                });
+                binding.checkInputText.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                // No action needed here
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                binding.checkInput.setError(null);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                                // No action needed here
+                        }
+                });
+                binding.emailInputText.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                // No action needed here
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                binding.emailInput.setError(null);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                                // No action needed here
+                        }
+                });
+                binding.phoneInputText.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                // No action needed here
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                binding.phoneInput.setError(null);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                                // No action needed here
+                        }
+                });
+        }
+        private void disableInputErrorStateFocused() {
+                binding.userInputText.setOnFocusChangeListener((v, hasFocus) -> {
+                        if (hasFocus) {
+                                binding.userInput.setError(null);
+                        }
+                });
+                binding.passwordInputText.setOnFocusChangeListener((v, hasFocus) -> {
+                        if (hasFocus) {
+                                binding.passwordInput.setError(null);
+                        }
+                });
+                binding.checkInputText.setOnFocusChangeListener((v, hasFocus) -> {
+                        if (hasFocus) {
+                                binding.checkInput.setError(null);
+                        }
+                });
+                binding.emailInputText.setOnFocusChangeListener((v, hasFocus) -> {
+                        if (hasFocus) {
+                                binding.emailInput.setError(null);
+                        }
+                });
+                binding.phoneInputText.setOnFocusChangeListener((v, hasFocus) -> {
+                        if (hasFocus) {
+                                binding.phoneInput.setError(null);
+                        }
+                });
+        }
+        private void disableCheckBoxErrorState() {
+                binding.termsCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                        binding.termsError.setVisibility(View.INVISIBLE);
+                });
+        }
+
 
 }
