@@ -68,15 +68,22 @@ public class RegisterFragment extends Fragment {
             String phone = binding.phoneInputText.getText().toString();
             boolean checked = binding.termsCheck.isChecked();
 
-            if(!validateInputsNotEmpty(user, password, checkPassword, email)){
+            if(!validateUsername(user)){
                     return false;
             }
-            if(!validateInputsFormat(user, password, checkPassword, email, phone)){
+            if(!validatePassword(password)){
                     return false;
             }
-            if(!validatePasswordsMatch(password, checkPassword)){
+            if(!validateCheckPassword(checkPassword, password)){
                     return false;
             }
+            if(!validateEmail(email)){
+                    return false;
+            }
+            if(!validatePhone(phone)){
+                    return false;
+            }
+
             if(!validateTermsChecked(checked)){
                     return false;
             }
@@ -84,48 +91,53 @@ public class RegisterFragment extends Fragment {
             return true;
         }
 
-        private boolean validateInputsNotEmpty(String user, String password, String checkPassword, String email) {
+        private boolean validateUsername(String user) {
                 if (user.isEmpty()) {
                         binding.userInput.setError("Ingrese un nombre de usuario");
                         return false;
                 }
-                if (password.isEmpty()) {
-                        binding.passwordInput.setError("Ingrese una contraseña");
-                        return false;
-                }
-                if (checkPassword.isEmpty()) {
-                        binding.checkInput.setError("Confirme su contraseña");
-                        return false;
-                }
-                if (email.isEmpty()) {
-                        binding.emailInput.setError("Ingrese un correo electrónico");
-                        return false;
-                }
-                return true;
-        }
-
-        private boolean validateInputsFormat(String user, String password, String checkPassword, String email, String phone) {
                 if (!Pattern.matches("^[a-zA-Z0-9]{1,}$", user)) {
                         binding.userInput.setError("El nombre de usuario debe tener solo letras y números");
                         return false;
                 }
-                if (password.length() < 6) {
+                return true;
+        }
+        private boolean validatePassword(String password) {
+                if (password.isEmpty()) {
+                        binding.passwordInput.setError("Ingrese una contraseña");
+                        return false;
+                }
+                if(password.length() < 6){
                         binding.passwordInput.setError("La contraseña debe tener al menos 6 caracteres");
+                        return false;
+                }
+                return true;
+        }
+        private boolean validateCheckPassword(String checkPassword, String password) {
+                if (checkPassword.isEmpty()) {
+                        binding.checkInput.setError("Confirme su contraseña");
+                        return false;
+                }
+                if(!checkPassword.equals(password)){
+                        binding.checkInput.setError("Las contraseñas deben coincidir");
+                        return false;
+                }
+                return true;
+        }
+        private boolean validateEmail(String email) {
+                if (email.isEmpty()) {
+                        binding.emailInput.setError("Ingrese un correo electrónico");
                         return false;
                 }
                 if (!Pattern.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", email)) {
                         binding.emailInput.setError("Ingrese un correo electrónico válido");
                         return false;
                 }
-                if (!phone.isEmpty() && !Pattern.matches("^\\+?[1-9]\\d{1,14}$", phone)) {
-                        binding.phoneInput.setError("El número de teléfono no es válido");
-                        return false;
-                }
                 return true;
         }
-        private boolean validatePasswordsMatch(String password, String checkPassword) {
-                if (!password.equals(checkPassword)) {
-                        binding.checkInput.setError("Las contraseñas deben coincidir");
+        private boolean validatePhone(String phone) {
+                if (!phone.isEmpty() && !Pattern.matches("^[0-9]{10}$", phone)) {
+                        binding.phoneInput.setError("El número de teléfono no es válido");
                         return false;
                 }
                 return true;
