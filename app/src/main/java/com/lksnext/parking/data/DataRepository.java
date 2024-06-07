@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.lksnext.parking.domain.LoginCallback;
 import com.lksnext.parking.domain.RegisterCallback;
+import com.lksnext.parking.domain.Usuario;
 
 public class DataRepository {
 
@@ -85,7 +86,8 @@ public class DataRepository {
                         if (task.isSuccessful()) {
 
                             FirebaseUser user = mAuth.getCurrentUser();
-                            dbManager.addUserToDB(user.getUid(), name, email, phone);
+                            Usuario usuario = new Usuario(user.getUid(), name, email, phone);
+                            dbManager.addUserToDB(usuario);
                             callback.onSuccess();
 
                         } else {
