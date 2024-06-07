@@ -29,12 +29,13 @@ public class DataBaseManager {
         db.collection("usuario").document(usuario.getID()).set(usuario);
     }
 
-    public Usuario getCurrenUser(){
+    public void setCurrenUser(UserCallback callback){
         String uid = mAuth.getCurrentUser().getUid();
-        return getUserFromDB(uid);
+        db.collection("usuario").document(uid).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Usuario usuario = task.getResult().toObject(Usuario.class);
+                callback.onCallback(usuario);
+            }
+        });
     }
-    private Usuario getUserFromDB(String uid){
-        return null;
-    }
-
 }
