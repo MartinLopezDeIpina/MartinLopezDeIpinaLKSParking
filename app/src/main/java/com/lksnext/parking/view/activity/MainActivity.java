@@ -29,6 +29,7 @@ public class MainActivity extends BaseActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         MainViewModel viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         binding.setMainViewModel(viewModel);
+        viewModel.setCurrentUserViewModel();
 
         setContentView(binding.getRoot());
 
