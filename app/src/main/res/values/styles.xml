@@ -3,6 +3,8 @@
     <style name="TextInputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxStrokeWidthFocused">4dp</item>
     </style>
+    <style name="registerTextInput" parent="TextInputStyle">
+    </style>
     <style name="HeadingStyle">
         <item name="android:textColor">?attr/colorOnSurface</item>
         <item name="android:textSize">36sp</item>
@@ -11,6 +13,9 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">36dp</item>
+    </style>
+    <style name="HeadingFlechaStyle" parent="HeadingStyle">
+        <item name="android:layout_marginTop">0dp</item>
     </style>
     <style name="HeadingSecondaryStyle">
         <item name="android:layout_marginTop">50dp</item>
@@ -53,5 +58,11 @@
     <style name="ProfileInfo">
         <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
         <item name="android:textSize">18sp</item>
+    </style>
+    <style name="baseLayout">
+        <item name="android:layout_marginStart">20dp</item>
+    </style>
+    <style name="registerInputSeparation" parent="TextInputStyle">
+        <item name="android:layout_marginTop">20dp</item>
     </style>
 </resources>
