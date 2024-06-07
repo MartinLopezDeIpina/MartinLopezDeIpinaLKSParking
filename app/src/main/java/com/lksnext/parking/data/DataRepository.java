@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.lksnext.parking.domain.LoginCallback;
 import com.lksnext.parking.domain.RegisterCallback;
 
@@ -18,8 +19,10 @@ public class DataRepository {
 
     private static DataRepository instance;
     private FirebaseAuth mAuth;
+    private DataBaseManager dbManager;
     private DataRepository(){
-        mAuth = FirebaseManager.getInstance().getFirebaseAuth();
+        mAuth = FirebaseAuth.getInstance();
+        dbManager = DataBaseManager.getInstance();
     }
 
     //Creación de la instancia en caso de que no exista.
@@ -80,8 +83,11 @@ public class DataRepository {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+
                             FirebaseUser user = mAuth.getCurrentUser();
+                            dbManager.addUserToDB(user.getUid(), name, email, phone);
                             callback.onSuccess();
+
                         } else {
                             RegisterErrorType error = getRegisterErrorMessage(task.getException());
                             callback.onRegisterFailure(error);
