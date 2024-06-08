@@ -1,10 +1,15 @@
 package com.lksnext.parking.domain;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import com.google.firebase.firestore.PropertyName;
+
 public class Reserva {
 
-    String fecha, usuario, id;
+    String fecha, usuarioID;
 
-    Plaza plaza;
+    Integer plazaID;
 
     Hora hora;
 
@@ -12,13 +17,13 @@ public class Reserva {
 
     }
 
-    public Reserva(String fecha, String usuario, String id, Plaza plaza, Hora hora) {
+    public Reserva(String fecha, String usuarioID, Integer plazaID, Hora hora) {
         this.fecha = fecha;
-        this.usuario = usuario;
-        this.plaza = plaza;
+        this.usuarioID = usuarioID;
+        this.plazaID = plazaID;
         this.hora = hora;
-        this.id = id;
     }
+
 
     public String getFecha() {
         return fecha;
@@ -28,43 +33,50 @@ public class Reserva {
         this.fecha = fecha;
     }
 
-    public String getUsuario() {
-        return usuario;
+    public String getUsuarioID() {
+        return usuarioID;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
+    public void setUsuarioID(String usuarioID) {
+        this.usuarioID = usuarioID;
     }
 
-    public Plaza getPlazaId() {
-        return plaza;
+    public Integer getPlazaID() {
+        return plazaID;
     }
 
-    public void setPlazaId(Plaza plaza) {
-        this.plaza = plaza;
+    public void setPlazaID(Integer plazaID) {
+        this.plazaID = plazaID;
     }
 
-    public Hora getHoraInicio() {
+
+    @PropertyName("hora")
+    public Hora getHora() {
         return hora;
     }
-
-    public void setHoraInicio(Hora hora) {
+    @PropertyName("hora")
+    public void setHora(Hora hora) {
         this.hora = hora;
     }
 
-    public Hora getHoraFin() {
-        return hora;
+
+    public boolean isCaducada() {
+        Date today = getParsedDate();
+
+        if (today == null) {
+            return false;
+        }
+
+        return today.compareTo(today) >= 0 && hora.getHoraFin() > System.currentTimeMillis();
     }
 
-    public void setHoraFin(Hora hora) {
-        this.hora = hora;
-    }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    private Date getParsedDate() {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            return sdf.parse(fecha);
+        } catch (ParseException e) {
+            return null;
+        }
     }
 }

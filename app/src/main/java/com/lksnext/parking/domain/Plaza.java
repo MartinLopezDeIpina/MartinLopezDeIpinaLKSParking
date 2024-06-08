@@ -22,6 +22,9 @@ public class Plaza {
     public void setTipo(TipoPlaza tipo) {
         this.tipo = tipo;
     }
+    public TipoPlaza getTipoPlaza() {
+        return tipo;
+    }
 
     public long getId() {
         return id;
@@ -30,4 +33,5 @@ public class Plaza {
     public void setId(long id) {
         this.id = id;
     }
+
 }
