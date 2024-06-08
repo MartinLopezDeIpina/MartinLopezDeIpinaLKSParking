@@ -57,7 +57,7 @@
                 />
 
             <ImageView
-                android:id="@+id/vehiculo"
+                android:id="@+id/vehiculoIcono"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:src="@drawable/cocheicono"

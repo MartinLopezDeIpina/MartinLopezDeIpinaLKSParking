@@ -31,10 +31,17 @@ public class DataBaseFiller {
 
     public void fillReservas(){
         String userID = "X0gZj6BNaeT6yIVzdN3IWKLyM1S2";
-        for(int i = 0; i < 10; i++){
+        for(int i = 0; i < 3; i++){
             Reserva reserva = new Reserva("2021-06-01", userID, i, new Hora(1000, 1100));
             db.addBookingToDB(reserva);
         }
+
+        Reserva reserva = new Reserva("2021-06-01", userID, 57, new Hora(1030, 1130));
+        Reserva reserva2 = new Reserva("2021-06-01", userID, 78, new Hora(1000, 1200));
+        Reserva reserva3 = new Reserva("2021-06-01", userID, 98, new Hora(1000, 1700));
+        db.addBookingToDB(reserva);
+        db.addBookingToDB(reserva2);
+        db.addBookingToDB(reserva3);
     }
 
 }
