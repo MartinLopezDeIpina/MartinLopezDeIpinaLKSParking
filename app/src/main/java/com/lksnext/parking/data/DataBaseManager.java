@@ -33,7 +33,7 @@ public class DataBaseManager {
         db.collection("plaza").document(Long.toString(plaza.getId())).set(plaza);
     }
     public void addBookingToDB(Reserva reserva){
-        db.collection("reserva").document(reserva.getReservaID()).set(reserva);
+        db.collection("reserva").add(reserva);
     }
 
     public void getCurrenUser(UserCallback callback){
@@ -47,7 +47,7 @@ public class DataBaseManager {
     }
     public void getCurrentUserBookings(ReservaCallback callback){
         String uid = mAuth.getCurrentUser().getUid();
-        db.collection("reserva").whereEqualTo("userID", uid)
+        db.collection("reserva").whereEqualTo("usuarioID", uid)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

@@ -29,10 +29,10 @@ public class DataBaseFiller {
         }
     }
 
-    private void fillReservas(){
+    public void fillReservas(){
         String userID = "X0gZj6BNaeT6yIVzdN3IWKLyM1S2";
         for(int i = 0; i < 10; i++){
-            Reserva reserva = new Reserva("2021-06-01", userID, i, new Hora(10, 0));
+            Reserva reserva = new Reserva("2021-06-01", userID, i, new Hora(1000, 1100));
             db.addBookingToDB(reserva);
         }
     }
