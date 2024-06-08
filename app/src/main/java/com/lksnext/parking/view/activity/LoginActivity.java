@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.lksnext.parking.data.DataBaseManager;
 import com.lksnext.parking.util.DataBaseFiller;
 import com.lksnext.parking.viewmodel.LoginViewModel;
 import com.lksnext.parking.R;
@@ -32,6 +33,9 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        DataBaseFiller dataBaseFiller = new DataBaseFiller();
+        dataBaseFiller.fillReservas();
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

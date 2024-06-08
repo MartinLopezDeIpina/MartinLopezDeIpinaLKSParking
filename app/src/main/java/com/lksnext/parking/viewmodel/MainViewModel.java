@@ -25,6 +25,10 @@ public class MainViewModel extends ViewModel {
     public void setUser(Usuario usuario){
         user.setValue(usuario);
     }
+
+    public LiveData<List<Reserva>> getReservasActivas() {
+        return reservasActivas;
+    }
     public void setListaReservas(List<Reserva> reservas){
         reservas.forEach(reserva -> {
             parking.addReserva(reserva);

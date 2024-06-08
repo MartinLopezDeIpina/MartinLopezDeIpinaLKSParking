@@ -3,10 +3,11 @@ package com.lksnext.parking.domain;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import com.google.firebase.firestore.PropertyName;
 
 public class Reserva {
 
-    String fecha, usuario;
+    String fecha, usuarioID;
 
     Integer plazaID;
 
@@ -18,7 +19,7 @@ public class Reserva {
 
     public Reserva(String fecha, String usuarioID, Integer plazaID, Hora hora) {
         this.fecha = fecha;
-        this.usuario = usuarioID;
+        this.usuarioID = usuarioID;
         this.plazaID = plazaID;
         this.hora = hora;
     }
@@ -32,41 +33,34 @@ public class Reserva {
         this.fecha = fecha;
     }
 
-    public String getUsuario() {
-        return usuario;
+    public String getUsuarioID() {
+        return usuarioID;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
+    public void setUsuarioID(String usuarioID) {
+        this.usuarioID = usuarioID;
     }
 
-    public Integer getPlazaId() {
+    public Integer getPlazaID() {
         return plazaID;
     }
 
-    public void setPlazaId(Integer plazaID) {
+    public void setPlazaID(Integer plazaID) {
         this.plazaID = plazaID;
     }
 
-    public Hora getHoraInicio() {
+
+    @PropertyName("hora")
+    public Hora getHora() {
         return hora;
     }
-
-    public void setHoraInicio(Hora hora) {
+    @PropertyName("hora")
+    public void setHora(Hora hora) {
         this.hora = hora;
     }
 
-    public Hora getHoraFin() {
-        return hora;
-    }
 
-    public void setHoraFin(Hora hora) {
-        this.hora = hora;
-    }
-
-    }
-
-    public boolean isCaducada(){
+    public boolean isCaducada() {
         Date today = getParsedDate();
 
         if (today == null) {
@@ -75,6 +69,8 @@ public class Reserva {
 
         return today.compareTo(today) >= 0 && hora.getHoraFin() > System.currentTimeMillis();
     }
+
+
     private Date getParsedDate() {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

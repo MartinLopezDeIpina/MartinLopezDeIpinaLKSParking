@@ -1,5 +1,6 @@
 package com.lksnext.parking.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Parking {
@@ -10,6 +11,7 @@ public class Parking {
     private Usuario usuario;
 
     private Parking() {
+        reservas = new ArrayList<>();
     }
 
     public static Parking getInstance() {
