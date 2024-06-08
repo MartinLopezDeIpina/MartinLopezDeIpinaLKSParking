@@ -45,6 +45,16 @@ public class DataBaseManager {
             }
         });
     }
+    public void getParkingSpots(PlazaCallback callback){
+        db.collection("plaza")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<Plaza> plazas = task.getResult().toObjects(Plaza.class);
+                        callback.onCallback(plazas);
+                    }
+                });
+    }
     public void getCurrentUserBookings(ReservaCallback callback){
         String uid = mAuth.getCurrentUser().getUid();
         db.collection("reserva").whereEqualTo("usuarioID", uid)

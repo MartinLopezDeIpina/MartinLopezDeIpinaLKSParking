@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.lksnext.parking.domain.Parking;
+import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.Reserva;
 import com.lksnext.parking.domain.Usuario;
 
@@ -29,11 +30,12 @@ public class MainViewModel extends ViewModel {
     public LiveData<List<Reserva>> getReservasActivas() {
         return reservasActivas;
     }
+    public void setListaPlazas(List<Plaza> plazas){
+        parking.setPlazas(plazas);
+    }
     public void setListaReservas(List<Reserva> reservas){
-        reservas.forEach(reserva -> {
-            parking.addReserva(reserva);
-            updateReservas();
-        });
+        parking.setReservas(reservas);
+        updateReservas();
     }
     private void updateReservas(){
         List<Reserva> reservas = parking.getReservas();

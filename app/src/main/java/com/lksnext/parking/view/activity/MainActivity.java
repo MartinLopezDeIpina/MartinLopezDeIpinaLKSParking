@@ -12,9 +12,11 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.lksnext.parking.R;
 import com.lksnext.parking.data.DataBaseManager;
+import com.lksnext.parking.data.PlazaCallback;
 import com.lksnext.parking.data.ReservaCallback;
 import com.lksnext.parking.data.UserCallback;
 import com.lksnext.parking.databinding.ActivityMainBinding;
+import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.Reserva;
 import com.lksnext.parking.domain.Usuario;
 import com.lksnext.parking.viewmodel.MainViewModel;
@@ -83,6 +85,7 @@ public class MainActivity extends BaseActivity {
 
     private void setCurrentUserDataFromDB(){
         setProfileData();
+        setSpotData();
         setBookingData();
     }
     private void setProfileData(){
@@ -90,6 +93,14 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onCallback(Usuario usuario) {
                 viewModel.setUser(usuario);
+            }
+        });
+    }
+    private void setSpotData(){
+        dataBaseManager.getParkingSpots(new PlazaCallback() {
+            @Override
+            public void onCallback(List<Plaza> plazas) {
+                viewModel.setListaPlazas(plazas);
             }
         });
     }
