@@ -51,6 +51,9 @@ public class Reserva {
     public void setPlazaID(Integer plazaID) {
         this.plazaID = plazaID;
     }
+    public boolean isInsideReservaMultiple() {
+        return insideReservaMultiple;
+    }
 
 
     @PropertyName("hora")

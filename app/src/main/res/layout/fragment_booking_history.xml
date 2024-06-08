@@ -15,6 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <LinearLayout
+        android:id="@+id/sortingChips"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
@@ -74,11 +75,11 @@
     <FrameLayout
         android:id="@+id/commposed_book_container"
         android:layout_width="325dp"
-        android:layout_height="275dp"
+        android:layout_height="186dp"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/heading"
+        app:layout_constraintTop_toBottomOf="@id/sortingChips"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

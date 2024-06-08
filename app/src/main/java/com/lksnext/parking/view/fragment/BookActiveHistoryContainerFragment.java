@@ -23,12 +23,12 @@ import com.lksnext.parking.viewmodel.MainViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookContainerFragment extends Fragment {
+public class BookActiveHistoryContainerFragment extends Fragment {
     private MainViewModel mainViewModel;
     private RecyclerView recyclerView;
-    private ReservationAdapter adapter;
+    private ComposedReservationAdapter composedAdapter;
 
-    public BookContainerFragment() {
+    public BookActiveHistoryContainerFragment() {
         // Es necesario un constructor vacio
     }
 
@@ -36,7 +36,7 @@ public class BookContainerFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         com.lksnext.parking.databinding.FragmentBookcontainerBinding binding =
-            com.lksnext.parking.databinding.FragmentBookcontainerBinding.inflate(inflater, container, false);
+                com.lksnext.parking.databinding.FragmentBookcontainerBinding.inflate(inflater, container, false);
 
         mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
 
@@ -44,8 +44,8 @@ public class BookContainerFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mainViewModel.getReservasActivas().observe(getViewLifecycleOwner(), newReservations -> {
-            adapter = new ReservationAdapter(newReservations.first);
-            recyclerView.setAdapter(adapter);
+            composedAdapter = new ComposedReservationAdapter(newReservations.first, newReservations.second);
+            recyclerView.setAdapter(composedAdapter);
         });
 
         return binding.getRoot();

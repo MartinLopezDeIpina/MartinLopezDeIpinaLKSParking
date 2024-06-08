@@ -1,12 +1,16 @@
 package com.lksnext.parking.viewmodel;
 
+import android.util.Pair;
+
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.lksnext.parking.domain.Parking;
 import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.Reserva;
+import com.lksnext.parking.domain.ReservaCompuesta;
 import com.lksnext.parking.domain.Usuario;
 
 import java.util.ArrayList;
@@ -16,7 +20,8 @@ public class MainViewModel extends ViewModel {
 
     private Parking parking = Parking.getInstance();
     private final MutableLiveData<Usuario> user = new MutableLiveData<>(null);
-    private MutableLiveData<List<Reserva>> reservasActivas = new MutableLiveData<>(new ArrayList<>());
+
+    private final MediatorLiveData<Pair<List<Reserva>, List<ReservaCompuesta>>> reservasActivas = new MediatorLiveData<>();
     private MutableLiveData<List<Reserva>> reservasPasadas = new MutableLiveData<>(new ArrayList<>());
 
 
@@ -27,14 +32,15 @@ public class MainViewModel extends ViewModel {
         user.setValue(usuario);
     }
 
-    public LiveData<List<Reserva>> getReservasActivas() {
+    public LiveData<Pair<List<Reserva>, List<ReservaCompuesta>>> getReservasActivas() {
         return reservasActivas;
     }
     public void setListaPlazas(List<Plaza> plazas){
         parking.setPlazas(plazas);
     }
-    public void setListaReservas(List<Reserva> reservas){
+    public void setListaReservas(List<Reserva> reservas, List<ReservaCompuesta> compuestas){
         parking.setReservas(reservas);
+        parking.setReservasCompuestas(compuestas);
         updateReservas();
     }
     private void updateReservas(){
@@ -48,7 +54,8 @@ public class MainViewModel extends ViewModel {
                 activas.add(reserva);
             }
         }
-        reservasActivas.setValue(activas);
+        List<ReservaCompuesta> compuestas = parking.getReservasCompuestas();
+        reservasActivas.setValue(new Pair<>(activas, compuestas));
         reservasPasadas.setValue(pasadas);
     }
 }
