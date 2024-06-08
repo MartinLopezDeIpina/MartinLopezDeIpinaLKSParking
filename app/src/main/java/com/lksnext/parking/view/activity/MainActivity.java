@@ -1,6 +1,7 @@
 package com.lksnext.parking.view.activity;
 
 import android.os.Bundle;
+import android.util.Pair;
 import android.util.TypedValue;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -18,6 +19,7 @@ import com.lksnext.parking.data.UserCallback;
 import com.lksnext.parking.databinding.ActivityMainBinding;
 import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.Reserva;
+import com.lksnext.parking.domain.ReservaCompuesta;
 import com.lksnext.parking.domain.Usuario;
 import com.lksnext.parking.viewmodel.MainViewModel;
 
@@ -107,8 +109,8 @@ public class MainActivity extends BaseActivity {
     private void setBookingData(){
         dataBaseManager.getCurrentUserBookings(new ReservaCallback() {
             @Override
-            public void onCallback(List<Reserva> reservas) {
-                viewModel.setListaReservas(reservas);
+            public void onCallback(List<Reserva> reservas, List<ReservaCompuesta> compuestas) {
+                viewModel.setListaReservas(reservas, compuestas);
             }
         });
     }

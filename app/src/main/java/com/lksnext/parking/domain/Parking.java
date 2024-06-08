@@ -7,11 +7,13 @@ public class Parking {
     private static Parking instance;
 
     private List<Reserva> reservas;
+    private List<ReservaCompuesta> reservasCompuestas;
     private List<Plaza> plazas;
     private Usuario usuario;
 
     private Parking() {
         reservas = new ArrayList<>();
+        reservasCompuestas = new ArrayList<>();
     }
 
     public static Parking getInstance() {
@@ -29,8 +31,14 @@ public class Parking {
     public void setReservas(List<Reserva> reservas){
         this.reservas = reservas;
     }
+    public void setReservasCompuestas(List<ReservaCompuesta> compuestas){
+        reservasCompuestas.addAll(compuestas);
+    }
     public List<Reserva> getReservas(){
         return reservas;
+    }
+    public List<ReservaCompuesta> getReservasCompuestas(){
+        return reservasCompuestas;
     }
     public TipoPlaza getTipoPlazaReserva(int plazaID){
         return plazas.stream()

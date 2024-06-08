@@ -1,10 +1,13 @@
 package com.lksnext.parking.data;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.lksnext.parking.domain.Plaza;
+import com.lksnext.parking.domain.ReservaCompuesta;
 import com.lksnext.parking.domain.Usuario;
 import com.lksnext.parking.domain.Reserva;
+import com.google.android.gms.tasks.Tasks;
 
 import java.util.List;
 
@@ -32,8 +35,17 @@ public class DataBaseManager {
     public void addSpotToDB(Plaza plaza){
         db.collection("plaza").document(Long.toString(plaza.getId())).set(plaza);
     }
-    public void addBookingToDB(Reserva reserva){
-        db.collection("reserva").add(reserva);
+    public Task<String> addBookingToDB(Reserva reserva){
+        return db.collection("reserva").add(reserva).continueWith(task -> {
+            if (task.isSuccessful()) {
+                return task.getResult().getId();
+            } else {
+                throw task.getException();
+            }
+        });
+    }
+    public void addReservaCompuestaToDB(ReservaCompuesta reservaCompuesta){
+        db.collection("reservaCompuesta").add(reservaCompuesta);
     }
 
     public void getCurrenUser(UserCallback callback){
@@ -55,16 +67,27 @@ public class DataBaseManager {
                     }
                 });
     }
+
     public void getCurrentUserBookings(ReservaCallback callback){
         String uid = mAuth.getCurrentUser().getUid();
-        db.collection("reserva").whereEqualTo("usuarioID", uid)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        List<Reserva> reservas = task.getResult().toObjects(Reserva.class);
-                        callback.onCallback(reservas);
-                    }
-                });
-    }
+
+        db.collection("reserva")
+            .whereEqualTo("usuarioID", uid)
+            .get()
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    List<Reserva> reservas = task.getResult().toObjects(Reserva.class);
+                    db.collection("reservaCompuesta")
+                        .whereEqualTo("usuarioID", uid)
+                        .get()
+                        .addOnCompleteListener(task2 -> {
+                            if (task2.isSuccessful()) {
+                                List<ReservaCompuesta> reservasCompuestas = task2.getResult().toObjects(ReservaCompuesta.class);
+                                callback.onCallback(reservas, reservasCompuestas);
+                            }
+                        });
+                }
+            });
+}
 
 }

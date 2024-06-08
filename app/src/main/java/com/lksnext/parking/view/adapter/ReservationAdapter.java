@@ -16,7 +16,7 @@ import com.lksnext.parking.view.adapter.ReservationViewHolder;
 
 public class ReservationAdapter extends RecyclerView.Adapter<ReservationViewHolder> {
 
-    private final List<Reserva> reservations;
+    protected final List<Reserva> reservations;
 
     public ReservationAdapter(List<Reserva> reservations) {
         this.reservations = reservations;
