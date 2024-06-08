@@ -22,6 +22,11 @@
     <string name="active_reservations">Reservas activas</string>
     <string name="add_reservation">Añadir reserva</string>
     <string name="settings">Ajustes</string>
+    <string name="booking_history">Historial de reservas</string>
+    <string name="date">Fecha</string>
+    <string name="time">Hora</string>
+    <string name="spot">Plaza</string>
+    <string name="vehicle">Vehículo</string>
 
 
     <string name="selectDate">Selecciona una fecha</string>
