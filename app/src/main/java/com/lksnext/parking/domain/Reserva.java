@@ -13,15 +13,18 @@ public class Reserva {
 
     Hora hora;
 
+    boolean insideReservaMultiple;
+
     public Reserva() {
 
     }
 
-    public Reserva(String fecha, String usuarioID, Integer plazaID, Hora hora) {
+    public Reserva(String fecha, String usuarioID, Integer plazaID, Hora hora, Boolean insideReservaMultiple) {
         this.fecha = fecha;
         this.usuarioID = usuarioID;
         this.plazaID = plazaID;
         this.hora = hora;
+        this.insideReservaMultiple = insideReservaMultiple;
     }
 
 
