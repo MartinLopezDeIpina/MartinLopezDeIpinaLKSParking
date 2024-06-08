@@ -11,15 +11,24 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.lksnext.parking.R;
+import com.lksnext.parking.data.DataBaseManager;
+import com.lksnext.parking.data.ReservaCallback;
+import com.lksnext.parking.data.UserCallback;
 import com.lksnext.parking.databinding.ActivityMainBinding;
+import com.lksnext.parking.domain.Reserva;
+import com.lksnext.parking.domain.Usuario;
 import com.lksnext.parking.viewmodel.MainViewModel;
+
+import java.util.List;
 
 public class MainActivity extends BaseActivity {
 
+    MainViewModel viewModel;
     BottomNavigationView bottomNavigationView;
     ActivityMainBinding binding;
     NavController navController;
     AppBarConfiguration appBarConfiguration;
+    DataBaseManager dataBaseManager = DataBaseManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +36,9 @@ public class MainActivity extends BaseActivity {
 
         //Asignamos la vista/interfaz main (layout)
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-        MainViewModel viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         binding.setMainViewModel(viewModel);
-        viewModel.setCurrentUserViewModel();
+        setCurrentUserDataFromDB();
 
         setContentView(binding.getRoot());
 
@@ -70,5 +79,26 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
+    }
+
+    private void setCurrentUserDataFromDB(){
+        setProfileData();
+        setBookingData();
+    }
+    private void setProfileData(){
+        dataBaseManager.getCurrenUser(new UserCallback() {
+            @Override
+            public void onCallback(Usuario usuario) {
+                viewModel.setUser(usuario);
+            }
+        });
+    }
+    private void setBookingData(){
+        dataBaseManager.getCurrentUserBookings(new ReservaCallback() {
+            @Override
+            public void onCallback(List<Reserva> reservas) {
+                viewModel.setListaReservas(reservas);
+            }
+        });
     }
 }

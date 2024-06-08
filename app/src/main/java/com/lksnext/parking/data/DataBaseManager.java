@@ -2,11 +2,12 @@ package com.lksnext.parking.data;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.auth.User;
+import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.Usuario;
+import com.lksnext.parking.domain.Reserva;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+
 
 public class DataBaseManager {
     private static DataBaseManager instance;
@@ -28,8 +29,14 @@ public class DataBaseManager {
     public void addUserToDB(Usuario usuario){
         db.collection("usuario").document(usuario.getID()).set(usuario);
     }
+    public void addSpotToDB(Plaza plaza){
+        db.collection("plaza").document(Long.toString(plaza.getId())).set(plaza);
+    }
+    public void addBookingToDB(Reserva reserva){
+        db.collection("reserva").document(reserva.getReservaID()).set(reserva);
+    }
 
-    public void setCurrenUser(UserCallback callback){
+    public void getCurrenUser(UserCallback callback){
         String uid = mAuth.getCurrentUser().getUid();
         db.collection("usuario").document(uid).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -38,4 +45,16 @@ public class DataBaseManager {
             }
         });
     }
+    public void getCurrentUserBookings(ReservaCallback callback){
+        String uid = mAuth.getCurrentUser().getUid();
+        db.collection("reserva").whereEqualTo("userID", uid)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<Reserva> reservas = task.getResult().toObjects(Reserva.class);
+                        callback.onCallback(reservas);
+                    }
+                });
+    }
+
 }

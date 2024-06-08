@@ -1,10 +1,14 @@
 package com.lksnext.parking.domain;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Reserva {
 
-    String fecha, usuario, id;
+    String fecha, usuario;
 
-    Plaza plaza;
+    Integer plazaID;
 
     Hora hora;
 
@@ -12,13 +16,13 @@ public class Reserva {
 
     }
 
-    public Reserva(String fecha, String usuario, String id, Plaza plaza, Hora hora) {
+    public Reserva(String fecha, String usuarioID, Integer plazaID, Hora hora) {
         this.fecha = fecha;
-        this.usuario = usuario;
-        this.plaza = plaza;
+        this.usuario = usuarioID;
+        this.plazaID = plazaID;
         this.hora = hora;
-        this.id = id;
     }
+
 
     public String getFecha() {
         return fecha;
@@ -36,12 +40,12 @@ public class Reserva {
         this.usuario = usuario;
     }
 
-    public Plaza getPlazaId() {
-        return plaza;
+    public Integer getPlazaId() {
+        return plazaID;
     }
 
-    public void setPlazaId(Plaza plaza) {
-        this.plaza = plaza;
+    public void setPlazaId(Integer plazaID) {
+        this.plazaID = plazaID;
     }
 
     public Hora getHoraInicio() {
@@ -60,11 +64,23 @@ public class Reserva {
         this.hora = hora;
     }
 
-    public String getId() {
-        return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public boolean isCaducada(){
+        Date today = getParsedDate();
+
+        if (today == null) {
+            return false;
+        }
+
+        return today.compareTo(today) >= 0 && hora.getHoraFin() > System.currentTimeMillis();
+    }
+    private Date getParsedDate() {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            return sdf.parse(fecha);
+        } catch (ParseException e) {
+            return null;
+        }
     }
 }
