@@ -38,12 +38,12 @@ public class BookContainerFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         List<Reserva> reservations = new ArrayList<>();
-        reservations.add(new Reserva("2021-06-01", "usuario1", "1", new Plaza(3, TipoPlaza.COCHE), new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
-        reservations.add(new Reserva("2021-08-01", "usuario1", "1", new Plaza(5, TipoPlaza.COCHE), new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
-        reservations.add(new Reserva("2021-09-01", "usuario1", "1", new Plaza(7, TipoPlaza.COCHE), new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
-        reservations.add(new Reserva("2021-09-01", "usuario1", "1", new Plaza(7, TipoPlaza.COCHE), new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
-        reservations.add(new Reserva("2021-09-01", "usuario1", "1", new Plaza(7, TipoPlaza.COCHE), new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
-        reservations.add(new Reserva("2021-09-01", "usuario1", "1", new Plaza(7, TipoPlaza.COCHE), new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
+        reservations.add(new Reserva("2021-06-01", "usuario1",  1, new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
+        reservations.add(new Reserva("2021-08-01", "usuario1",  2, new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
+        reservations.add(new Reserva("2021-09-01", "usuario1",  3, new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
+        reservations.add(new Reserva("2021-09-01", "usuario1",  4, new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
+        reservations.add(new Reserva("2021-09-01", "usuario1",  5, new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
+        reservations.add(new Reserva("2021-09-01", "usuario1",  6, new Hora(System.currentTimeMillis(), System.currentTimeMillis())));
 
         adapter = new ReservationAdapter(reservations);
         recyclerView.setAdapter(adapter);

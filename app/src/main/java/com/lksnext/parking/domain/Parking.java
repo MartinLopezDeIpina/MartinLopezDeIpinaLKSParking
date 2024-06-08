@@ -18,4 +18,10 @@ public class Parking {
         }
         return instance;
     }
+    public void addReserva(Reserva reserva){
+        reservas.add(reserva);
+    }
+    public List<Reserva> getReservas(){
+        return reservas;
+    }
 }
