@@ -11,6 +11,7 @@ import com.lksnext.parking.domain.TipoPlaza;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 
 public class DataBaseFiller {
@@ -37,37 +38,31 @@ public class DataBaseFiller {
     }
 
     public void fillReservas(){
+
         String userID = "X0gZj6BNaeT6yIVzdN3IWKLyM1S2";
 
-        List<Task<String>> tasks = new ArrayList<>();
+        List<Task<Reserva>> tasks = new ArrayList<>();
         List<String> reservasParaCompuesta = new ArrayList<>();
 
         for(int i = 0; i < 3; i++){
-            Reserva reserva = new Reserva(String.format("2021-07-0%s", i), userID, i, new Hora(1000, 1100), true);
-            Task<String> task = db.addBookingToDB(reserva).continueWith(task2 -> {
-                if (task2.isSuccessful()) {
-                    return task2.getResult();
-                } else {
-                    throw task2.getException();
-                }
-            });
-            tasks.add(task);
+            Reserva reserva = new Reserva(String.format("2021-07-0%s", i), userID, 3, new Hora(1000, 1100), true);
+            tasks.add(db.addBookingToDB(reserva));
         }
 
-        Tasks.whenAllSuccess(tasks).addOnSuccessListener(ids -> {
-            for (Object id : ids) {
-                reservasParaCompuesta.add((String) id);
+        Tasks.whenAllSuccess(tasks).addOnSuccessListener(reservas -> {
+            for (Object reserva : reservas) {
+                reservasParaCompuesta.add(((Reserva)reserva).getReservaID());
             }
-            ReservaCompuesta reservaCompuesta = new ReservaCompuesta(userID, reservasParaCompuesta);
+            ReservaCompuesta reservaCompuesta = new ReservaCompuesta(userID, reservasParaCompuesta, 3, new Hora(1000, 1100));
             db.addReservaCompuestaToDB(reservaCompuesta);
         });
 
         Reserva reserva = new Reserva("2021-06-01", userID, 57, new Hora(1030, 1130), false);
         Reserva reserva2 = new Reserva("2021-06-01", userID, 78, new Hora(1000, 1200), false);
         Reserva reserva3 = new Reserva("2021-06-01", userID, 98, new Hora(1000, 1700), false);
+
         db.addBookingToDB(reserva);
         db.addBookingToDB(reserva2);
         db.addBookingToDB(reserva3);
     }
-
 }
