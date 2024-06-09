@@ -55,4 +55,12 @@
         de uso de QuickSpot</string>
     <string name="accept_terms">Por favor acepta los términos de uso</string>
 
+    <string name="monday">L</string>
+    <string name="tuesday">M</string>
+    <string name="wednesday">X</string>
+    <string name="thursday">J</string>
+    <string name="friday">V</string>
+    <string name="saturday">S</string>
+    <string name="sunday">D</string>
+
 </resources>

@@ -35,7 +35,7 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         DataBaseFiller dataBaseFiller = new DataBaseFiller();
-        //dataBaseFiller.fillReservas();
+        dataBaseFiller.fillReservas();
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

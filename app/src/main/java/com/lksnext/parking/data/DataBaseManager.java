@@ -2,6 +2,7 @@ package com.lksnext.parking.data;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.ReservaCompuesta;
@@ -35,15 +36,18 @@ public class DataBaseManager {
     public void addSpotToDB(Plaza plaza){
         db.collection("plaza").document(Long.toString(plaza.getId())).set(plaza);
     }
-    public Task<String> addBookingToDB(Reserva reserva){
-        return db.collection("reserva").add(reserva).continueWith(task -> {
-            if (task.isSuccessful()) {
-                return task.getResult().getId();
+    public Task<Reserva> addBookingToDB(Reserva reserva){
+        Task<DocumentReference> task = db.collection("reserva").add(reserva);
+        return task.continueWith(task2 -> {
+            if (task2.isSuccessful()) {
+                String id = task2.getResult().getId();
+                reserva.setReservaID(id);
+                return reserva;
             } else {
-                throw task.getException();
+                throw task2.getException();
             }
         });
-    }
+}
     public void addReservaCompuestaToDB(ReservaCompuesta reservaCompuesta){
         db.collection("reservaCompuesta").add(reservaCompuesta);
     }

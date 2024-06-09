@@ -37,6 +37,12 @@ public class Parking {
     public List<Reserva> getReservas(){
         return reservas;
     }
+    public Reserva getReserva(String reservaID){
+        return reservas.stream()
+                .filter(reserva -> reserva.getReservaID().equals(reservaID))
+                .findFirst()
+                .orElse(null);
+    }
     public List<ReservaCompuesta> getReservasCompuestas(){
         return reservasCompuestas;
     }
