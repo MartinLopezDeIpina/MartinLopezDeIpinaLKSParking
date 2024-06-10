@@ -36,18 +36,10 @@ public class DataBaseManager {
     public void addSpotToDB(Plaza plaza){
         db.collection("plaza").document(Long.toString(plaza.getId())).set(plaza);
     }
-    public Task<Reserva> addBookingToDB(Reserva reserva){
-        Task<DocumentReference> task = db.collection("reserva").add(reserva);
-        return task.continueWith(task2 -> {
-            if (task2.isSuccessful()) {
-                String id = task2.getResult().getId();
-                reserva.setReservaID(id);
-                return reserva;
-            } else {
-                throw task2.getException();
-            }
-        });
-}
+
+    public void addBookingToDB(Reserva reserva){
+        db.collection("reserva").document(reserva.getId()).set(reserva);
+    }
     public void addReservaCompuestaToDB(ReservaCompuesta reservaCompuesta){
         db.collection("reservaCompuesta").add(reservaCompuesta);
     }
