@@ -71,27 +71,28 @@ public class ComposedReservationViewHolder extends RecyclerView.ViewHolder{
         for (Reserva reserva : reservas) {
             switch(reserva.getDiaSemana()) {
                 case LUNES:
-                    lunes.setTextAppearance(itemView.getContext(), R.style.diaSemanaDisabled);
+                    lunes.setAlpha(1f);
                     break;
                 case MARTES:
-                    martes.setTextAppearance(itemView.getContext(), R.style.diaSemanaDisabled);
+                    martes.setAlpha(1f);
                     break;
                 case MIERCOLES:
-                    miercoles.setTextAppearance(itemView.getContext(), R.style.diaSemanaDisabled);
+                    miercoles.setAlpha(1f);
                     break;
                 case JUEVES:
-                    jueves.setTextAppearance(itemView.getContext(), R.style.diaSemanaDisabled);
+                    jueves.setAlpha(1f);
                     break;
                 case VIERNES:
-                    viernes.setTextAppearance(itemView.getContext(), R.style.diaSemanaDisabled);
+                    viernes.setAlpha(1f);
                     break;
                 case SABADO:
-                    sabado.setTextAppearance(itemView.getContext(), R.style.diaSemanaDisabled);
+                    sabado.setAlpha(1f);
                     break;
                 case DOMINGO:
-                    domingo.setTextAppearance(itemView.getContext(), R.style.diaSemanaDisabled);
+                    domingo.setAlpha(1f);
                     break;
             }
+
         }
 
     }

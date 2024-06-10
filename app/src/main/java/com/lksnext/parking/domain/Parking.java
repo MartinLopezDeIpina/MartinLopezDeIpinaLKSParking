@@ -39,7 +39,7 @@ public class Parking {
     }
     public Reserva getReserva(String reservaID){
         return reservas.stream()
-                .filter(reserva -> reserva.getReservaID().equals(reservaID))
+                .filter(reserva -> reserva.getId().equals(reservaID))
                 .findFirst()
                 .orElse(null);
     }

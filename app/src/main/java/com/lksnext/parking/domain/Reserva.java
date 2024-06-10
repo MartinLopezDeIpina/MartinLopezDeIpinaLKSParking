@@ -5,15 +5,15 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import com.google.firebase.firestore.PropertyName;
+import java.util.UUID;
 
 public class Reserva {
 
-    String fecha, usuarioID;
+    String fecha, usuarioID, id;
 
     Integer plazaID;
 
     Hora hora;
-    String reservaID;
 
     boolean insideReservaMultiple;
 
@@ -22,6 +22,7 @@ public class Reserva {
     }
 
     public Reserva(String fecha, String usuarioID, Integer plazaID, Hora hora, Boolean insideReservaMultiple) {
+        this.id = UUID.randomUUID().toString();
         this.fecha = fecha;
         this.usuarioID = usuarioID;
         this.plazaID = plazaID;
@@ -29,8 +30,8 @@ public class Reserva {
         this.insideReservaMultiple = insideReservaMultiple;
     }
 
-    public void setReservaID(String reservaID) {
-        this.reservaID = reservaID;
+    public void setId(String id) {
+        this.id = id;
     }
     public String getFecha() {
         return fecha;
@@ -55,8 +56,8 @@ public class Reserva {
     public void setPlazaID(Integer plazaID) {
         this.plazaID = plazaID;
     }
-    public String getReservaID() {
-        return reservaID;
+    public String getId() {
+        return id;
     }
     public boolean isInsideReservaMultiple() {
         return insideReservaMultiple;

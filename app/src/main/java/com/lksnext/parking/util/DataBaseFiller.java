@@ -36,31 +36,24 @@ public class DataBaseFiller {
             db.addSpotToDB(new Plaza(i, TipoPlaza.DISCAPACITADO));
         }
     }
-
     public void fillReservas(){
-
         String userID = "X0gZj6BNaeT6yIVzdN3IWKLyM1S2";
 
-        List<Task<Reserva>> tasks = new ArrayList<>();
+        List<Task<String>> tasks = new ArrayList<>();
         List<String> reservasParaCompuesta = new ArrayList<>();
 
         for(int i = 0; i < 3; i++){
             Reserva reserva = new Reserva(String.format("2021-07-0%s", i), userID, 3, new Hora(1000, 1100), true);
-            tasks.add(db.addBookingToDB(reserva));
+            db.addBookingToDB(reserva);
+            reservasParaCompuesta.add(reserva.getId());
         }
 
-        Tasks.whenAllSuccess(tasks).addOnSuccessListener(reservas -> {
-            for (Object reserva : reservas) {
-                reservasParaCompuesta.add(((Reserva)reserva).getReservaID());
-            }
-            ReservaCompuesta reservaCompuesta = new ReservaCompuesta(userID, reservasParaCompuesta, 3, new Hora(1000, 1100));
-            db.addReservaCompuestaToDB(reservaCompuesta);
-        });
+        ReservaCompuesta reservaCompuesta = new ReservaCompuesta(userID, reservasParaCompuesta, 3, new Hora(1000, 1100));
+        db.addReservaCompuestaToDB(reservaCompuesta);
 
         Reserva reserva = new Reserva("2021-06-01", userID, 57, new Hora(1030, 1130), false);
         Reserva reserva2 = new Reserva("2021-06-01", userID, 78, new Hora(1000, 1200), false);
         Reserva reserva3 = new Reserva("2021-06-01", userID, 98, new Hora(1000, 1700), false);
-
         db.addBookingToDB(reserva);
         db.addBookingToDB(reserva2);
         db.addBookingToDB(reserva3);
