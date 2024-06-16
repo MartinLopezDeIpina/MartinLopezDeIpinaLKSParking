@@ -25,6 +25,9 @@ public class Parking {
     public void addReserva(Reserva reserva){
         reservas.add(reserva);
     }
+    public List<Plaza> getPlazas(){
+        return plazas;
+    }
     public void setPlazas(List<Plaza> plazas){
         this.plazas = plazas;
     }

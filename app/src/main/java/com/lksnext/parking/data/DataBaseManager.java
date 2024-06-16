@@ -11,6 +11,7 @@ import com.lksnext.parking.domain.Reserva;
 import com.google.android.gms.tasks.Tasks;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 public class DataBaseManager {
@@ -84,6 +85,17 @@ public class DataBaseManager {
                         });
                 }
             });
-}
+    }
+
+    public void getBookings(ReservasCallback callback){
+        db.collection("reserva").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<Reserva> reservas = task.getResult().toObjects(Reserva.class);
+                callback.onCallback(reservas);
+            } else {
+                callback.onCallback(null);
+            }
+        });
+    }
 
 }

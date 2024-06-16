@@ -105,4 +105,39 @@ public class Reserva {
             return null;
         }
     }
+
+    private Date getTransformedDate(boolean isInicio){
+        long hour;
+        if(isInicio){
+            hour = hora.getHoraInicio();
+        }else{
+            hour = hora.getHoraFin();
+        }
+
+        String hourStr = String.format("%04d", hour);
+        hourStr = hourStr.substring(0, 2) + ":" + hourStr.substring(2);
+
+        String dateTimeStr = fecha + " " + hourStr;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date date = null;
+        try {
+            date = sdf.parse(dateTimeStr);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        return date;
+    }
+
+    public boolean overlapsAnyHour(Date inicio, Date fin){
+        Date dateInicio = getTransformedDate(true);
+        Date dateFin = getTransformedDate(false);
+
+        boolean overlapsFromInicio = dateInicio.compareTo(inicio) < 0 && dateFin.compareTo(inicio) > 0;
+        boolean overlapsFromFin = dateInicio.compareTo(fin) < 0 && dateFin.compareTo(fin) > 0;
+        boolean overlapsInside = dateInicio.compareTo(inicio) > 0 && dateFin.compareTo(fin) < 0;
+        boolean overlapsOutside = dateInicio.compareTo(inicio) < 0 && dateFin.compareTo(fin) > 0;
+
+        return overlapsFromInicio || overlapsFromFin || overlapsInside || overlapsOutside;
+    }
 }
