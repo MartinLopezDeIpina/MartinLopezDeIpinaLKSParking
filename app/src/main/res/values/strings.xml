@@ -64,6 +64,10 @@
     <string name="saturday">S</string>
     <string name="sunday">D</string>
 
-    <string name="add_booking">Añadir Reserva</string>
+    <string name="add_booking">Añadir reserva</string>
+    <string name="booking_type">Tipo de plaza</string>
+    <string name="booking_date">Fecha</string>
+    <string name="booking_time">Hora</string>
+    <string name="booking_spot">Plaza</string>
 
 </resources>
