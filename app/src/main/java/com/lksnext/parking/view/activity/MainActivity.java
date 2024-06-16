@@ -78,6 +78,8 @@ public class MainActivity extends BaseActivity {
 
         // Establece el color de la barra de navegación
         getWindow().setNavigationBarColor(color);
+
+        setBookFragmentNavigationListener();
     }
 
     @Override
@@ -113,5 +115,20 @@ public class MainActivity extends BaseActivity {
                 viewModel.setListaReservas(reservas, compuestas);
             }
         });
+    }
+
+    private void setBookFragmentNavigationListener(){
+        viewModel.getNavigateToBookingFragment().observe(this, shouldNavigate -> {
+            if (shouldNavigate) {
+                navigateToBookingHistory();
+                viewModel.navigateToBookingFragment(false);
+            }
+        });
+    }
+
+    private void navigateToBookingHistory(){
+        navController.navigate(R.id.bookFragment);
+        bottomNavigationView.setSelectedItemId(R.id.reservations);
+
     }
 }
