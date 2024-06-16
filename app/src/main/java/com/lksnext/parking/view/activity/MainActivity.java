@@ -122,7 +122,7 @@ public class MainActivity extends BaseActivity {
         viewModel.getNavigateToBookingFragment().observe(this, shouldNavigate -> {
             if (shouldNavigate) {
                 navigateToBookingHistory();
-                viewModel.navigateToBookingFragment(false);
+                viewModel.navigateToBookingFragment(false, viewModel.getBookingNavigationPosition());
             }
         });
     }

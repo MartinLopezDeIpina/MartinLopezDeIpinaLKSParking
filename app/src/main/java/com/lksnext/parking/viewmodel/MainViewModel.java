@@ -63,8 +63,8 @@ public class MainViewModel extends ViewModel {
     }
 
 
-    public void navigateToBookingFragment(boolean shouldNavigate) {
-        setBookingNavigationPosition(1);
+    public void navigateToBookingFragment(boolean shouldNavigate, Integer position) {
+        setBookingNavigationPosition(position);
         navigateToBookingFragment.setValue(shouldNavigate);
     }
     public LiveData<Boolean> getNavigateToBookingFragment() {

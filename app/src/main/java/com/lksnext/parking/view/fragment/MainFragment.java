@@ -38,13 +38,19 @@ public class MainFragment extends Fragment {
         transaction.commit();
 
         bindAddButton();
+        bindViewMoreButton();
 
         return view;
     }
 
     public void bindAddButton(){
         binding.addButton.setOnClickListener(v -> {
-            mainViewModel.navigateToBookingFragment(true);
+            mainViewModel.navigateToBookingFragment(true, 1);
+        });
+    }
+    public void bindViewMoreButton(){
+        binding.viewMoreButton.setOnClickListener(v -> {
+            mainViewModel.navigateToBookingFragment(true, 0);
         });
     }
 }
