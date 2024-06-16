@@ -80,6 +80,7 @@ public class MainActivity extends BaseActivity {
         getWindow().setNavigationBarColor(color);
 
         setBookFragmentNavigationListener();
+        setMainFragmentNavigationListener();
     }
 
     @Override
@@ -125,10 +126,21 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
-
     private void navigateToBookingHistory(){
         navController.navigate(R.id.bookFragment);
         bottomNavigationView.setSelectedItemId(R.id.reservations);
+    }
 
+    private void setMainFragmentNavigationListener(){
+        viewModel.getNavigateToMainFragment().observe(this, shouldNavigate -> {
+            if (shouldNavigate) {
+                navigateToMainFragment();
+                viewModel.navigateToMainFragment(false);
+            }
+        });
+    }
+    public void navigateToMainFragment(){
+        navController.navigate(R.id.mainFragment);
+        bottomNavigationView.setSelectedItemId(R.id.newres);
     }
 }
