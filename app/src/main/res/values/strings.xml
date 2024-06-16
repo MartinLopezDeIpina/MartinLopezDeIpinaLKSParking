@@ -32,6 +32,7 @@
     <string name="selectDate">Selecciona una fecha</string>
 
     <string name="fragment_main">Main</string>
+    <string name="fragment_add_booking">Añadir Reserva</string>
     <string name="fragment_step1">Step 1</string>
     <string name="fragment_step2">Step 2</string>
     <string name="fragment_end">End</string>
@@ -62,5 +63,7 @@
     <string name="friday">V</string>
     <string name="saturday">S</string>
     <string name="sunday">D</string>
+
+    <string name="add_booking">Añadir Reserva</string>
 
 </resources>

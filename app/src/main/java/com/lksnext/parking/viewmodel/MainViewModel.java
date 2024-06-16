@@ -23,6 +23,8 @@ public class MainViewModel extends ViewModel {
 
     private final MediatorLiveData<Pair<List<Reserva>, List<ReservaCompuesta>>> reservasActivas = new MediatorLiveData<>();
     private MutableLiveData<List<Reserva>> reservasPasadas = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<Boolean> navigateToBookingFragment = new MutableLiveData<>();
+    private Integer bookingNavigationPosition = 0;
 
 
     public LiveData<Usuario> getUser() {
@@ -57,5 +59,22 @@ public class MainViewModel extends ViewModel {
         List<ReservaCompuesta> compuestas = parking.getReservasCompuestas();
         reservasActivas.setValue(new Pair<>(activas, compuestas));
         reservasPasadas.setValue(pasadas);
+    }
+
+
+    public void navigateToBookingFragment(boolean shouldNavigate) {
+        setBookingNavigationPosition(1);
+        navigateToBookingFragment.setValue(shouldNavigate);
+    }
+    public LiveData<Boolean> getNavigateToBookingFragment() {
+        return navigateToBookingFragment;
+    }
+
+    public Integer getBookingNavigationPosition() {
+        return bookingNavigationPosition;
+    }
+
+    public void setBookingNavigationPosition(Integer position) {
+        bookingNavigationPosition = position;
     }
 }
