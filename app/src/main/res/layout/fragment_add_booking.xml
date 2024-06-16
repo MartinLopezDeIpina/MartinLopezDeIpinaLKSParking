@@ -5,24 +5,24 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 xmlns:app="http://schemas.android.com/apk/res-auto"
 >
+    <LinearLayout
+        android:id="@+id/heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-<TextView
-    android:id="@+id/heading"
-    style="@style/HeadingStyle"
-    android:text="@string/add_booking"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="parent"/>
+        <ImageView
+            style="@style/iconoAtras"
+            android:id="@+id/returning"
+            android:src="@drawable/iconoactras" />
 
-<LinearLayout
-    android:id="@+id/sortingChips"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="25dp"
-    android:orientation="horizontal"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/heading"
-    >
-</LinearLayout>
+        <TextView
+            style="@style/HeadingFlechaStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/add_booking" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
