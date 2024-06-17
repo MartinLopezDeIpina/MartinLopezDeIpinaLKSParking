@@ -93,7 +93,16 @@ public class Reserva {
             return false;
         }
 
-        return today.compareTo(today) >= 0 && hora.getHoraFin() > System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String dateTimeStr = fecha + " " + hora.getHoraFin();
+        Date horaFinDate;
+        try {
+            horaFinDate = sdf.parse(dateTimeStr);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        return today.compareTo(new Date()) >= 0 && (horaFinDate != null && horaFinDate.getTime() > System.currentTimeMillis());
     }
 
 
@@ -107,15 +116,13 @@ public class Reserva {
     }
 
     private Date getTransformedDate(boolean isInicio){
-        long hour;
+        String hourStr;
         if(isInicio){
-            hour = hora.getHoraInicio();
+            hourStr = hora.getHoraInicio();
         }else{
-            hour = hora.getHoraFin();
+            hourStr = hora.getHoraFin();
         }
 
-        String hourStr = String.format("%04d", hour);
-        hourStr = hourStr.substring(0, 2) + ":" + hourStr.substring(2);
 
         String dateTimeStr = fecha + " " + hourStr;
 

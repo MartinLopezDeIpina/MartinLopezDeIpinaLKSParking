@@ -83,23 +83,16 @@ public class BookViewModel extends ViewModel {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
 
-        if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-            //si hoy es domingo devolver el final del día
-            calendar.set(Calendar.HOUR_OF_DAY, 23);
-            calendar.set(Calendar.MINUTE, 59);
-            calendar.set(Calendar.SECOND, 59);
-            calendar.set(Calendar.MILLISECOND, 999);
-        } else {
-            //si no es domingo devolver el final del próximo domingo
-            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-            calendar.add(Calendar.WEEK_OF_YEAR, 1);
+        // Set the day to Sunday
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        // Add one week to always get the next Sunday
+        calendar.add(Calendar.WEEK_OF_YEAR, 1);
 
-            calendar.set(Calendar.HOUR_OF_DAY, 23);
-            calendar.set(Calendar.MINUTE, 59);
-            calendar.set(Calendar.SECOND, 59);
-            calendar.set(Calendar.MILLISECOND, 999);
-        }
-
+        // Set the time to the end of the day
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
         return calendar.getTime();
     }
 
