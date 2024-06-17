@@ -30,8 +30,8 @@ public class ReservationViewHolder extends RecyclerView.ViewHolder {
         reservationPlaza.setText(String.format("Plaza %s",reservation.getPlazaID()));
         reservationDate.setText(reservation.getFecha());
 
-        String horaInicio = reservation.getHora().getHoraInicioString();
-        String horaFin = reservation.getHora().getHoraFinString();
+        String horaInicio = reservation.getHora().getHoraInicio();
+        String horaFin = reservation.getHora().getHoraFin();
         reservationHour.setText(String.format("%s - %s", horaInicio, horaFin));
 
         TipoPlaza tipoPlaza = Parking.getInstance().getTipoPlazaReserva(reservation.getPlazaID());
