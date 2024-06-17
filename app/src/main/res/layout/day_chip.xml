@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <data>
+        <variable
+            name="number"
+            type="int" />
+    </data>
+    <com.google.android.material.chip.Chip
+        style="@style/dateChip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{Integer.toString(number)}"
+        app:chipStartPadding="3dp"
+        android:textSize="16sp"
+        app:chipEndPadding="3dp"
+        app:chipMinTouchTargetSize="30dp"
+        android:layout_marginTop="5dp"
+        app:chipBackgroundColor="@color/chip_background_color"
+        >
+    </com.google.android.material.chip.Chip>
+</layout>

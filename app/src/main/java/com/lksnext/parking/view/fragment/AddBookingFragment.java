@@ -35,6 +35,8 @@ private FragmentAddBookingBinding binding;
         mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
         bookViewModel = new ViewModelProvider(requireActivity()).get(BookViewModel.class);
 
+        binding.setBookViewModel(bookViewModel);
+
         bookViewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
             if(isLoading){
                 binding.progressBar.setVisibility(View.VISIBLE);
