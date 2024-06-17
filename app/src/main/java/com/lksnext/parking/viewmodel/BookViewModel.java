@@ -8,15 +8,18 @@ import androidx.lifecycle.ViewModel;
 
 import com.lksnext.parking.data.DataBaseManager;
 import com.lksnext.parking.data.ReservasCallback;
+import com.lksnext.parking.domain.DiaSemana;
 import com.lksnext.parking.domain.Parking;
 import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.Reserva;
 import com.lksnext.parking.domain.TipoPlaza;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class BookViewModel extends ViewModel {
@@ -99,4 +102,39 @@ public class BookViewModel extends ViewModel {
 
         return calendar.getTime();
     }
+
+    //el primer argumento es el día del mes y el segundo la inicial del mes. De lunes a viernes.
+    public String[][] getSemanaActual(){
+        String[][] semanaActual = new String[7][2];
+        Calendar calendar = Calendar.getInstance();
+
+        while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+            calendar.add(Calendar.DAY_OF_MONTH, -1);
+        }
+
+        for (int i = 0; i < 7; i++) {
+            semanaActual[i][0] = Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
+            semanaActual[i][1] = new SimpleDateFormat("MMMM", new Locale("es", "ES")).format(calendar.getTime()).substring(0, 1).toUpperCase();
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        return semanaActual;
+    }
+
+    public Integer[] getTwoWeeksDays() {
+        Integer[] twoWeeksDays = new Integer[14];
+        Calendar calendar = Calendar.getInstance();
+
+        while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+            calendar.add(Calendar.DAY_OF_MONTH, -1);
+        }
+
+        for (int i = 0; i < 14; i++) {
+            twoWeeksDays[i] = calendar.get(Calendar.DAY_OF_MONTH);
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        return twoWeeksDays;
+    }
+
 }
