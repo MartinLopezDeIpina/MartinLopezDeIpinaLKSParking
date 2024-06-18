@@ -143,6 +143,7 @@
                 >
             </TextView>
             <include
+                android:id="@+id/date_chip_group"
                 layout="@layout/date_chip_group"
                 bind:weekDays="@{bookViewModel.getNextSevenDays()}"
                 bind:weekDaysInitials="@{bookViewModel.getNextSevenDaysInitials()}"
@@ -158,7 +159,7 @@
             <include
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                layout="@layout/time_chip_group"
+                layout="@layout/hour_chip_group"
                 >
 
             </include>
@@ -171,7 +172,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminate="true"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
