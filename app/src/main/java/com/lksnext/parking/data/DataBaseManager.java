@@ -3,13 +3,16 @@ package com.lksnext.parking.data;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.lksnext.parking.domain.Hora;
 import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.ReservaCompuesta;
 import com.lksnext.parking.domain.Usuario;
 import com.lksnext.parking.domain.Reserva;
 import com.google.android.gms.tasks.Tasks;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -96,6 +99,54 @@ public class DataBaseManager {
                 callback.onCallback(null);
             }
         });
+    }
+
+    public List<Reserva> getBookingsSpotNotExpired(long plazaID) {
+        try {
+            Task<List<DocumentSnapshot>> task = db.collection("reserva")
+                    .whereEqualTo("plazaID", plazaID)
+                    .get()
+                    .continueWith(task1 -> task1.getResult().getDocuments());
+
+            List<DocumentSnapshot> documents = Tasks.await(task);
+
+            List<Reserva> reservas = new ArrayList<>();
+            for (DocumentSnapshot document : documents) {
+                String fecha = document.getString("fecha");
+                Hora hora = document.toObject(Hora.class);
+                Reserva reserva = new Reserva(fecha, hora);
+                if(!reserva.isCaducada()){
+                    reservas.add(reserva);
+                }
+            }
+
+            return reservas;
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void getBookingsSpotDay(long plazaID, String dia, ReservasCallback callback) {
+        db.collection("reserva")
+            .whereEqualTo("plazaID", plazaID)
+            .whereEqualTo("fecha", dia)
+            .get()
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    List<Reserva> reservas = new ArrayList<>();
+                    for (DocumentSnapshot document : task.getResult().getDocuments()) {
+                        String horaInicio = document.getString("hora.horaInicio");
+                        String horaFin = document.getString("hora.horaFin");
+                        Hora hora = new Hora(horaInicio, horaFin);
+                        Reserva reserva = new Reserva(dia, hora);
+                        reservas.add(reserva);
+                    }
+                    callback.onCallback(reservas);
+                } else {
+                    callback.onCallback(null);
+                }
+            });
     }
 
 }

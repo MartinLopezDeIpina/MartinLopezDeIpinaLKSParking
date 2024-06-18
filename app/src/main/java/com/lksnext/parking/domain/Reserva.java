@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.PropertyName;
 import java.util.UUID;
 
@@ -28,6 +30,10 @@ public class Reserva {
         this.plazaID = plazaID;
         this.hora = hora;
         this.insideReservaMultiple = insideReservaMultiple;
+    }
+    public Reserva(String fecha, Hora hora){
+        this.fecha = fecha;
+        this.hora = hora;
     }
 
     public void setId(String id) {
@@ -86,10 +92,11 @@ public class Reserva {
     }
 
 
+    @Exclude
     public boolean isCaducada() {
-        Date today = getParsedDate();
+        Date book_date = getParsedDate();
 
-        if (today == null) {
+        if (book_date == null) {
             return false;
         }
 
@@ -102,7 +109,19 @@ public class Reserva {
             throw new RuntimeException(e);
         }
 
-        return today.compareTo(new Date()) >= 0 && (horaFinDate != null && horaFinDate.getTime() > System.currentTimeMillis());
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        cal1.setTime(book_date);
+        cal2.setTime(new Date());
+
+        boolean sameDay = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
+
+        if(sameDay) {
+            return !(horaFinDate != null && horaFinDate.getTime() > System.currentTimeMillis());
+        } else {
+            return book_date.compareTo(new Date()) <= 0;
+        }
     }
 
 

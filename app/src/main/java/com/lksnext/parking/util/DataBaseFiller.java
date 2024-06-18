@@ -63,9 +63,25 @@ public class DataBaseFiller {
 
     public void fillPlaza98(){
         Calendar calendar = Calendar.getInstance();
-        for(int i = 0; i < 7; i++){
+        for(int i = 0; i < 13; i++){
             String date = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
             Reserva reserva = new Reserva(date, userID, 98, new Hora("00:00", "23:59"), false);
+            db.addBookingToDB(reserva);
+            calendar.add(Calendar.DAY_OF_MONTH, 1); // Increment the day
+        }
+    }
+
+    public void fillPlazas75_94(){
+        for(int i = 75; i < 95; i++){
+            fillPlaza(i);
+        }
+    }
+
+    public void fillPlaza(int plazaID){
+        Calendar calendar = Calendar.getInstance();
+        for(int i = 0; i < 13; i++){
+            String date = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
+            Reserva reserva = new Reserva(date, userID, plazaID, new Hora("00:00", "23:59"), false);
             db.addBookingToDB(reserva);
             calendar.add(Calendar.DAY_OF_MONTH, 1); // Increment the day
         }
