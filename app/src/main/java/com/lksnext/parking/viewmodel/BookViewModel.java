@@ -14,51 +14,109 @@ import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.Reserva;
 import com.lksnext.parking.domain.TipoPlaza;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class BookViewModel extends ViewModel {
     private Parking parking = Parking.getInstance();
-    private List<Reserva> reservas = new ArrayList<>();
     private DataBaseManager db = DataBaseManager.getInstance();
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>(true);
 
 
     public BookViewModel() {
-        db.getBookings(new ReservasCallback() {
-            @Override
-            public void onCallback(List<Reserva> reservasDB) {
-                reservas = reservasDB;
-                isLoading.setValue(false);
-            }
-        });
     }
 
     public LiveData<Boolean> getIsLoading() {
         return isLoading;
     }
 
-    public boolean isTipoPlazaDisponibleEstaSemana(TipoPlaza tipo){
-        Date inicio = new Date();
-        Date finDeSemana = getSiguineteDomingoFin();
+    //chequear si cada tipo de plaza está disponible de forma asíncrona
+    public CompletableFuture<Boolean> isTipoPlazaDisponibleEstaSemana(TipoPlaza tipo){
+        return CompletableFuture.supplyAsync(() -> {
+            Date inicio = new Date();
+            Date finDeSemana = getSiguineteDomingoFin();
+            List<String> dias = getDatesBetween(inicio, finDeSemana);
 
-        List<Plaza> plazas = parking.getPlazas();
-        return plazas.stream()
-                .filter(plaza -> plaza.getTipoPlaza() == tipo)
-                .anyMatch(plaza -> plazaDisponible(plaza.getId(), inicio, finDeSemana));
+            for(String dia : dias){
+                if(isTipoPlazaDisponibleDia(tipo, dia)){
+                    return true;
+                }
+            }
+            return false;
+        });
+    }
+
+    //Dentro de cada tipo de plaza, chequear si hay alguna plaza disponible ese día de forma síncrona
+    private boolean isTipoPlazaDisponibleDia(TipoPlaza tipo, String dia){
+        List<Plaza> plazas = parking.getPlazas().stream()
+                .filter(plaza -> plaza.getTipo().equals(tipo))
+                .collect(Collectors.toList());
+
+
+        for(Plaza plaza : plazas){
+            System.out.println("checking" + plaza.getId() + " " + dia);
+            if(plazaDisponibleDia(plaza.getId(), dia)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //Dentro de cada plaza chquear si hay alguna plaza disponible ese día de forma síncrona
+    private boolean plazaDisponibleDia(long plazaID, String dia){
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+
+        db.getBookingsSpotDay(plazaID, dia, new ReservasCallback() {
+            @Override
+            public void onCallback(List<Reserva> reservasPlaza) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar calendar = Calendar.getInstance();
+                try {
+                    calendar.setTime(sdf.parse(dia));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    future.complete(false);
+                    return;
+                }
+
+                Date inicio = calendar.getTime();
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                Date fin = calendar.getTime();
+
+                while (inicio.before(fin)) {
+                    Date currentHour = inicio;
+                    calendar.setTime(inicio);
+                    calendar.add(Calendar.HOUR, 1);
+                    Date nextHour = calendar.getTime();
+
+                    boolean isHourAvailable = reservasPlaza.stream()
+                            .noneMatch(reserva -> reserva.overlapsAnyHour(currentHour, nextHour));
+
+                    if (isHourAvailable) {
+                        future.complete(true);
+                        return;
+                    }
+
+                    inicio = nextHour;
+                }
+
+                future.complete(false);
+            }
+        });
+
+        return future.join();
     }
 
     //una plaza estará disponible esa semana si al menos hay una hora libre en ella
     private boolean plazaDisponible(long plazaID, Date inicio, Date fin){
-        List<Reserva> overlapingReservas = reservas.stream()
-                .filter(reserva -> reserva.getPlazaID() == plazaID)
-                .filter(reserva -> reserva.overlapsAnyHour(inicio, fin))
-                .collect(Collectors.toList());
+        List<Reserva> reservasPlaza = db.getBookingsSpotNotExpired(plazaID);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(inicio);
@@ -68,7 +126,7 @@ public class BookViewModel extends ViewModel {
             calendar.add(Calendar.HOUR, 1);
             Date nextHour = calendar.getTime();
 
-            boolean isHourAvailable = overlapingReservas.stream()
+            boolean isHourAvailable = reservasPlaza.stream()
                     .noneMatch(reserva -> reserva.overlapsAnyHour(currentHour, nextHour));
 
             if (isHourAvailable) {
@@ -94,6 +152,21 @@ public class BookViewModel extends ViewModel {
         calendar.set(Calendar.SECOND, 59);
         calendar.set(Calendar.MILLISECOND, 999);
         return calendar.getTime();
+    }
+
+    public List<String> getDatesBetween(Date start, Date end) {
+        List<String> dates = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(start);
+
+        while (calendar.getTime().before(end)) {
+            dates.add(sdf.format(calendar.getTime()));
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        return dates;
     }
 
     //el primer argumento es el día del mes y el segundo la inicial del mes. De lunes a viernes.

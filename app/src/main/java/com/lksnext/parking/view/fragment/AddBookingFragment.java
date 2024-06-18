@@ -20,6 +20,9 @@ import com.lksnext.parking.domain.TipoPlaza;
 import com.lksnext.parking.viewmodel.BookViewModel;
 import com.lksnext.parking.viewmodel.MainViewModel;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
 public class AddBookingFragment extends Fragment {
 private FragmentAddBookingBinding binding;
     private MainViewModel mainViewModel;
@@ -37,16 +40,8 @@ private FragmentAddBookingBinding binding;
 
         binding.setBookViewModel(bookViewModel);
 
-        bookViewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
-            if(isLoading){
-                binding.progressBar.setVisibility(View.VISIBLE);
-            }else{
-                binding.progressBar.setVisibility(View.GONE);
-                disableChipsIfNoPlazaAvailable();
-            }
-        });
 
-
+        disableChipsIfNoPlazaAvailable();
 
         bindReturnButton();
 
@@ -60,18 +55,33 @@ private FragmentAddBookingBinding binding;
         });
     }
 
-    private void disableChipsIfNoPlazaAvailable(){
-        if(!bookViewModel.isTipoPlazaDisponibleEstaSemana(TipoPlaza.COCHE)){
-            binding.cocheChip.setEnabled(false);
-        }
-        if(!bookViewModel.isTipoPlazaDisponibleEstaSemana(TipoPlaza.MOTO)){
-            binding.motoChip.setEnabled(false);
-        }
-        if(!bookViewModel.isTipoPlazaDisponibleEstaSemana(TipoPlaza.ELECTRICO)){
-            binding.electricChip.setEnabled(false);
-        }
-        if(!bookViewModel.isTipoPlazaDisponibleEstaSemana(TipoPlaza.DISCAPACITADO)){
-            binding.specialChip.setEnabled(false);
-        }
-    }
+    private void disableChipsIfNoPlazaAvailable() {
+        CompletableFuture<Boolean> cocheAvailable = bookViewModel.isTipoPlazaDisponibleEstaSemana(TipoPlaza.COCHE);
+        CompletableFuture<Boolean> motoAvailable = bookViewModel.isTipoPlazaDisponibleEstaSemana(TipoPlaza.MOTO);
+        CompletableFuture<Boolean> electricoAvailable = bookViewModel.isTipoPlazaDisponibleEstaSemana(TipoPlaza.ELECTRICO);
+        CompletableFuture<Boolean> discapacitadoAvailable = bookViewModel.isTipoPlazaDisponibleEstaSemana(TipoPlaza.DISCAPACITADO);
+
+        //Chequar de forma asíncrona si hay plazas disponibles de cada tipo
+        CompletableFuture.allOf(cocheAvailable, motoAvailable, electricoAvailable, discapacitadoAvailable).thenRun(() -> {
+            try {
+                if (!cocheAvailable.get()) {
+                    binding.cocheChip.setEnabled(false);
+                }
+                if (!motoAvailable.get()) {
+                    binding.motoChip.setEnabled(false);
+                }
+                if (!electricoAvailable.get()) {
+                    binding.electricChip.setEnabled(false);
+                }
+                if (!discapacitadoAvailable.get()) {
+                    binding.specialChip.setEnabled(false);
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }finally {
+                getActivity().runOnUiThread(() -> binding.progressBar.setVisibility(View.GONE));
+            }
+        });
+}
+
 }
