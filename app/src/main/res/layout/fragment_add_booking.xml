@@ -144,7 +144,8 @@
             </TextView>
             <include
                 layout="@layout/date_chip_group"
-                bind:weekDays="@{bookViewModel.getTwoWeeksDays()}"
+                bind:weekDays="@{bookViewModel.getNextSevenDays()}"
+                bind:weekDaysInitials="@{bookViewModel.getNextSevenDaysInitials()}"
                 />
 
             <TextView
