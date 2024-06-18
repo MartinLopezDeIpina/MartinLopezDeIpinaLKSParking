@@ -14,16 +14,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.chip.Chip;
 import com.lksnext.parking.R;
-import com.lksnext.parking.databinding.DateChipGroupBinding;
-import com.lksnext.parking.databinding.DayChipBinding;
 import com.lksnext.parking.databinding.FragmentAddBookingBinding;
-import com.lksnext.parking.databinding.HourChipBinding;
 import com.lksnext.parking.domain.TipoPlaza;
 import com.lksnext.parking.viewmodel.BookViewModel;
 import com.lksnext.parking.viewmodel.MainViewModel;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class AddBookingFragment extends Fragment {
 private FragmentAddBookingBinding binding;
@@ -158,9 +159,32 @@ private FragmentAddBookingBinding binding;
    }
 
     private void enableHourChips() {
-        for (Chip hourChip : hourChips) {
-            hourChip.setEnabled(true);
+        TipoPlaza tipoPlaza = bookViewModel.getSelectedTipoPlaza().getValue();
+
+        List<Integer> dias = bookViewModel.getSelectedDias().getValue();
+        if (dias == null) {
+            return;
         }
+        List<String> fechas_dias = dias.stream().map(this::getStringFormatDateFromDayNumber).collect(Collectors.toList());
+
+        for (Chip hourChip : hourChips) {
+            LiveData<Boolean> available = bookViewModel.isHoraDisponibleInSelectedSpotTypeAndDays(fechas_dias, hourChip.getText().toString(), tipoPlaza);
+            available.observe(getViewLifecycleOwner(), isAvailable -> {
+                hourChip.setEnabled(isAvailable);
+            });
+        }
+    }
+
+    public String getStringFormatDateFromDayNumber(int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+
+        if (calendar.getTime().before(new Date())) {
+            calendar.add(Calendar.MONTH, 1);
+        }
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        return formatter.format(calendar.getTime());
     }
 
 

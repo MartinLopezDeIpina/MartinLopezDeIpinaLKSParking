@@ -1,19 +1,25 @@
 package com.lksnext.parking.data;
 
+import androidx.lifecycle.LiveData;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.lksnext.parking.domain.Hora;
 import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.ReservaCompuesta;
+import com.lksnext.parking.domain.TipoPlaza;
 import com.lksnext.parking.domain.Usuario;
 import com.lksnext.parking.domain.Reserva;
 import com.google.android.gms.tasks.Tasks;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 
@@ -149,4 +155,38 @@ public class DataBaseManager {
             });
     }
 
+    public LiveData<Integer> getCountBookingsConflictingSpotTypeDayHour(String dia, String hora, TipoPlaza tipoPlaza){
+        return new LiveData<Integer>() {
+            @Override
+            protected void onActive() {
+                Task<QuerySnapshot> task1 = db.collection("reserva")
+                    .whereEqualTo("fecha", dia)
+                    .whereEqualTo("tipoPlaza", tipoPlaza)
+                    .whereLessThanOrEqualTo("hora.horaInicio", hora)
+                    .get();
+
+                Task<QuerySnapshot> task2 = db.collection("reserva")
+                    .whereEqualTo("fecha", dia)
+                    .whereEqualTo("tipoPlaza", tipoPlaza)
+                    .whereGreaterThan("hora.horaFin", hora)
+                    .get();
+
+                Task<List<QuerySnapshot>> combinedTask = Tasks.whenAllSuccess(task1, task2);
+
+                combinedTask.addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Set<String> uniqueIds = new HashSet<>();
+                        for (QuerySnapshot querySnapshot : task.getResult()) {
+                            for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                                uniqueIds.add(document.getId());
+                            }
+                        }
+                        setValue(uniqueIds.size());
+                    } else {
+                        setValue(0);
+                    }
+                });
+            }
+        };
+    }
 }
