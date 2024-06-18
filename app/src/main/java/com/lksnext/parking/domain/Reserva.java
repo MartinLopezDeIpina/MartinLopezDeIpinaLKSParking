@@ -118,9 +118,9 @@ public class Reserva {
                 cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
 
         if(sameDay) {
-            return !(horaFinDate != null && horaFinDate.getTime() > System.currentTimeMillis());
+            return horaFinDate != null && horaFinDate.getTime() > System.currentTimeMillis();
         } else {
-            return book_date.compareTo(new Date()) <= 0;
+            return book_date.compareTo(new Date()) >= 0;
         }
     }
 

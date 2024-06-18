@@ -31,13 +31,47 @@ public class BookViewModel extends ViewModel {
     private Parking parking = Parking.getInstance();
     private DataBaseManager db = DataBaseManager.getInstance();
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>(true);
+    private MutableLiveData<TipoPlaza> selectedTipoPlaza = new MutableLiveData<>();
+    private MutableLiveData<List<Integer>> selectedDias = new MutableLiveData<>();
+
+    private Integer[] dayNumbers = new Integer[7];
 
 
     public BookViewModel() {
+        dayNumbers = getNextSevenDays();
     }
 
     public LiveData<Boolean> getIsLoading() {
         return isLoading;
+    }
+    public LiveData<TipoPlaza> getSelectedTipoPlaza() {
+        return selectedTipoPlaza;
+    }
+    public LiveData<List<Integer>> getSelectedDias() {
+        return selectedDias;
+    }
+    public void toggleSelectedTipoPlaza(TipoPlaza tipoPlaza){
+        if(selectedTipoPlaza.getValue() == tipoPlaza){
+            selectedTipoPlaza.setValue(null);
+        }else{
+            selectedTipoPlaza.setValue(tipoPlaza);
+        }
+    }
+
+    public void toggleDia(Integer dia_index){
+        int dia = dayNumbers[dia_index];
+        List<Integer> dias = selectedDias.getValue();
+
+        if(dias == null){
+            dias = new ArrayList<>();
+        }
+        if(dias.contains(dia)){
+            int index = dias.indexOf(dia);
+            dias.remove(index);
+        }else{
+            dias.add(dia);
+        }
+        selectedDias.setValue(dias);
     }
 
 

@@ -4,31 +4,32 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 
+import com.google.android.material.chip.Chip;
 import com.lksnext.parking.R;
+import com.lksnext.parking.databinding.DateChipGroupBinding;
+import com.lksnext.parking.databinding.DayChipBinding;
 import com.lksnext.parking.databinding.FragmentAddBookingBinding;
-import com.lksnext.parking.databinding.FragmentProfileBinding;
+import com.lksnext.parking.databinding.HourChipBinding;
 import com.lksnext.parking.domain.TipoPlaza;
 import com.lksnext.parking.viewmodel.BookViewModel;
 import com.lksnext.parking.viewmodel.MainViewModel;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class AddBookingFragment extends Fragment {
 private FragmentAddBookingBinding binding;
     private MainViewModel mainViewModel;
     private BookViewModel bookViewModel;
+    private Chip[] hourChips;
     public AddBookingFragment() {
         // Es necesario un constructor vacio
     }
@@ -42,13 +43,30 @@ private FragmentAddBookingBinding binding;
 
         binding.setBookViewModel(bookViewModel);
 
-
-        disableChipsIfNoPlazaAvailable();
+        fillHourChipBindings();
 
         bindReturnButton();
 
+        bindSelectedItems();
+
+        bindDisableOrEnableHourChips();
+
 
         return binding.getRoot();
+    }
+
+    private void fillHourChipBindings(){
+        hourChips = new Chip[24];
+        GridLayout gridLayout = binding.getRoot().findViewById(R.id.hour_chip_grid);
+
+        int count = gridLayout.getChildCount();
+        for(int i = 0 ; i <count ; i++){
+            View child = gridLayout.getChildAt(i);
+            if (child instanceof Chip) {
+                hourChips[i] = (Chip) child;
+                hourChips[i].setEnabled(false);
+            }
+        }
     }
 
     private void bindReturnButton(){
@@ -56,6 +74,95 @@ private FragmentAddBookingBinding binding;
            mainViewModel.navigateToMainFragment(true);
         });
     }
+
+    private void bindSelectedItems(){
+        bindSelectedTipoPlaza();
+        bindSelectedDias();
+    }
+
+    private void bindSelectedTipoPlaza(){
+        binding.cocheChip.setOnClickListener(v -> {
+            bookViewModel.toggleSelectedTipoPlaza(TipoPlaza.COCHE);
+        });
+        binding.motoChip.setOnClickListener(v -> {
+            bookViewModel.toggleSelectedTipoPlaza(TipoPlaza.MOTO);
+        });
+        binding.electricChip.setOnClickListener(v -> {
+            bookViewModel.toggleSelectedTipoPlaza(TipoPlaza.ELECTRICO);
+        });
+        binding.specialChip.setOnClickListener(v -> {
+            bookViewModel.toggleSelectedTipoPlaza(TipoPlaza.DISCAPACITADO);
+        });
+    }
+    private void bindSelectedDias(){
+        Chip lunesChip = binding.getRoot().findViewById(R.id.lunes_chip).findViewById(R.id.chip);
+        Chip martesChip = binding.getRoot().findViewById(R.id.martes_chip).findViewById(R.id.chip);
+        Chip miercolesChip = binding.getRoot().findViewById(R.id.miercoles_chip).findViewById(R.id.chip);
+        Chip juevesChip = binding.getRoot().findViewById(R.id.jueves_chip).findViewById(R.id.chip);
+        Chip viernesChip = binding.getRoot().findViewById(R.id.viernes_chip).findViewById(R.id.chip);
+        Chip sabadoChip = binding.getRoot().findViewById(R.id.sabado_chip).findViewById(R.id.chip);
+        Chip domingoChip = binding.getRoot().findViewById(R.id.domingo_chip).findViewById(R.id.chip);
+
+        lunesChip.setOnClickListener(v -> {
+            bookViewModel.toggleDia(0);
+        });
+        martesChip.setOnClickListener(v -> {
+            bookViewModel.toggleDia(1);
+        });
+        miercolesChip.setOnClickListener(v -> {
+            bookViewModel.toggleDia(2);
+        });
+        juevesChip.setOnClickListener(v -> {
+            bookViewModel.toggleDia(3);
+        });
+        viernesChip.setOnClickListener(v -> {
+            bookViewModel.toggleDia(4);
+        });
+        sabadoChip.setOnClickListener(v -> {
+            bookViewModel.toggleDia(5);
+        });
+        domingoChip.setOnClickListener(v -> {
+            bookViewModel.toggleDia(6);
+        });
+    }
+
+    private void bindDisableOrEnableHourChips(){
+        bookViewModel.getSelectedTipoPlaza().observe(getViewLifecycleOwner(), tipoPlaza -> {
+            if (tipoPlaza == null) {
+                disableHourChips();
+            }else{
+                if(bookViewModel.getSelectedDias().getValue() == null){
+                    return;
+                }
+                if(!bookViewModel.getSelectedDias().getValue().isEmpty()) {
+                    enableHourChips();
+                }
+            }
+        });
+        bookViewModel.getSelectedDias().observe(getViewLifecycleOwner(), dias -> {
+            if (dias == null || dias.isEmpty()) {
+                disableHourChips();
+            }else{
+                if(bookViewModel.getSelectedTipoPlaza().getValue() == null){
+                    return;
+                }
+                enableHourChips();
+            }
+        });
+    }
+
+   private void disableHourChips() {
+        for (Chip hourChip : hourChips) {
+            hourChip.setEnabled(false);
+        }
+   }
+
+    private void enableHourChips() {
+        for (Chip hourChip : hourChips) {
+            hourChip.setEnabled(true);
+        }
+    }
+
 
     private void disableChipsIfNoPlazaAvailable() {
         AtomicInteger counter = new AtomicInteger(4); // Initialize counter with the number of LiveData objects
