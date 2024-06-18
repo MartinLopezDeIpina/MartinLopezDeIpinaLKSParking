@@ -1,8 +1,11 @@
 package com.lksnext.parking.viewmodel;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.ContactsContract;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -37,41 +40,55 @@ public class BookViewModel extends ViewModel {
         return isLoading;
     }
 
-    //chequear si cada tipo de plaza está disponible de forma asíncrona
-    public CompletableFuture<Boolean> isTipoPlazaDisponibleEstaSemana(TipoPlaza tipo){
-        return CompletableFuture.supplyAsync(() -> {
+
+    public LiveData<Boolean> isTipoPlazaDisponibleEstaSemana(TipoPlaza tipo){
+        MediatorLiveData<Boolean> result = new MediatorLiveData<>();
+
+        new Thread(() -> {
             Date inicio = new Date();
-            Date finDeSemana = getSiguineteDomingoFin();
+            Date finDeSemana = getNextSeventhDayEnd();
             List<String> dias = getDatesBetween(inicio, finDeSemana);
 
             for(String dia : dias){
-                if(isTipoPlazaDisponibleDia(tipo, dia)){
-                    return true;
-                }
+                LiveData<Boolean> isAvailable = isTipoPlazaDisponibleDia(tipo, dia);
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    result.addSource(isAvailable, available -> {
+                        if (available) {
+                            result.postValue(true);
+                            result.removeSource(isAvailable);
+                        }
+                    });
+                });
             }
-            return false;
-        });
+        }).start();
+
+        return result;
     }
 
-    //Dentro de cada tipo de plaza, chequear si hay alguna plaza disponible ese día de forma síncrona
-    private boolean isTipoPlazaDisponibleDia(TipoPlaza tipo, String dia){
+    private LiveData<Boolean> isTipoPlazaDisponibleDia(TipoPlaza tipo, String dia){
+        MediatorLiveData<Boolean> result = new MediatorLiveData<>();
+
         List<Plaza> plazas = parking.getPlazas().stream()
                 .filter(plaza -> plaza.getTipo().equals(tipo))
                 .collect(Collectors.toList());
 
-
         for(Plaza plaza : plazas){
-            System.out.println("checking" + plaza.getId() + " " + dia);
-            if(plazaDisponibleDia(plaza.getId(), dia)){
-                return true;
-            }
+            LiveData<Boolean> isAvailable = plazaDisponibleDia(plaza.getId(), dia);
+            new Handler(Looper.getMainLooper()).post(() -> {
+                result.addSource(isAvailable, available -> {
+                    System.out.println("checking" + plaza.getId() + " " + dia);
+                    if (available) {
+                        result.postValue(true);
+                        result.removeSource(isAvailable);
+                    }
+                });
+            });
         }
-        return false;
-    }
 
-    //Dentro de cada plaza chquear si hay alguna plaza disponible ese día de forma síncrona
-    private boolean plazaDisponibleDia(long plazaID, String dia){
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        return result;
+    }
+    private LiveData<Boolean> plazaDisponibleDia(long plazaID, String dia){
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
 
         db.getBookingsSpotDay(plazaID, dia, new ReservasCallback() {
             @Override
@@ -82,7 +99,7 @@ public class BookViewModel extends ViewModel {
                     calendar.setTime(sdf.parse(dia));
                 } catch (ParseException e) {
                     e.printStackTrace();
-                    future.complete(false);
+                    result.postValue(false);
                     return;
                 }
 
@@ -100,21 +117,21 @@ public class BookViewModel extends ViewModel {
                             .noneMatch(reserva -> reserva.overlapsAnyHour(currentHour, nextHour));
 
                     if (isHourAvailable) {
-                        future.complete(true);
+                        result.postValue(true);
                         return;
                     }
 
                     inicio = nextHour;
                 }
 
-                future.complete(false);
+                result.postValue(false);
             }
         });
 
-        return future.join();
+        return result;
     }
 
-    //una plaza estará disponible esa semana si al menos hay una hora libre en ella
+
     private boolean plazaDisponible(long plazaID, Date inicio, Date fin){
         List<Reserva> reservasPlaza = db.getBookingsSpotNotExpired(plazaID);
 
@@ -137,14 +154,12 @@ public class BookViewModel extends ViewModel {
         return false;
     }
 
-    private Date getSiguineteDomingoFin(){
+    private Date getNextSeventhDayEnd(){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
 
-        // Set the day to Sunday
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-        // Add one week to always get the next Sunday
-        calendar.add(Calendar.WEEK_OF_YEAR, 1);
+        // Add 7 days to get the next seventh day
+        calendar.add(Calendar.DAY_OF_MONTH, 6);
 
         // Set the time to the end of the day
         calendar.set(Calendar.HOUR_OF_DAY, 23);
@@ -187,20 +202,30 @@ public class BookViewModel extends ViewModel {
         return semanaActual;
     }
 
-    public Integer[] getTwoWeeksDays() {
-        Integer[] twoWeeksDays = new Integer[14];
+    public Integer[] getNextSevenDays() {
+        Integer[] nextSevenDays = new Integer[7];
         Calendar calendar = Calendar.getInstance();
 
-        while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
-            calendar.add(Calendar.DAY_OF_MONTH, -1);
-        }
-
-        for (int i = 0; i < 14; i++) {
-            twoWeeksDays[i] = calendar.get(Calendar.DAY_OF_MONTH);
+        for (int i = 0; i < 7; i++) {
+            nextSevenDays[i] = calendar.get(Calendar.DAY_OF_MONTH);
             calendar.add(Calendar.DAY_OF_MONTH, 1);
         }
 
-        return twoWeeksDays;
+        return nextSevenDays;
+    }
+
+    public String[] getNextSevenDaysInitials() {
+        String[] nextSevenDaysInitials = new String[7];
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE", new Locale("es", "ES"));
+
+        for (int i = 0; i < 7; i++) {
+            String dayOfWeek = sdf.format(calendar.getTime());
+            nextSevenDaysInitials[i] = dayOfWeek.substring(0, 1).toUpperCase();
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        return nextSevenDaysInitials;
     }
 
 }

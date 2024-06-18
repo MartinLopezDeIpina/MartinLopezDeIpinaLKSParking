@@ -8,6 +8,9 @@
             name="weekDays"
             type="java.lang.Integer[]"
             />
+        <variable
+            name="weekDaysInitials"
+            type="java.lang.String[]" />
     </data>
 
     <LinearLayout
@@ -16,10 +19,9 @@
         android:orientation="vertical"
         android:gravity="center_horizontal"
         >
-        <GridLayout
+        <com.google.android.material.chip.ChipGroup
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:columnCount="7"
             android:orientation="horizontal"
             android:gravity="center_horizontal"
             >
@@ -27,102 +29,60 @@
             <include
                 layout="@layout/day_chip"
                 bind:number='@{weekDays[0]}'
+                bind:diaSemana='@{weekDaysInitials[0]}'
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="3dp"
                 />
             <include
                 layout="@layout/day_chip"
                 bind:number='@{weekDays[1]}'
+                bind:diaSemana='@{weekDaysInitials[1]}'
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="3dp"
                 />
             <include
                 layout="@layout/day_chip"
                 bind:number='@{weekDays[2]}'
+                bind:diaSemana='@{weekDaysInitials[2]}'
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="3dp"
                 />
             <include
                 layout="@layout/day_chip"
                 bind:number='@{weekDays[3]}'
+                bind:diaSemana='@{weekDaysInitials[3]}'
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="3dp"
                 />
             <include
                 layout="@layout/day_chip"
                 bind:number='@{weekDays[4]}'
+                bind:diaSemana='@{weekDaysInitials[4]}'
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="3dp"
                 />
             <include
                 layout="@layout/day_chip"
                 bind:number='@{weekDays[5]}'
+                bind:diaSemana='@{weekDaysInitials[5]}'
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="3dp"
                 />
             <include
                 layout="@layout/day_chip"
                 bind:number='@{weekDays[6]}'
+                bind:diaSemana='@{weekDaysInitials[6]}'
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="3dp"
                 />
-            <include
-                layout="@layout/day_chip"
-                bind:number='@{weekDays[7]}'
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_margin="5dp"
-                />
-            <include
-                layout="@layout/day_chip"
-                bind:number='@{weekDays[8]}'
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_margin="5dp"
-                />
-            <include
-                layout="@layout/day_chip"
-                bind:number='@{weekDays[9]}'
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_margin="5dp"
-                />
-            <include
-                layout="@layout/day_chip"
-                bind:number='@{weekDays[10]}'
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_margin="5dp"
-                />
-            <include
-                layout="@layout/day_chip"
-                bind:number='@{weekDays[11]}'
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_margin="5dp"
-                />
-            <include
-                layout="@layout/day_chip"
-                bind:number='@{weekDays[12]}'
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_margin="5dp"
-                />
-            <include
-                layout="@layout/day_chip"
-                bind:number='@{weekDays[13]}'
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_margin="5dp"
-                />
-        </GridLayout>
+        </com.google.android.material.chip.ChipGroup>
 
     </LinearLayout>
 </layout>

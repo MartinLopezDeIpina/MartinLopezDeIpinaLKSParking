@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -22,6 +23,7 @@ import com.lksnext.parking.viewmodel.MainViewModel;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AddBookingFragment extends Fragment {
 private FragmentAddBookingBinding binding;
@@ -56,32 +58,49 @@ private FragmentAddBookingBinding binding;
     }
 
     private void disableChipsIfNoPlazaAvailable() {
-        CompletableFuture<Boolean> cocheAvailable = bookViewModel.isTipoPlazaDisponibleEstaSemana(TipoPlaza.COCHE);
-        CompletableFuture<Boolean> motoAvailable = bookViewModel.isTipoPlazaDisponibleEstaSemana(TipoPlaza.MOTO);
-        CompletableFuture<Boolean> electricoAvailable = bookViewModel.isTipoPlazaDisponibleEstaSemana(TipoPlaza.ELECTRICO);
-        CompletableFuture<Boolean> discapacitadoAvailable = bookViewModel.isTipoPlazaDisponibleEstaSemana(TipoPlaza.DISCAPACITADO);
+        AtomicInteger counter = new AtomicInteger(4); // Initialize counter with the number of LiveData objects
 
-        //Chequar de forma asíncrona si hay plazas disponibles de cada tipo
-        CompletableFuture.allOf(cocheAvailable, motoAvailable, electricoAvailable, discapacitadoAvailable).thenRun(() -> {
-            try {
-                if (!cocheAvailable.get()) {
-                    binding.cocheChip.setEnabled(false);
-                }
-                if (!motoAvailable.get()) {
-                    binding.motoChip.setEnabled(false);
-                }
-                if (!electricoAvailable.get()) {
-                    binding.electricChip.setEnabled(false);
-                }
-                if (!discapacitadoAvailable.get()) {
-                    binding.specialChip.setEnabled(false);
-                }
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }finally {
-                getActivity().runOnUiThread(() -> binding.progressBar.setVisibility(View.GONE));
+        binding.progressBar.setVisibility(View.VISIBLE); // Show progress bar
+
+        LiveData<Boolean> cocheAvailable = bookViewModel.isTipoPlazaDisponibleEstaSemana(TipoPlaza.COCHE);
+        LiveData<Boolean> motoAvailable = bookViewModel.isTipoPlazaDisponibleEstaSemana(TipoPlaza.MOTO);
+        LiveData<Boolean> electricoAvailable = bookViewModel.isTipoPlazaDisponibleEstaSemana(TipoPlaza.ELECTRICO);
+        LiveData<Boolean> discapacitadoAvailable = bookViewModel.isTipoPlazaDisponibleEstaSemana(TipoPlaza.DISCAPACITADO);
+
+        cocheAvailable.observe(getViewLifecycleOwner(), available -> {
+            if (!available) {
+                binding.cocheChip.setEnabled(false);
+            }
+            if (counter.decrementAndGet() == 0) {
+                binding.progressBar.setVisibility(View.GONE); // Hide progress bar when all LiveData objects have updated
             }
         });
-}
 
+        motoAvailable.observe(getViewLifecycleOwner(), available -> {
+            if (!available) {
+                binding.motoChip.setEnabled(false);
+            }
+            if (counter.decrementAndGet() == 0) {
+                binding.progressBar.setVisibility(View.GONE);
+            }
+        });
+
+        electricoAvailable.observe(getViewLifecycleOwner(), available -> {
+            if (!available) {
+                binding.electricChip.setEnabled(false);
+            }
+            if (counter.decrementAndGet() == 0) {
+                binding.progressBar.setVisibility(View.GONE);
+            }
+        });
+
+        discapacitadoAvailable.observe(getViewLifecycleOwner(), available -> {
+            if (!available) {
+                binding.specialChip.setEnabled(false);
+            }
+            if (counter.decrementAndGet() == 0) {
+                binding.progressBar.setVisibility(View.GONE);
+            }
+        });
+    }
 }
