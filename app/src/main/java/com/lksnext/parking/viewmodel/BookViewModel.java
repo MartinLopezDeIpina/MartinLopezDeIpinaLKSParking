@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class BookViewModel extends ViewModel {
@@ -33,14 +34,7 @@ public class BookViewModel extends ViewModel {
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>(true);
     private MutableLiveData<TipoPlaza> selectedTipoPlaza = new MutableLiveData<>();
     private MutableLiveData<List<Integer>> selectedDias = new MutableLiveData<>();
-
     private Integer[] dayNumbers = new Integer[7];
-
-
-    public BookViewModel() {
-        dayNumbers = getNextSevenDays();
-    }
-
     public LiveData<Boolean> getIsLoading() {
         return isLoading;
     }
@@ -50,6 +44,12 @@ public class BookViewModel extends ViewModel {
     public LiveData<List<Integer>> getSelectedDias() {
         return selectedDias;
     }
+
+    public BookViewModel() {
+        dayNumbers = getNextSevenDays();
+    }
+
+
     public void toggleSelectedTipoPlaza(TipoPlaza tipoPlaza){
         if(selectedTipoPlaza.getValue() == tipoPlaza){
             selectedTipoPlaza.setValue(null);
@@ -74,6 +74,43 @@ public class BookViewModel extends ViewModel {
         selectedDias.setValue(dias);
     }
 
+
+    public LiveData<Boolean> isHoraDisponibleInSelectedSpotTypeAndDays(List<String> fechas_dias, String hora, TipoPlaza tipoPlaza){
+        MediatorLiveData<Boolean> result = new MediatorLiveData<>();
+        AtomicInteger counter = new AtomicInteger(0);
+
+        for (String dia : fechas_dias) {
+            LiveData<Boolean> isAvailable = isHoraDisponibleInSelectedSpotTypeAndDay(dia, hora, tipoPlaza);
+            result.addSource(isAvailable, available -> {
+                if (!available) {
+                    result.setValue(false);
+                    result.removeSource(isAvailable);
+                } else {
+                    if (counter.incrementAndGet() == fechas_dias.size()) {
+                        result.setValue(true);
+                    }
+                }
+            });
+        }
+
+        return result;
+    }
+
+    private LiveData<Boolean> isHoraDisponibleInSelectedSpotTypeAndDay(String dia, String hora, TipoPlaza tipoPlaza) {
+        List<Plaza> plazas = parking.getPlazas().stream()
+                .filter(plaza -> plaza.getTipo().equals(tipoPlaza))
+                .collect(Collectors.toList());
+
+        System.out.printf("Checking %s %s %s%n", dia, hora, tipoPlaza);
+        LiveData<Integer> conflictingPlazasCount = db.getCountBookingsConflictingSpotTypeDayHour(dia, hora, tipoPlaza);
+        MediatorLiveData<Boolean> result = new MediatorLiveData<>();
+
+        result.addSource(conflictingPlazasCount, count -> {
+            result.setValue(!count.equals(plazas.size()));
+        });
+
+        return result;
+    }
 
     public LiveData<Boolean> isTipoPlazaDisponibleEstaSemana(TipoPlaza tipo){
         MediatorLiveData<Boolean> result = new MediatorLiveData<>();
