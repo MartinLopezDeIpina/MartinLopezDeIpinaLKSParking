@@ -20,6 +20,8 @@ import com.lksnext.parking.viewmodel.BookViewModel;
 import com.lksnext.parking.viewmodel.MainViewModel;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -31,7 +33,7 @@ public class AddBookingFragment extends Fragment {
 private FragmentAddBookingBinding binding;
     private MainViewModel mainViewModel;
     private BookViewModel bookViewModel;
-    private Chip[] hourChips;
+    private List<Chip> hourChips;
     public AddBookingFragment() {
         // Es necesario un constructor vacio
     }
@@ -48,25 +50,27 @@ private FragmentAddBookingBinding binding;
         fillHourChipBindings();
 
         bindReturnButton();
-
         bindSelectedItems();
-
         bindDisableOrEnableHourChips();
+        bindSelectedHourValues();
+        bindSelectedHourChips();
+        bindUnselectedHourValue();
+        bindVisualPath();
 
 
         return binding.getRoot();
     }
 
     private void fillHourChipBindings(){
-        hourChips = new Chip[24];
+        hourChips = new ArrayList<>(24);
         GridLayout gridLayout = binding.getRoot().findViewById(R.id.hour_chip_grid);
 
         int count = gridLayout.getChildCount();
         for(int i = 0 ; i <count ; i++){
             View child = gridLayout.getChildAt(i);
             if (child instanceof Chip) {
-                hourChips[i] = (Chip) child;
-                hourChips[i].setEnabled(false);
+                child.setEnabled(false);
+                hourChips.add((Chip) child);
             }
         }
     }
@@ -130,6 +134,7 @@ private FragmentAddBookingBinding binding;
 
     private void bindDisableOrEnableHourChips(){
         bookViewModel.getSelectedTipoPlaza().observe(getViewLifecycleOwner(), tipoPlaza -> {
+            unCheckAllHourChips();
             if (tipoPlaza == null) {
                 disableHourChips();
             }else{
@@ -142,6 +147,7 @@ private FragmentAddBookingBinding binding;
             }
         });
         bookViewModel.getSelectedDias().observe(getViewLifecycleOwner(), dias -> {
+            unCheckAllHourChips();
             if (dias == null || dias.isEmpty()) {
                 disableHourChips();
             }else{
@@ -151,6 +157,13 @@ private FragmentAddBookingBinding binding;
                 enableHourChips();
             }
         });
+    }
+
+    private void unCheckAllHourChips(){
+        for(Chip chip : hourChips){
+            chip.setChecked(false);
+        }
+        bookViewModel.setIntermediateSelectedHours(new ArrayList<>());
     }
 
    private void disableHourChips() {
@@ -190,6 +203,124 @@ private FragmentAddBookingBinding binding;
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         return formatter.format(calendar.getTime());
+    }
+
+    private void bindSelectedHourChips(){
+        for(Chip hourChip : hourChips){
+            hourChip.setOnClickListener(v -> {
+                if(possibleToSelectHourChip(hourChip)){
+                    bookViewModel.toggleSelectedHour(hourChip.getText().toString());
+                }else{
+                    hourChip.setChecked(false);
+                }
+            });
+        }
+    }
+
+    private boolean possibleToSelectHourChip(Chip hourChip){
+
+        if(bookViewModel.getSelectedHora1().getValue() == null && bookViewModel.getSelectedHora2().getValue() == null){
+            return true;
+        }
+
+        String hourToCheck = bookViewModel.getLastSelectedHour();
+        if(bookViewModel.getSelectedHora1().getValue() == null){
+            hourToCheck = bookViewModel.getSelectedHora2().getValue();
+        }
+        if(bookViewModel.getSelectedHora2().getValue() == null){
+            hourToCheck = bookViewModel.getSelectedHora1().getValue();
+        }
+
+        return availablePathBetweenHours(hourToCheck, hourChip.getText().toString());
+    }
+
+    private void bindSelectedHourValues(){
+        bookViewModel.getSelectedHora1().observe(getViewLifecycleOwner(), hora1 -> {
+            hourSelected(hora1);
+        });
+        bookViewModel.getSelectedHora2().observe(getViewLifecycleOwner(), hora2 -> {
+            hourSelected(hora2);
+        });
+    }
+
+    private void bindUnselectedHourValue(){
+        bookViewModel.getUnselectedHora().observe(getViewLifecycleOwner(), unselectedHora -> {
+            if(unselectedHora != null){
+                hourChips.stream().filter(chip -> chip.getText().toString().equals(unselectedHora)).findFirst().ifPresent(chip -> {
+                    chip.setChecked(false);
+                });
+            }
+        });
+    }
+
+    private void hourSelected(String hora){
+        hourChips.stream().filter(chip -> chip.getText().toString().equals(hora)).findFirst().ifPresent(chip -> {
+            if(bookViewModel.bothHoursSelected()){
+                tryToSetBookHours();
+            }
+        });
+    }
+
+    private void tryToSetBookHours(){
+        String hour1 = bookViewModel.getSelectedHora1().getValue();
+        String hour2 = bookViewModel.getSelectedHora2().getValue();
+
+        bookViewModel.setHorasReservaValidas(true);
+        setVisualPath(hour1, hour2);
+    }
+
+    private boolean availablePathBetweenHours(String hour1, String hour2){
+        Integer[] indexes = getHoursIndexes(hour1, hour2);
+        int hour1Index = indexes[0];
+        int hour2Index = indexes[1];
+
+        boolean available = true;
+        for(int i = hour1Index; i <= hour2Index; i++){
+            Chip chip = hourChips.get(i);
+            if(!chip.isEnabled()){
+                return false;
+            }
+        }
+        return available;
+    }
+
+    private void setVisualPath(String hour1, String hour2){
+        Integer[] indexes = getHoursIndexes(hour1, hour2);
+        int hour1Index = indexes[0];
+        int hour2Index = indexes[1];
+
+        List<String> intermediateChipHours = new ArrayList<>();
+        for(int i = hour1Index+1; i < hour2Index; i++){
+            Chip chip = hourChips.get(i);
+            intermediateChipHours.add(chip.getText().toString());
+        }
+
+        bookViewModel.setIntermediateSelectedHours(intermediateChipHours);
+    }
+
+    private Integer[] getHoursIndexes(String hour1, String hour2){
+        List<String> mappedChips = hourChips.stream().map(Chip::getText).map(CharSequence::toString).collect(Collectors.toList());
+        int hour1Index = mappedChips.indexOf(hour1);
+        int hour2Index = mappedChips.indexOf(hour2);
+        if (hour1Index > hour2Index) {
+            int temp = hour1Index;
+            hour1Index = hour2Index;
+            hour2Index = temp;
+        }
+        return new Integer[]{hour1Index, hour2Index};
+    }
+
+    private void bindVisualPath(){
+        bookViewModel.getIntermediateSelectedHours().observe(getViewLifecycleOwner(), intermediateHours -> {
+            for (Chip chip : hourChips) {
+                String chipText = chip.getText().toString();
+                if(intermediateHours.contains(chipText)){
+                    chip.setChipBackgroundColorResource(R.color.chip_hour_intermediate);
+                }else {
+                    chip.setChipBackgroundColorResource(R.color.chip_background_color);
+                }
+            }
+        });
     }
 
 
