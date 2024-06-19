@@ -122,6 +122,12 @@ public class BookViewModel extends ViewModel {
         setHorasReservaValidas(false);
     }
 
+    public void emptyBooking(){
+       selectedTipoPlaza.setValue(null);
+       selectedDias.setValue(new ArrayList<>());
+       emptySelectedHours();
+    }
+
     public void toggleDia(Integer dia_index){
         emptySelectedHours();
         int dia = dayNumbers[dia_index];
