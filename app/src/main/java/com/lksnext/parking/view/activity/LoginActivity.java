@@ -38,6 +38,7 @@ public class LoginActivity extends BaseActivity {
         //dataBaseFiller.fillReservas();
         //dataBaseFiller.fillPlaza98();
         //dataBaseFiller.fillPlazas75_94();
+        //dataBaseFiller.fillPlazasPruebasHoras();
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

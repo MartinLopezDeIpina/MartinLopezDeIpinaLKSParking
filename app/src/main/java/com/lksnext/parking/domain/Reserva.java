@@ -118,9 +118,9 @@ public class Reserva {
                 cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
 
         if(sameDay) {
-            return horaFinDate != null && horaFinDate.getTime() > System.currentTimeMillis();
+            return horaFinDate != null && horaFinDate.getTime() < System.currentTimeMillis();
         } else {
-            return book_date.compareTo(new Date()) >= 0;
+            return book_date.compareTo(new Date()) <= 0;
         }
     }
 
@@ -165,5 +165,9 @@ public class Reserva {
         boolean overlapsOutside = dateInicio.compareTo(inicio) < 0 && dateFin.compareTo(fin) > 0;
 
         return overlapsFromInicio || overlapsFromFin || overlapsInside || overlapsOutside;
+    }
+
+    public boolean overlapsHour(String hora) {
+        return this.hora.getHoraInicio().compareTo(hora) < 0 && this.hora.getHoraFin().compareTo(hora) >= 0;
     }
 }
