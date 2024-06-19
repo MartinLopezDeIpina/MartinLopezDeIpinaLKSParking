@@ -39,6 +39,12 @@ private FragmentAddBookingBinding binding;
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        bookViewModel.emptyBooking();
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentAddBookingBinding.inflate(inflater, container, false);
