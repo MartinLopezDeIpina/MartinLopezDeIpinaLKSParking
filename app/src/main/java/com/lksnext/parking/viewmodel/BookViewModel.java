@@ -34,6 +34,7 @@ public class BookViewModel extends ViewModel {
     private MutableLiveData<List<String>> intermediateSelectedHours = new MutableLiveData<>();
     private MutableLiveData<Boolean> horasReservaValidas = new MutableLiveData<>(false);
     private MutableLiveData<String> unselectedHora = new MutableLiveData<>();
+    private MutableLiveData<List<Integer>> availableSpots = new MutableLiveData<>();
     private Integer[] dayNumbers = new Integer[7];
     public LiveData<Boolean> getIsLoading() {
         return isLoading;
@@ -55,6 +56,9 @@ public class BookViewModel extends ViewModel {
     }
     public LiveData<String> getUnselectedHora() {
         return unselectedHora;
+    }
+    public LiveData<List<Integer>> getAvailableSpots() {
+        return availableSpots;
     }
     public String getLastSelectedHour() {
         return lastSelectedHour;

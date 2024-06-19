@@ -11,11 +11,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.chip.Chip;
 import com.lksnext.parking.R;
 import com.lksnext.parking.databinding.FragmentAddBookingBinding;
 import com.lksnext.parking.domain.TipoPlaza;
+import com.lksnext.parking.view.adapter.AvailableSpotsAdapter;
+import com.lksnext.parking.view.adapter.ComposedReservationAdapter;
 import com.lksnext.parking.viewmodel.BookViewModel;
 import com.lksnext.parking.viewmodel.MainViewModel;
 
@@ -33,6 +37,8 @@ public class AddBookingFragment extends Fragment {
 private FragmentAddBookingBinding binding;
     private MainViewModel mainViewModel;
     private BookViewModel bookViewModel;
+    private RecyclerView recyclerView;
+    private AvailableSpotsAdapter spotsAdapter;
     private List<Chip> hourChips;
     public AddBookingFragment() {
         // Es necesario un constructor vacio
@@ -53,8 +59,8 @@ private FragmentAddBookingBinding binding;
 
         binding.setBookViewModel(bookViewModel);
 
+        bindSpotsRecyclerView();
         fillHourChipBindings();
-
         bindReturnButton();
         bindSelectedItems();
         bindDisableOrEnableHourChips();
@@ -65,6 +71,15 @@ private FragmentAddBookingBinding binding;
 
 
         return binding.getRoot();
+    }
+    private void bindSpotsRecyclerView(){
+        recyclerView = binding.availableSpotsRecyclerView;
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        bookViewModel.getAvailableSpots().observe(getViewLifecycleOwner(), availableSpots -> {
+            spotsAdapter = new AvailableSpotsAdapter(availableSpots);
+            recyclerView.setAdapter(spotsAdapter);
+        });
     }
 
     private void fillHourChipBindings(){

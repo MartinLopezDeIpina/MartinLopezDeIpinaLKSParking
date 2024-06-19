@@ -162,6 +162,23 @@
                 layout="@layout/hour_chip_group"
                 >
 
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/booking_spot"
+                style="@style/HeadingSecondaryStyle"
+                >
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/available_spots_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:clipToPadding="false"
+                    />
+            </TextView>
+
             </include>
 
 
