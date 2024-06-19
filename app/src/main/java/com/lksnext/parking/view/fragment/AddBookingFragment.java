@@ -22,6 +22,7 @@ import com.lksnext.parking.viewmodel.MainViewModel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -159,6 +160,8 @@ private FragmentAddBookingBinding binding;
    }
 
     private void enableHourChips() {
+        binding.progressBar.setVisibility(View.VISIBLE);
+
         TipoPlaza tipoPlaza = bookViewModel.getSelectedTipoPlaza().getValue();
 
         List<Integer> dias = bookViewModel.getSelectedDias().getValue();
@@ -167,12 +170,14 @@ private FragmentAddBookingBinding binding;
         }
         List<String> fechas_dias = dias.stream().map(this::getStringFormatDateFromDayNumber).collect(Collectors.toList());
 
-        for (Chip hourChip : hourChips) {
-            LiveData<Boolean> available = bookViewModel.isHoraDisponibleInSelectedSpotTypeAndDays(fechas_dias, hourChip.getText().toString(), tipoPlaza);
-            available.observe(getViewLifecycleOwner(), isAvailable -> {
-                hourChip.setEnabled(isAvailable);
-            });
-        }
+        LiveData<HashMap<String, Boolean>> availableHours = bookViewModel.getHorasDisponiblesInSelectedSpotTypeAndDays(fechas_dias, tipoPlaza);
+        availableHours.observe(getViewLifecycleOwner(), horasDisponibles -> {
+            for(Chip chip : hourChips){
+                chip.setEnabled(horasDisponibles.get(chip.getText().toString()));
+            }
+
+            binding.progressBar.setVisibility(View.GONE);
+        });
     }
 
     public String getStringFormatDateFromDayNumber(int day) {
@@ -188,50 +193,4 @@ private FragmentAddBookingBinding binding;
     }
 
 
-    private void disableChipsIfNoPlazaAvailable() {
-        AtomicInteger counter = new AtomicInteger(4); // Initialize counter with the number of LiveData objects
-
-        binding.progressBar.setVisibility(View.VISIBLE); // Show progress bar
-
-        LiveData<Boolean> cocheAvailable = bookViewModel.isTipoPlazaDisponibleEstaSemana(TipoPlaza.COCHE);
-        LiveData<Boolean> motoAvailable = bookViewModel.isTipoPlazaDisponibleEstaSemana(TipoPlaza.MOTO);
-        LiveData<Boolean> electricoAvailable = bookViewModel.isTipoPlazaDisponibleEstaSemana(TipoPlaza.ELECTRICO);
-        LiveData<Boolean> discapacitadoAvailable = bookViewModel.isTipoPlazaDisponibleEstaSemana(TipoPlaza.DISCAPACITADO);
-
-        cocheAvailable.observe(getViewLifecycleOwner(), available -> {
-            if (!available) {
-                binding.cocheChip.setEnabled(false);
-            }
-            if (counter.decrementAndGet() == 0) {
-                binding.progressBar.setVisibility(View.GONE); // Hide progress bar when all LiveData objects have updated
-            }
-        });
-
-        motoAvailable.observe(getViewLifecycleOwner(), available -> {
-            if (!available) {
-                binding.motoChip.setEnabled(false);
-            }
-            if (counter.decrementAndGet() == 0) {
-                binding.progressBar.setVisibility(View.GONE);
-            }
-        });
-
-        electricoAvailable.observe(getViewLifecycleOwner(), available -> {
-            if (!available) {
-                binding.electricChip.setEnabled(false);
-            }
-            if (counter.decrementAndGet() == 0) {
-                binding.progressBar.setVisibility(View.GONE);
-            }
-        });
-
-        discapacitadoAvailable.observe(getViewLifecycleOwner(), available -> {
-            if (!available) {
-                binding.specialChip.setEnabled(false);
-            }
-            if (counter.decrementAndGet() == 0) {
-                binding.progressBar.setVisibility(View.GONE);
-            }
-        });
-    }
 }

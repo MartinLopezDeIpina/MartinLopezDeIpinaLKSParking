@@ -7,6 +7,7 @@ import android.provider.ContactsContract;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
 import com.lksnext.parking.data.DataBaseManager;
@@ -22,8 +23,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -74,21 +77,19 @@ public class BookViewModel extends ViewModel {
         selectedDias.setValue(dias);
     }
 
-
-    public LiveData<Boolean> isHoraDisponibleInSelectedSpotTypeAndDays(List<String> fechas_dias, String hora, TipoPlaza tipoPlaza){
-        MediatorLiveData<Boolean> result = new MediatorLiveData<>();
-        AtomicInteger counter = new AtomicInteger(0);
+    public LiveData<HashMap<String, Boolean>> getHorasDisponiblesInSelectedSpotTypeAndDays(List<String> fechas_dias, TipoPlaza tipoPlaza){
+        MediatorLiveData<HashMap<String, Boolean>> result = new MediatorLiveData<>();
+        HashMap<String, Boolean> combinedResult = new HashMap<>();
+        AtomicInteger counter = new AtomicInteger(fechas_dias.size());
 
         for (String dia : fechas_dias) {
-            LiveData<Boolean> isAvailable = isHoraDisponibleInSelectedSpotTypeAndDay(dia, hora, tipoPlaza);
-            result.addSource(isAvailable, available -> {
-                if (!available) {
-                    result.setValue(false);
-                    result.removeSource(isAvailable);
-                } else {
-                    if (counter.incrementAndGet() == fechas_dias.size()) {
-                        result.setValue(true);
-                    }
+            LiveData<HashMap<String, Boolean>> dailyResult = getHorasDisponiblesInSelectedSpotTypeAndDay(dia, tipoPlaza);
+            result.addSource(dailyResult, map -> {
+                for (Map.Entry<String, Boolean> entry : map.entrySet()) {
+                    combinedResult.merge(entry.getKey(), entry.getValue(), Boolean::logicalAnd);
+                }
+                if (counter.decrementAndGet() == 0) {
+                    result.setValue(combinedResult);
                 }
             });
         }
@@ -96,106 +97,42 @@ public class BookViewModel extends ViewModel {
         return result;
     }
 
-    private LiveData<Boolean> isHoraDisponibleInSelectedSpotTypeAndDay(String dia, String hora, TipoPlaza tipoPlaza) {
-        List<Plaza> plazas = parking.getPlazas().stream()
+    private LiveData<HashMap<String, Boolean>> getHorasDisponiblesInSelectedSpotTypeAndDay(String dia, TipoPlaza tipoPlaza){
+        int tipoPlazaCount = parking.getPlazas().stream()
                 .filter(plaza -> plaza.getTipo().equals(tipoPlaza))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList())
+                .size();
 
-        System.out.printf("Checking %s %s %s%n", dia, hora, tipoPlaza);
-        LiveData<Integer> conflictingPlazasCount = db.getCountBookingsConflictingSpotTypeDayHour(dia, hora, tipoPlaza);
-        MediatorLiveData<Boolean> result = new MediatorLiveData<>();
+        MediatorLiveData<HashMap<String, Boolean>> result = new MediatorLiveData<>();
+        HashMap<String, Boolean> availableHours = new HashMap<>();
 
-        result.addSource(conflictingPlazasCount, count -> {
-            result.setValue(!count.equals(plazas.size()));
-        });
+        LiveData<List<Reserva>> reservasDiaTipoPlaza = db.getBookingsSpotDay(dia, tipoPlaza);
 
-        return result;
-    }
-
-    public LiveData<Boolean> isTipoPlazaDisponibleEstaSemana(TipoPlaza tipo){
-        MediatorLiveData<Boolean> result = new MediatorLiveData<>();
-
-        new Thread(() -> {
-            Date inicio = new Date();
-            Date finDeSemana = getNextSeventhDayEnd();
-            List<String> dias = getDatesBetween(inicio, finDeSemana);
-
-            for(String dia : dias){
-                LiveData<Boolean> isAvailable = isTipoPlazaDisponibleDia(tipo, dia);
-                new Handler(Looper.getMainLooper()).post(() -> {
-                    result.addSource(isAvailable, available -> {
-                        if (available) {
-                            result.postValue(true);
-                            result.removeSource(isAvailable);
-                        }
-                    });
-                });
-            }
-        }).start();
-
-        return result;
-    }
-
-    private LiveData<Boolean> isTipoPlazaDisponibleDia(TipoPlaza tipo, String dia){
-        MediatorLiveData<Boolean> result = new MediatorLiveData<>();
-
-        List<Plaza> plazas = parking.getPlazas().stream()
-                .filter(plaza -> plaza.getTipo().equals(tipo))
-                .collect(Collectors.toList());
-
-        for(Plaza plaza : plazas){
-            LiveData<Boolean> isAvailable = plazaDisponibleDia(plaza.getId(), dia);
-            new Handler(Looper.getMainLooper()).post(() -> {
-                result.addSource(isAvailable, available -> {
-                    System.out.println("checking" + plaza.getId() + " " + dia);
-                    if (available) {
-                        result.postValue(true);
-                        result.removeSource(isAvailable);
-                    }
-                });
-            });
-        }
-
-        return result;
-    }
-    private LiveData<Boolean> plazaDisponibleDia(long plazaID, String dia){
-        MutableLiveData<Boolean> result = new MutableLiveData<>();
-
-        db.getBookingsSpotDay(plazaID, dia, new ReservasCallback() {
+        reservasDiaTipoPlaza.observeForever(new Observer<List<Reserva>>() {
             @Override
-            public void onCallback(List<Reserva> reservasPlaza) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                Calendar calendar = Calendar.getInstance();
-                try {
-                    calendar.setTime(sdf.parse(dia));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                    result.postValue(false);
-                    return;
-                }
+            public void onChanged(List<Reserva> reservas) {
 
-                Date inicio = calendar.getTime();
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
-                Date fin = calendar.getTime();
 
-                while (inicio.before(fin)) {
-                    Date currentHour = inicio;
-                    calendar.setTime(inicio);
-                    calendar.add(Calendar.HOUR, 1);
-                    Date nextHour = calendar.getTime();
+                for (int i = 0; i < 24; i++) {
+                    String hora = String.format("%02d:00", i);
+                    int countHoraConflicto = 0;
 
-                    boolean isHourAvailable = reservasPlaza.stream()
-                            .noneMatch(reserva -> reserva.overlapsAnyHour(currentHour, nextHour));
-
-                    if (isHourAvailable) {
-                        result.postValue(true);
-                        return;
+                    if (reservas == null) {
+                        availableHours.put(hora, true);
+                        continue;
                     }
 
-                    inicio = nextHour;
+                    for (Reserva reserva : reservas) {
+                        if (reserva.overlapsHour(hora)) {
+                            countHoraConflicto++;
+                        }
+                    }
+                    boolean disponible = countHoraConflicto < tipoPlazaCount;
+                    availableHours.put(hora, disponible);
                 }
 
-                result.postValue(false);
+                result.setValue(availableHours);
+                reservasDiaTipoPlaza.removeObserver(this);
             }
         });
 

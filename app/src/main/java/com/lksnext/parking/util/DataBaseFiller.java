@@ -77,13 +77,35 @@ public class DataBaseFiller {
         }
     }
 
+    public void fillPlazasPruebasHoras(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        String date;
+        for(int i = 1; i < 9; i++){
+            date = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
+            Reserva reserva = new Reserva(date, userID, 98, new Hora(String.format("0%s:00", i), String.format("1%s:00", i)), false);
+            db.addBookingToDB(reserva);
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        date = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
+
+        for(int i = 75; i < 95; i++){
+            Reserva reserva = new Reserva(date, userID, i, new Hora("10:00", "13:00"), false);
+            db.addBookingToDB(reserva);
+        }
+    }
+
     public void fillPlaza(int plazaID){
         Calendar calendar = Calendar.getInstance();
         for(int i = 0; i < 13; i++){
-            String date = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
+            String date = new SimpleDateFormat("yyyy-mm-dd").format(calendar.getTime());
             Reserva reserva = new Reserva(date, userID, plazaID, new Hora("00:00", "23:59"), false);
             db.addBookingToDB(reserva);
-            calendar.add(Calendar.DAY_OF_MONTH, 1); // Increment the day
+            calendar.add(calendar.DAY_OF_MONTH, 1); // increment the day
         }
     }
+
 }

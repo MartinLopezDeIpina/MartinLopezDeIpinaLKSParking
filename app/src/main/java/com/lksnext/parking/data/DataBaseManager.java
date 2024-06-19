@@ -9,6 +9,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.lksnext.parking.domain.Hora;
+import com.lksnext.parking.domain.Parking;
 import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.ReservaCompuesta;
 import com.lksnext.parking.domain.TipoPlaza;
@@ -21,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 
 public class DataBaseManager {
@@ -133,26 +135,26 @@ public class DataBaseManager {
         }
     }
 
-    public void getBookingsSpotDay(long plazaID, String dia, ReservasCallback callback) {
-        db.collection("reserva")
-            .whereEqualTo("plazaID", plazaID)
-            .whereEqualTo("fecha", dia)
-            .get()
-            .addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    List<Reserva> reservas = new ArrayList<>();
-                    for (DocumentSnapshot document : task.getResult().getDocuments()) {
-                        String horaInicio = document.getString("hora.horaInicio");
-                        String horaFin = document.getString("hora.horaFin");
-                        Hora hora = new Hora(horaInicio, horaFin);
-                        Reserva reserva = new Reserva(dia, hora);
-                        reservas.add(reserva);
-                    }
-                    callback.onCallback(reservas);
-                } else {
-                    callback.onCallback(null);
-                }
-            });
+    //todo: hacer que las reservas solo tengan dos valores para ver si es más eficiente así
+    public LiveData<List<Reserva>> getBookingsSpotDay(String dia, TipoPlaza tipoPlaza) {
+        return new LiveData<List<Reserva>>() {
+            @Override
+            protected void onActive() {
+                List<Integer> plazasID = Parking.getInstance().getPlazas().stream().filter(plaza -> plaza.getTipo().equals(tipoPlaza)).map(Plaza::getId).map(Long::intValue).collect(Collectors.toList());
+                db.collection("reserva")
+                        .whereEqualTo("fecha", dia)
+                        .whereIn("plazaID", plazasID)
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                List<Reserva> reservas = task.getResult().toObjects(Reserva.class);
+                                setValue(reservas);
+                            } else {
+                                setValue(null);
+                            }
+                        });
+            }
+        };
     }
 
     public LiveData<Integer> getCountBookingsConflictingSpotTypeDayHour(String dia, String hora, TipoPlaza tipoPlaza){
