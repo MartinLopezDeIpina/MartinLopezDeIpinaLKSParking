@@ -1,9 +1,5 @@
 package com.lksnext.parking.viewmodel;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.provider.ContactsContract;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -11,32 +7,33 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
 import com.lksnext.parking.data.DataBaseManager;
-import com.lksnext.parking.data.ReservasCallback;
-import com.lksnext.parking.domain.DiaSemana;
 import com.lksnext.parking.domain.Parking;
-import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.Reserva;
 import com.lksnext.parking.domain.TipoPlaza;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class BookViewModel extends ViewModel {
     private Parking parking = Parking.getInstance();
     private DataBaseManager db = DataBaseManager.getInstance();
+    private String lastSelectedHour;
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>(true);
     private MutableLiveData<TipoPlaza> selectedTipoPlaza = new MutableLiveData<>();
     private MutableLiveData<List<Integer>> selectedDias = new MutableLiveData<>();
+    private MutableLiveData<String> selectedHora1 = new MutableLiveData<>();
+    private MutableLiveData<String> selectedHora2 = new MutableLiveData<>();
+    private MutableLiveData<List<String>> intermediateSelectedHours = new MutableLiveData<>();
+    private MutableLiveData<Boolean> horasReservaValidas = new MutableLiveData<>(false);
+    private MutableLiveData<String> unselectedHora = new MutableLiveData<>();
     private Integer[] dayNumbers = new Integer[7];
     public LiveData<Boolean> getIsLoading() {
         return isLoading;
@@ -47,21 +44,86 @@ public class BookViewModel extends ViewModel {
     public LiveData<List<Integer>> getSelectedDias() {
         return selectedDias;
     }
+    public LiveData<String> getSelectedHora1() {
+        return selectedHora1;
+    }
+    public LiveData<String> getSelectedHora2() {
+        return selectedHora2;
+    }
+    public LiveData<List<String>> getIntermediateSelectedHours() {
+        return intermediateSelectedHours;
+    }
+    public LiveData<String> getUnselectedHora() {
+        return unselectedHora;
+    }
+    public String getLastSelectedHour() {
+        return lastSelectedHour;
+    }
+    public void setSelectedHora1(String hora) {
+        selectedHora1.setValue(hora);
+    }
+    public void setSelectedHora2(String hora) {
+        selectedHora2.setValue(hora);
+    }
+    private void setLastSelectedHour(String hora) {
+        lastSelectedHour = hora;
+    }
+    public void setIntermediateSelectedHours(List<String> horas) {
+        intermediateSelectedHours.setValue(horas);
+    }
+    public void setHorasReservaValidas(Boolean available) {
+        horasReservaValidas.setValue(available);
+    }
 
     public BookViewModel() {
         dayNumbers = getNextSevenDays();
     }
 
-
+    public void toggleSelectedHour(String hora){
+        if(Objects.equals(selectedHora1.getValue(), hora)){
+            setSelectedHour(null, selectedHora1);
+            setIntermediateSelectedHours(new ArrayList<>());
+            setHorasReservaValidas(false);
+        }else if(Objects.equals(selectedHora2.getValue(), hora)){
+            setSelectedHour(null, selectedHora2);
+            setIntermediateSelectedHours(new ArrayList<>());
+            setHorasReservaValidas(false);
+        }else if(selectedHora1.getValue() == null){
+            setSelectedHour(hora, selectedHora1);
+        }else if(selectedHora2.getValue() == null) {
+            setSelectedHour(hora, selectedHora2);
+        }else{
+            if(selectedHora2.getValue().equals(lastSelectedHour)) {
+                setSelectedHour(hora, selectedHora1);
+            }else{
+                setSelectedHour(hora, selectedHora2);
+            }
+        }
+    }
+    private void setSelectedHour(String hour, MutableLiveData<String> selectedHour){
+        unselectedHora.setValue(selectedHour.getValue());
+        selectedHour.setValue(hour);
+        lastSelectedHour = hour;
+    }
     public void toggleSelectedTipoPlaza(TipoPlaza tipoPlaza){
         if(selectedTipoPlaza.getValue() == tipoPlaza){
             selectedTipoPlaza.setValue(null);
         }else{
             selectedTipoPlaza.setValue(tipoPlaza);
         }
+        emptySelectedHours();
+    }
+
+    private void emptySelectedHours(){
+        setIntermediateSelectedHours(new ArrayList<>());
+        setSelectedHora1(null);
+        setSelectedHora2(null);
+        setLastSelectedHour(null);
+        setHorasReservaValidas(false);
     }
 
     public void toggleDia(Integer dia_index){
+        emptySelectedHours();
         int dia = dayNumbers[dia_index];
         List<Integer> dias = selectedDias.getValue();
 
@@ -75,6 +137,10 @@ public class BookViewModel extends ViewModel {
             dias.add(dia);
         }
         selectedDias.setValue(dias);
+    }
+
+    public boolean bothHoursSelected(){
+        return selectedHora1.getValue() != null && selectedHora2.getValue() != null;
     }
 
     public LiveData<HashMap<String, Boolean>> getHorasDisponiblesInSelectedSpotTypeAndDays(List<String> fechas_dias, TipoPlaza tipoPlaza){
@@ -139,76 +205,6 @@ public class BookViewModel extends ViewModel {
         return result;
     }
 
-
-    private boolean plazaDisponible(long plazaID, Date inicio, Date fin){
-        List<Reserva> reservasPlaza = db.getBookingsSpotNotExpired(plazaID);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(inicio);
-
-        while (calendar.getTime().before(fin)) {
-            Date currentHour = calendar.getTime();
-            calendar.add(Calendar.HOUR, 1);
-            Date nextHour = calendar.getTime();
-
-            boolean isHourAvailable = reservasPlaza.stream()
-                    .noneMatch(reserva -> reserva.overlapsAnyHour(currentHour, nextHour));
-
-            if (isHourAvailable) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private Date getNextSeventhDayEnd(){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-
-        // Add 7 days to get the next seventh day
-        calendar.add(Calendar.DAY_OF_MONTH, 6);
-
-        // Set the time to the end of the day
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 59);
-        calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 999);
-        return calendar.getTime();
-    }
-
-    public List<String> getDatesBetween(Date start, Date end) {
-        List<String> dates = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(start);
-
-        while (calendar.getTime().before(end)) {
-            dates.add(sdf.format(calendar.getTime()));
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
-        }
-
-        return dates;
-    }
-
-    //el primer argumento es el día del mes y el segundo la inicial del mes. De lunes a viernes.
-    public String[][] getSemanaActual(){
-        String[][] semanaActual = new String[7][2];
-        Calendar calendar = Calendar.getInstance();
-
-        while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
-            calendar.add(Calendar.DAY_OF_MONTH, -1);
-        }
-
-        for (int i = 0; i < 7; i++) {
-            semanaActual[i][0] = Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
-            semanaActual[i][1] = new SimpleDateFormat("MMMM", new Locale("es", "ES")).format(calendar.getTime()).substring(0, 1).toUpperCase();
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
-        }
-
-        return semanaActual;
-    }
 
     public Integer[] getNextSevenDays() {
         Integer[] nextSevenDays = new Integer[7];
