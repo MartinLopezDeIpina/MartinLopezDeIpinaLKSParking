@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ProgressBar;
 
@@ -15,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.lksnext.parking.R;
 import com.lksnext.parking.databinding.FragmentAddBookingBinding;
@@ -39,6 +41,7 @@ private FragmentAddBookingBinding binding;
     private AvailableSpotsAdapter spotsAdapter;
     private ProgressBar hoursProgressBar;
     private ProgressBar spotsProgressBar;
+    private MaterialButton addBookingButton;
     private List<Chip> hourChips;
     public AddBookingFragment() {
         // Es necesario un constructor vacio
@@ -59,6 +62,8 @@ private FragmentAddBookingBinding binding;
 
         binding.setBookViewModel(bookViewModel);
 
+        bindSelectedSpot();
+        bindAddBookingButton();
         bindProgressBars();
         bindSpotsRecyclerView();
         fillHourChipBindings();
@@ -73,6 +78,19 @@ private FragmentAddBookingBinding binding;
 
         return binding.getRoot();
     }
+    private void bindSelectedSpot(){
+        bookViewModel.getSelectedSpot().observe(getViewLifecycleOwner(), selectedSpot -> {
+            if(selectedSpot != null){
+
+            }
+        });
+    }
+    private void bindAddBookingButton(){
+        addBookingButton = binding.addBookingButton;
+        addBookingButton.setOnClickListener(v -> {
+
+        });
+    }
     private void bindProgressBars(){
         hoursProgressBar = binding.hourChipProgressBar;
         spotsProgressBar = binding.plazaRecyclerProgressBar;
@@ -82,7 +100,7 @@ private FragmentAddBookingBinding binding;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         bookViewModel.getAvailableSpots().observe(getViewLifecycleOwner(), availableSpots -> {
-            spotsAdapter = new AvailableSpotsAdapter(availableSpots);
+            spotsAdapter = new AvailableSpotsAdapter(availableSpots, bookViewModel);
             recyclerView.setAdapter(spotsAdapter);
             spotsProgressBar.setVisibility(View.GONE);
         });
