@@ -1,6 +1,7 @@
 package com.lksnext.parking.data;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,11 +50,23 @@ public class DataBaseManager {
         db.collection("plaza").document(Long.toString(plaza.getId())).set(plaza);
     }
 
-    public void addBookingToDB(Reserva reserva){
-        db.collection("reserva").document(reserva.getId()).set(reserva);
+    public LiveData<String> addBookingToDB(Reserva reserva){
+        MutableLiveData<String> result = new MutableLiveData<>();
+        DocumentReference docRef = db.collection("reserva").document();
+        reserva.setId(docRef.getId());
+        docRef.set(reserva)
+                .addOnSuccessListener(aVoid -> result.setValue(docRef.getId()))
+                .addOnFailureListener(e -> result.setValue(null));
+        return result;
     }
-    public void addReservaCompuestaToDB(ReservaCompuesta reservaCompuesta){
-        db.collection("reservaCompuesta").add(reservaCompuesta);
+
+    public LiveData<String> addReservaCompuestaToDB(ReservaCompuesta reservaCompuesta){
+        MutableLiveData<String> result = new MutableLiveData<>();
+        DocumentReference docRef = db.collection("reservaCompuesta").document();
+        docRef.set(reservaCompuesta)
+            .addOnSuccessListener(aVoid -> result.setValue(docRef.getId()))
+            .addOnFailureListener(e -> result.setValue(null));
+        return result;
     }
 
     public void getCurrenUser(UserCallback callback){

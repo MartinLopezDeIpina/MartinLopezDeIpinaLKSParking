@@ -56,7 +56,7 @@ public class Parking {
     public List<ReservaCompuesta> getReservasCompuestas(){
         return reservasCompuestas;
     }
-    public TipoPlaza getTipoPlazaReserva(int plazaID){
+    public TipoPlaza getTipoPlazaReserva(Long plazaID){
         return plazas.stream()
                 .filter(plaza -> plaza.getId() == plazaID)
                 .findFirst()

@@ -42,6 +42,7 @@ private FragmentAddBookingBinding binding;
     private AvailableSpotsAdapter spotsAdapter;
     private ProgressBar hoursProgressBar;
     private ProgressBar spotsProgressBar;
+    private ProgressBar generalProgressBar;
     private MaterialButton addBookingButton;
     private List<Chip> hourChips;
     public AddBookingFragment() {
@@ -82,10 +83,10 @@ private FragmentAddBookingBinding binding;
     private void bindSelectedSpot(){
         bookViewModel.getSelectedSpot().observe(getViewLifecycleOwner(), selectedSpot -> {
             if(selectedSpot != null){
-                addBookingButton.setSelected(true);
+                addBookingButton.setEnabled(true);
                 addBookingButton.setAlpha(1f);
             }else{
-                addBookingButton.setSelected(false);
+                addBookingButton.setEnabled(false);
                 addBookingButton.setAlpha(0.5f);
             }
         });
@@ -93,12 +94,20 @@ private FragmentAddBookingBinding binding;
     private void bindAddBookingButton(){
         addBookingButton = binding.addBookingButton;
         addBookingButton.setOnClickListener(v -> {
-
+            generalProgressBar.setVisibility(View.VISIBLE);
+            LiveData<String> bookingResult = bookViewModel.bookSpot();
+            bookingResult.observe(getViewLifecycleOwner(), result -> {
+                if(result != null){
+                    generalProgressBar.setVisibility(View.GONE);
+                    mainViewModel.navigateToMainFragment(false);
+                }
+            });
         });
     }
     private void bindProgressBars(){
         hoursProgressBar = binding.hourChipProgressBar;
         spotsProgressBar = binding.plazaRecyclerProgressBar;
+        generalProgressBar = binding.generalProgressBar;
     }
     private void bindSpotsRecyclerView(){
         recyclerView = binding.availableSpotsRecyclerView;

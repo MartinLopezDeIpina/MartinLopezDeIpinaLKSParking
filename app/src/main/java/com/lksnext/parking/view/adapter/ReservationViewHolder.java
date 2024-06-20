@@ -34,7 +34,7 @@ public class ReservationViewHolder extends RecyclerView.ViewHolder {
         String horaFin = reservation.getHora().getHoraFin();
         reservationHour.setText(String.format("%s - %s", horaInicio, horaFin));
 
-        TipoPlaza tipoPlaza = Parking.getInstance().getTipoPlazaReserva(reservation.getPlazaID().intValue());
+        TipoPlaza tipoPlaza = Parking.getInstance().getTipoPlazaReserva(reservation.getPlazaID());
         switch (tipoPlaza){
             case MOTO:
                 reservationVehicleImage.setImageResource(R.drawable.motoicono);
