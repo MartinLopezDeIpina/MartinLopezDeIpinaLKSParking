@@ -81,7 +81,11 @@ public class Reserva {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-            return DiaSemana.values()[dayOfWeek - 1];
+            if (dayOfWeek == 1) {
+                return DiaSemana.DOMINGO;
+            } else {
+                return DiaSemana.values()[dayOfWeek - 2];
+            }
         } catch (ParseException e) {
             return null;
         }

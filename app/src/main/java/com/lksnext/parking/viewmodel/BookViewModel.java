@@ -6,9 +6,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.lksnext.parking.data.DataBaseManager;
+import com.lksnext.parking.domain.Hora;
 import com.lksnext.parking.domain.Parking;
 import com.lksnext.parking.domain.Reserva;
+import com.lksnext.parking.domain.ReservaCompuesta;
 import com.lksnext.parking.domain.TipoPlaza;
 import com.lksnext.parking.util.DateUtils;
 
@@ -88,7 +91,7 @@ public class BookViewModel extends ViewModel {
 
         if(available){
             TipoPlaza tipoPlaza = selectedTipoPlaza.getValue();
-            List<String> dias = getFormatedDays(selectedDias.getValue());
+            List<String> dias = DateUtils.getFormatedDays(selectedDias.getValue());
             String horaInicio;
             String horaFin;
             String hora1 = selectedHora1.getValue();
@@ -124,7 +127,7 @@ public class BookViewModel extends ViewModel {
     }
 
     public BookViewModel() {
-        dayNumbers = getNextSevenDays();
+        dayNumbers = DateUtils.getNextSevenDays();
     }
 
     public void toggleSelectedHour(String hora){
@@ -197,6 +200,41 @@ public class BookViewModel extends ViewModel {
         return selectedHora1.getValue() != null && selectedHora2.getValue() != null;
     }
 
+    public LiveData<String> bookSpot(){
+        List<String> dias = DateUtils.getFormatedDays(selectedDias.getValue());
+        String[] horas = DateUtils.getOrderedHours(selectedHora1.getValue(), selectedHora2.getValue());
+        Hora hora = new Hora(horas[0], horas[1]);
+        Long plazaID = selectedSpot.getValue();
+        String userUuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        boolean reservaCompuesta = dias.size() > 1;
+        MediatorLiveData<String> result = new MediatorLiveData<>();
+        AtomicInteger counter = new AtomicInteger(0);
+        int totalLiveData = dias.size();
+
+        List<String> reservasID = new ArrayList<>();
+
+        for(String dia : dias) {
+            Reserva reserva = new Reserva(dia, userUuid, plazaID, hora, reservaCompuesta);
+            LiveData<String> reservaID = db.addBookingToDB(reserva);
+            if(!reservaCompuesta){
+                return reservaID;
+            }
+
+            result.addSource(reservaID, s -> {
+                if (s != null) {
+                    reservasID.add(s);
+                }
+                if (counter.incrementAndGet() == totalLiveData) {
+                    ReservaCompuesta reservaCompuestaObject = new ReservaCompuesta(userUuid, reservasID, plazaID, hora);
+                    LiveData<String> reservaCompuestaID = db.addReservaCompuestaToDB(reservaCompuestaObject);
+                    result.addSource(reservaCompuestaID, result::setValue);
+                }
+            });
+        }
+        return result;
+    }
+
     public LiveData<HashMap<String, Boolean>> getHorasDisponiblesInSelectedSpotTypeAndDays(List<String> fechas_dias, TipoPlaza tipoPlaza){
         MediatorLiveData<HashMap<String, Boolean>> result = new MediatorLiveData<>();
         HashMap<String, Boolean> combinedResult = new HashMap<>();
@@ -259,46 +297,13 @@ public class BookViewModel extends ViewModel {
         return result;
     }
 
-    private List<String> getFormatedDays(List<Integer> dayNumbers){
-        List<String> formattedDays = new ArrayList<>();
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        for (Integer dayNumber : dayNumbers) {
-            calendar.add(Calendar.DAY_OF_MONTH, dayNumber);
-            String formattedDay = sdf.format(calendar.getTime());
-            formattedDays.add(formattedDay);
-
-            calendar = Calendar.getInstance();
-        }
-
-        return formattedDays;
+    public static String[] getNextSevenDaysInitials() {
+        return DateUtils.getNextSevenDaysInitials();
+    }
+    public static Integer[] getNextSevenDays() {
+        return DateUtils.getNextSevenDays();
     }
 
-    public Integer[] getNextSevenDays() {
-        Integer[] nextSevenDays = new Integer[7];
-        Calendar calendar = Calendar.getInstance();
-
-        for (int i = 0; i < 7; i++) {
-            nextSevenDays[i] = calendar.get(Calendar.DAY_OF_MONTH);
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
-        }
-
-        return nextSevenDays;
-    }
-
-    public String[] getNextSevenDaysInitials() {
-        String[] nextSevenDaysInitials = new String[7];
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("EEEE", new Locale("es", "ES"));
-
-        for (int i = 0; i < 7; i++) {
-            String dayOfWeek = sdf.format(calendar.getTime());
-            nextSevenDaysInitials[i] = dayOfWeek.substring(0, 1).toUpperCase();
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
-        }
-
-        return nextSevenDaysInitials;
-    }
 
 }
