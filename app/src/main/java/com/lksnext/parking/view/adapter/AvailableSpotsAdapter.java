@@ -19,6 +19,7 @@ public class AvailableSpotsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     BookViewModel bookViewModel;
     
     public AvailableSpotsAdapter(List<Long> availableSpots, BookViewModel bookViewModel) {
+        availableSpots.sort(Long::compareTo);
         this.availableSpots = availableSpots;
         this.bookViewModel = bookViewModel;
     }
