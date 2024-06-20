@@ -2,6 +2,7 @@ package com.lksnext.parking.view.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -81,7 +82,11 @@ private FragmentAddBookingBinding binding;
     private void bindSelectedSpot(){
         bookViewModel.getSelectedSpot().observe(getViewLifecycleOwner(), selectedSpot -> {
             if(selectedSpot != null){
-
+                addBookingButton.setSelected(true);
+                addBookingButton.setAlpha(1f);
+            }else{
+                addBookingButton.setSelected(false);
+                addBookingButton.setAlpha(0.5f);
             }
         });
     }
@@ -103,6 +108,8 @@ private FragmentAddBookingBinding binding;
             spotsAdapter = new AvailableSpotsAdapter(availableSpots, bookViewModel);
             recyclerView.setAdapter(spotsAdapter);
             spotsProgressBar.setVisibility(View.GONE);
+            addBookingButton.setSelected(false);
+            addBookingButton.setAlpha(0.5f);
         });
     }
 
@@ -281,12 +288,14 @@ private FragmentAddBookingBinding binding;
 
     private void bindSelectedHourValues(){
         bookViewModel.getSelectedHora1().observe(getViewLifecycleOwner(), hora1 -> {
+            bookViewModel.setSelectedSpot(null);
             hourSelected(hora1);
             if(bookViewModel.bothHoursSelected()){
                 spotsProgressBar.setVisibility(View.VISIBLE);
             }
         });
         bookViewModel.getSelectedHora2().observe(getViewLifecycleOwner(), hora2 -> {
+            bookViewModel.setSelectedSpot(null);
             hourSelected(hora2);
             if(bookViewModel.bothHoursSelected()){
                 spotsProgressBar.setVisibility(View.VISIBLE);
