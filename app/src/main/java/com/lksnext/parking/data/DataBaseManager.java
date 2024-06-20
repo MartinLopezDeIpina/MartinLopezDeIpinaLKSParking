@@ -140,7 +140,8 @@ public class DataBaseManager {
         return new LiveData<List<Reserva>>() {
             @Override
             protected void onActive() {
-                List<Integer> plazasID = Parking.getInstance().getPlazas().stream().filter(plaza -> plaza.getTipo().equals(tipoPlaza)).map(Plaza::getId).map(Long::intValue).collect(Collectors.toList());
+                List<Long> plazasID = Parking.getInstance().getPlazasIDOfType(tipoPlaza);
+
                 db.collection("reserva")
                         .whereEqualTo("fecha", dia)
                         .whereIn("plazaID", plazasID)
@@ -155,6 +156,52 @@ public class DataBaseManager {
                         });
             }
         };
+    }
+
+    public LiveData<List<Reserva>> getBookingsSpotTypeDayAndHours(TipoPlaza tipoPlaza, List<String> dias, String horaInicio, String horaFin){
+       return new LiveData<List<Reserva>>(){
+           @Override
+           protected void onActive(){
+               List<Long> plazasID = Parking.getInstance().getPlazasIDOfType(tipoPlaza);
+
+               Task<QuerySnapshot> task1 = db.collection("reserva")
+                       .whereIn("fecha", dias)
+                       .whereIn("plazaID", plazasID)
+                       .whereGreaterThanOrEqualTo("hora.horaInicio", horaInicio)
+                       .get();
+
+               Task<QuerySnapshot> task2 = db.collection("reserva")
+                       .whereIn("fecha", dias)
+                       .whereIn("plazaID", plazasID)
+                       .whereLessThanOrEqualTo("hora.horaFin", horaFin)
+                       .get();
+
+               Task<List<QuerySnapshot>> combinedTask = Tasks.whenAllSuccess(task1, task2);
+
+
+               combinedTask.addOnCompleteListener(task -> {
+                   if (task.isSuccessful()) {
+                       List<Reserva> reservasTask1 = new ArrayList<>();
+                       List<Reserva> reservasTask2 = new ArrayList<>();
+                       List<QuerySnapshot> results = task.getResult();
+
+                       for (DocumentSnapshot document : results.get(0).getDocuments()) {
+                           reservasTask1.add(document.toObject(Reserva.class));
+                       }
+
+                       for (DocumentSnapshot document : results.get(1).getDocuments()) {
+                           reservasTask2.add(document.toObject(Reserva.class));
+                       }
+
+                       reservasTask1.retainAll(reservasTask2);
+
+                       setValue(reservasTask1);
+                   } else {
+                       setValue(new ArrayList<>());
+                   }
+               });
+           }
+       };
     }
 
     public LiveData<Integer> getCountBookingsConflictingSpotTypeDayHour(String dia, String hora, TipoPlaza tipoPlaza){

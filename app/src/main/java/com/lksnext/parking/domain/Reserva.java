@@ -8,12 +8,13 @@ import java.util.Date;
 import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.PropertyName;
 import java.util.UUID;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Reserva {
 
     String fecha, usuarioID, id;
 
-    Integer plazaID;
+    Long plazaID;
 
     Hora hora;
 
@@ -23,7 +24,11 @@ public class Reserva {
 
     }
 
-    public Reserva(String fecha, String usuarioID, Integer plazaID, Hora hora, Boolean insideReservaMultiple) {
+    public Reserva(String fecha, String usuarioID, Integer plazaID, Hora hora, Boolean insideReservaMultiple){
+        this(fecha, usuarioID, plazaID.longValue(), hora, insideReservaMultiple);
+    }
+
+    public Reserva(String fecha, String usuarioID, Long plazaID, Hora hora, Boolean insideReservaMultiple) {
         this.id = UUID.randomUUID().toString();
         this.fecha = fecha;
         this.usuarioID = usuarioID;
@@ -55,11 +60,11 @@ public class Reserva {
         this.usuarioID = usuarioID;
     }
 
-    public Integer getPlazaID() {
+    public Long getPlazaID() {
         return plazaID;
     }
 
-    public void setPlazaID(Integer plazaID) {
+    public void setPlazaID(Long plazaID) {
         this.plazaID = plazaID;
     }
     public String getId() {

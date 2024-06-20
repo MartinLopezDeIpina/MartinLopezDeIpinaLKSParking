@@ -10,6 +10,7 @@ import com.lksnext.parking.data.DataBaseManager;
 import com.lksnext.parking.domain.Parking;
 import com.lksnext.parking.domain.Reserva;
 import com.lksnext.parking.domain.TipoPlaza;
+import com.lksnext.parking.util.DateUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,9 +33,8 @@ public class BookViewModel extends ViewModel {
     private MutableLiveData<String> selectedHora1 = new MutableLiveData<>();
     private MutableLiveData<String> selectedHora2 = new MutableLiveData<>();
     private MutableLiveData<List<String>> intermediateSelectedHours = new MutableLiveData<>();
-    private MutableLiveData<Boolean> horasReservaValidas = new MutableLiveData<>(false);
     private MutableLiveData<String> unselectedHora = new MutableLiveData<>();
-    private MutableLiveData<List<Integer>> availableSpots = new MutableLiveData<>();
+    private MutableLiveData<List<Long>> availableSpots = new MutableLiveData<>();
     private Integer[] dayNumbers = new Integer[7];
     public LiveData<Boolean> getIsLoading() {
         return isLoading;
@@ -57,7 +57,7 @@ public class BookViewModel extends ViewModel {
     public LiveData<String> getUnselectedHora() {
         return unselectedHora;
     }
-    public LiveData<List<Integer>> getAvailableSpots() {
+    public LiveData<List<Long>> getAvailableSpots() {
         return availableSpots;
     }
     public String getLastSelectedHour() {
@@ -75,8 +75,45 @@ public class BookViewModel extends ViewModel {
     public void setIntermediateSelectedHours(List<String> horas) {
         intermediateSelectedHours.setValue(horas);
     }
-    public void setHorasReservaValidas(Boolean available) {
-        horasReservaValidas.setValue(available);
+
+    public void setPlazasAvailables(Boolean available) {
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+
+        if(available){
+            TipoPlaza tipoPlaza = selectedTipoPlaza.getValue();
+            List<String> dias = getFormatedDays(selectedDias.getValue());
+            String horaInicio;
+            String horaFin;
+            String hora1 = selectedHora1.getValue();
+            String hora2 = selectedHora2.getValue();
+            if(DateUtils.compareStringDates(hora1, hora2) >= 0){
+                horaInicio = hora2;
+                horaFin = hora1;
+            }else{
+                horaInicio = hora1;
+                horaFin = hora2;
+            }
+
+            LiveData<List<Reserva>> bookings = db.getBookingsSpotTypeDayAndHours(tipoPlaza, dias, horaInicio, horaFin);
+            bookings.observeForever(new Observer<List<Reserva>>() {
+                @Override
+                public void onChanged(List<Reserva> conflictingReservas) {
+
+                    List<Long> plazasID = parking.getPlazasIDOfType(tipoPlaza);
+
+                    plazasID.removeAll(conflictingReservas.stream()
+                            .map(Reserva::getPlazaID)
+                            .collect(Collectors.toList()));
+
+                    availableSpots.setValue(plazasID);
+                    result.setValue(true);
+                }
+            });
+
+        }else{
+            availableSpots.setValue(new ArrayList<>());
+            result.setValue(false);
+        }
     }
 
     public BookViewModel() {
@@ -87,11 +124,11 @@ public class BookViewModel extends ViewModel {
         if(Objects.equals(selectedHora1.getValue(), hora)){
             setSelectedHour(null, selectedHora1);
             setIntermediateSelectedHours(new ArrayList<>());
-            setHorasReservaValidas(false);
+            setPlazasAvailables(false);
         }else if(Objects.equals(selectedHora2.getValue(), hora)){
             setSelectedHour(null, selectedHora2);
             setIntermediateSelectedHours(new ArrayList<>());
-            setHorasReservaValidas(false);
+            setPlazasAvailables(false);
         }else if(selectedHora1.getValue() == null){
             setSelectedHour(hora, selectedHora1);
         }else if(selectedHora2.getValue() == null) {
@@ -123,7 +160,7 @@ public class BookViewModel extends ViewModel {
         setSelectedHora1(null);
         setSelectedHora2(null);
         setLastSelectedHour(null);
-        setHorasReservaValidas(false);
+        setPlazasAvailables(false);
     }
 
     public void emptyBooking(){
@@ -215,6 +252,21 @@ public class BookViewModel extends ViewModel {
         return result;
     }
 
+    private List<String> getFormatedDays(List<Integer> dayNumbers){
+        List<String> formattedDays = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        for (Integer dayNumber : dayNumbers) {
+            calendar.add(Calendar.DAY_OF_MONTH, dayNumber);
+            String formattedDay = sdf.format(calendar.getTime());
+            formattedDays.add(formattedDay);
+
+            calendar = Calendar.getInstance();
+        }
+
+        return formattedDays;
+    }
 
     public Integer[] getNextSevenDays() {
         Integer[] nextSevenDays = new Integer[7];
