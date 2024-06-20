@@ -11,188 +11,235 @@
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         >
-        <LinearLayout
-            android:id="@+id/heading"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                style="@style/iconoAtras"
-                android:id="@+id/returning"
-                android:src="@drawable/iconoactras" />
-
-            <TextView
-                style="@style/HeadingFlechaStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="@string/add_booking" />
-        </LinearLayout>
-        <LinearLayout
-            android:orientation="vertical"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/heading"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:fillViewport="true"
+            android:layout_marginBottom="50dp"
             >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/booking_type"
-                style="@style/HeadingSecondaryStyle"
-                >
-
-            </TextView>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 >
-
-                <com.google.android.material.chip.ChipGroup
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/heading"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_horizontal"
-                    app:singleSelection="true"
-                    app:singleLine="false">
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/coche_chip"
-                        style="@style/bookingChip"
+                    <ImageView
+                        style="@style/iconoAtras"
+                        android:id="@+id/returning"
+                        android:src="@drawable/iconoactras" />
+
+                    <TextView
+                        style="@style/HeadingFlechaStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/add_booking" />
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/heading"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    >
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/car"
-                        android:textColor="@color/chip_text_color"
-                        app:chipCornerRadius="15dp"
-                        app:chipEndPadding="10dp"
-                        app:chipIcon="@drawable/cocheicono"
-                        app:chipIconTint="@color/chip_text_color"
-                        app:chipBackgroundColor="@color/chip_background_color"
-                        app:chipIconSize="17dp"
-                        app:chipIconVisible="true"
-                        app:chipMinHeight="40dp"
-                        app:chipStartPadding="10dp" />
+                        android:text="@string/booking_type"
+                        style="@style/HeadingSecondaryStyle"
+                        >
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/moto_chip"
-                        style="@style/bookingChip"
+                    </TextView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        >
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_horizontal"
+                            app:singleSelection="true"
+                            app:singleLine="false">
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/coche_chip"
+                                style="@style/bookingChip"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/car"
+                                android:textColor="@color/chip_text_color"
+                                app:chipCornerRadius="15dp"
+                                app:chipEndPadding="10dp"
+                                app:chipIcon="@drawable/cocheicono"
+                                app:chipIconTint="@color/chip_text_color"
+                                app:chipBackgroundColor="@color/chip_background_color"
+                                app:chipIconSize="17dp"
+                                app:chipIconVisible="true"
+                                app:chipMinHeight="40dp"
+                                app:chipStartPadding="10dp" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/moto_chip"
+                                style="@style/bookingChip"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/motorcycle"
+                                android:textColor="@color/chip_text_color"
+                                app:chipIcon="@drawable/motoicono"
+                                app:chipIconTint="@color/chip_text_color"
+                                app:chipBackgroundColor="@color/chip_background_color"
+                                app:chipIconSize="17dp"
+                                app:chipIconVisible="true"
+                                app:chipCornerRadius="15dp"
+                                app:chipEndPadding="20dp"
+                                app:chipMinHeight="40dp"
+                                app:chipStartPadding="20dp" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/electric_chip"
+                                style="@style/bookingChip"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/electric"
+                                android:textColor="@color/chip_text_color"
+                                app:chipIcon="@drawable/electricoicono"
+                                app:chipIconTint="@color/chip_text_color"
+                                app:chipBackgroundColor="@color/chip_background_color"
+                                app:chipIconSize="17dp"
+                                app:chipIconVisible="true"
+                                app:chipCornerRadius="15dp"
+                                app:chipEndPadding="20dp"
+                                app:chipMinHeight="40dp"
+                                app:chipStartPadding="20dp" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/special_chip"
+                                style="@style/bookingChip"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/special"
+                                android:textColor="@color/chip_text_color"
+                                app:chipIcon="@drawable/especialicono"
+                                app:chipIconTint="@color/chip_text_color"
+                                app:chipBackgroundColor="@color/chip_background_color"
+                                app:chipIconSize="17dp"
+                                app:chipIconVisible="true"
+                                app:chipCornerRadius="15dp"
+                                app:chipEndPadding="20dp"
+                                app:chipMinHeight="40dp"
+                                app:chipStartPadding="20dp" />
+
+                        </com.google.android.material.chip.ChipGroup>
+                    </LinearLayout>
+
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/motorcycle"
-                        android:textColor="@color/chip_text_color"
-                        app:chipIcon="@drawable/motoicono"
-                        app:chipIconTint="@color/chip_text_color"
-                        app:chipBackgroundColor="@color/chip_background_color"
-                        app:chipIconSize="17dp"
-                        app:chipIconVisible="true"
-                        app:chipCornerRadius="15dp"
-                        app:chipEndPadding="20dp"
-                        app:chipMinHeight="40dp"
-                        app:chipStartPadding="20dp" />
+                        android:text="@string/booking_date"
+                        style="@style/HeadingSecondaryStyle"
+                        >
+                    </TextView>
+                    <include
+                        android:id="@+id/date_chip_group"
+                        layout="@layout/date_chip_group"
+                        bind:weekDays="@{bookViewModel.getNextSevenDays()}"
+                        bind:weekDaysInitials="@{bookViewModel.getNextSevenDaysInitials()}"
+                        />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/electric_chip"
-                        style="@style/bookingChip"
-                        android:layout_width="wrap_content"
+                    <TextView
                         android:layout_height="wrap_content"
-                        android:text="@string/electric"
-                        android:textColor="@color/chip_text_color"
-                        app:chipIcon="@drawable/electricoicono"
-                        app:chipIconTint="@color/chip_text_color"
-                        app:chipBackgroundColor="@color/chip_background_color"
-                        app:chipIconSize="17dp"
-                        app:chipIconVisible="true"
-                        app:chipCornerRadius="15dp"
-                        app:chipEndPadding="20dp"
-                        app:chipMinHeight="40dp"
-                        app:chipStartPadding="20dp" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/special_chip"
-                        style="@style/bookingChip"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/special"
-                        android:textColor="@color/chip_text_color"
-                        app:chipIcon="@drawable/especialicono"
-                        app:chipIconTint="@color/chip_text_color"
-                        app:chipBackgroundColor="@color/chip_background_color"
-                        app:chipIconSize="17dp"
-                        app:chipIconVisible="true"
-                        app:chipCornerRadius="15dp"
-                        app:chipEndPadding="20dp"
-                        app:chipMinHeight="40dp"
-                        app:chipStartPadding="20dp" />
+                        android:text="@string/booking_time"
+                        style="@style/HeadingSecondaryStyle"
+                        >
+                    </TextView>
 
-                </com.google.android.material.chip.ChipGroup>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+                        <include
+                            android:id="@+id/hour_chip_group"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            layout="@layout/hour_chip_group"
+                            />
+
+                        <ProgressBar
+                            android:id="@+id/hour_chip_progressBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:indeterminate="true"
+                            android:visibility="gone"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/hour_chip_group"
+                            app:layout_constraintBottom_toBottomOf="@+id/hour_chip_group" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="@string/booking_spot"
+                        style="@style/HeadingSecondaryStyle"
+                        >
+                    </TextView>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="50dp"
+
+                        >
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/available_spots_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="325dp"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp"
+                            android:clipToPadding="false"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            />
+
+
+                        <ProgressBar
+                            android:id="@+id/plaza_recycler_progressBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:indeterminate="true"
+                            android:visibility="gone"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/available_spots_recycler_view"
+                            app:layout_constraintBottom_toBottomOf="@+id/available_spots_recycler_view" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </LinearLayout>
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/booking_date"
-                style="@style/HeadingSecondaryStyle"
-                >
-            </TextView>
-            <include
-                android:id="@+id/date_chip_group"
-                layout="@layout/date_chip_group"
-                bind:weekDays="@{bookViewModel.getNextSevenDays()}"
-                bind:weekDaysInitials="@{bookViewModel.getNextSevenDaysInitials()}"
-                />
+        </androidx.core.widget.NestedScrollView>
 
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="@string/booking_time"
-                style="@style/HeadingSecondaryStyle"
-                >
-            </TextView>
-            <include
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                layout="@layout/hour_chip_group"
-                >
-
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="@string/booking_spot"
-                style="@style/HeadingSecondaryStyle"
-                >
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/available_spots_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:clipToPadding="false"
-                    />
-            </TextView>
-
-            </include>
-
-
-        </LinearLayout>
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

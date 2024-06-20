@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,18 +20,15 @@ import com.lksnext.parking.R;
 import com.lksnext.parking.databinding.FragmentAddBookingBinding;
 import com.lksnext.parking.domain.TipoPlaza;
 import com.lksnext.parking.view.adapter.AvailableSpotsAdapter;
-import com.lksnext.parking.view.adapter.ComposedReservationAdapter;
 import com.lksnext.parking.viewmodel.BookViewModel;
 import com.lksnext.parking.viewmodel.MainViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class AddBookingFragment extends Fragment {
@@ -39,6 +37,8 @@ private FragmentAddBookingBinding binding;
     private BookViewModel bookViewModel;
     private RecyclerView recyclerView;
     private AvailableSpotsAdapter spotsAdapter;
+    private ProgressBar hoursProgressBar;
+    private ProgressBar spotsProgressBar;
     private List<Chip> hourChips;
     public AddBookingFragment() {
         // Es necesario un constructor vacio
@@ -59,6 +59,7 @@ private FragmentAddBookingBinding binding;
 
         binding.setBookViewModel(bookViewModel);
 
+        bindProgressBars();
         bindSpotsRecyclerView();
         fillHourChipBindings();
         bindReturnButton();
@@ -72,6 +73,10 @@ private FragmentAddBookingBinding binding;
 
         return binding.getRoot();
     }
+    private void bindProgressBars(){
+        hoursProgressBar = binding.hourChipProgressBar;
+        spotsProgressBar = binding.plazaRecyclerProgressBar;
+    }
     private void bindSpotsRecyclerView(){
         recyclerView = binding.availableSpotsRecyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -79,6 +84,7 @@ private FragmentAddBookingBinding binding;
         bookViewModel.getAvailableSpots().observe(getViewLifecycleOwner(), availableSpots -> {
             spotsAdapter = new AvailableSpotsAdapter(availableSpots);
             recyclerView.setAdapter(spotsAdapter);
+            spotsProgressBar.setVisibility(View.GONE);
         });
     }
 
@@ -194,7 +200,7 @@ private FragmentAddBookingBinding binding;
    }
 
     private void enableHourChips() {
-        binding.progressBar.setVisibility(View.VISIBLE);
+        hoursProgressBar.setVisibility(View.VISIBLE);
 
         TipoPlaza tipoPlaza = bookViewModel.getSelectedTipoPlaza().getValue();
 
@@ -210,7 +216,7 @@ private FragmentAddBookingBinding binding;
                 chip.setEnabled(horasDisponibles.get(chip.getText().toString()));
             }
 
-            binding.progressBar.setVisibility(View.GONE);
+            hoursProgressBar.setVisibility(View.GONE);
         });
     }
 
@@ -258,9 +264,15 @@ private FragmentAddBookingBinding binding;
     private void bindSelectedHourValues(){
         bookViewModel.getSelectedHora1().observe(getViewLifecycleOwner(), hora1 -> {
             hourSelected(hora1);
+            if(bookViewModel.bothHoursSelected()){
+                spotsProgressBar.setVisibility(View.VISIBLE);
+            }
         });
         bookViewModel.getSelectedHora2().observe(getViewLifecycleOwner(), hora2 -> {
             hourSelected(hora2);
+            if(bookViewModel.bothHoursSelected()){
+                spotsProgressBar.setVisibility(View.VISIBLE);
+            }
         });
     }
 
@@ -286,7 +298,7 @@ private FragmentAddBookingBinding binding;
         String hour1 = bookViewModel.getSelectedHora1().getValue();
         String hour2 = bookViewModel.getSelectedHora2().getValue();
 
-        bookViewModel.setHorasReservaValidas(true);
+        bookViewModel.setPlazasAvailables(true);
         setVisualPath(hour1, hour2);
     }
 

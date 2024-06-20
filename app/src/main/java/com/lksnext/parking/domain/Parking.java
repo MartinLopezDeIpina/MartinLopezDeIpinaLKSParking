@@ -2,6 +2,7 @@ package com.lksnext.parking.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Parking {
     private static Parking instance;
@@ -27,6 +28,12 @@ public class Parking {
     }
     public List<Plaza> getPlazas(){
         return plazas;
+    }
+    public List<Long> getPlazasIDOfType(TipoPlaza tipo){
+       return plazas.stream()
+               .filter(plaza -> plaza.getTipoPlaza() == tipo)
+               .map(Plaza::getId)
+               .collect(Collectors.toList());
     }
     public void setPlazas(List<Plaza> plazas){
         this.plazas = plazas;
