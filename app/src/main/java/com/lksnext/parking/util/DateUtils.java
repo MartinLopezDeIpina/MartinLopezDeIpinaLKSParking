@@ -94,4 +94,17 @@ public class DateUtils {
 
         return nextSevenDaysInitials;
     }
+
+    public static boolean horaYaPasada(String hora, String dia) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String dateTimeStr = dia + " " + hora;
+        Date horaFinDate;
+        try {
+            horaFinDate = sdf.parse(dateTimeStr);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        return horaFinDate != null && horaFinDate.getTime() < System.currentTimeMillis();
+    }
 }

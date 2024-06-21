@@ -155,17 +155,17 @@ public class DataBaseManager {
         return new LiveData<List<Reserva>>() {
             @Override
             protected void onActive() {
-                List<Long> plazasID = Parking.getInstance().getPlazasIDOfType(tipoPlaza);
 
                 db.collection("reserva")
+                        .whereEqualTo("tipoPlaza", tipoPlaza)
                         .whereEqualTo("fecha", dia)
-                        .whereIn("plazaID", plazasID)
                         .get()
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 List<Reserva> reservas = task.getResult().toObjects(Reserva.class);
                                 setValue(reservas);
                             } else {
+                                Log.d("DataBaseManager", "Error getting documents: ", task.getException());
                                 setValue(null);
                             }
                         });
