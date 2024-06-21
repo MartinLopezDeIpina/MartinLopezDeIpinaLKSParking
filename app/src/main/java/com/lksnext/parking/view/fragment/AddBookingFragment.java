@@ -247,7 +247,27 @@ private FragmentAddBookingBinding binding;
         LiveData<HashMap<String, Boolean>> availableHours = bookViewModel.getHorasDisponiblesInSelectedSpotTypeAndDays(fechas_dias, tipoPlaza);
         availableHours.observe(getViewLifecycleOwner(), horasDisponibles -> {
             for(Chip chip : hourChips){
-                chip.setEnabled(horasDisponibles.get(chip.getText().toString()));
+                Boolean enabled = horasDisponibles.get(chip.getText().toString());
+                if(enabled == null){
+                    enabled = false;
+                }
+
+                //si la segunda hora está deshabilitada, la primera también
+                int chipIndex = hourChips.indexOf(chip);
+                if(chipIndex == 1){
+                   if(!enabled){
+                       hourChips.get(0).setEnabled(false);
+                   }
+                }
+                //para que no se quede una hora habilitada sola
+                if(chipIndex != 0 && chipIndex != 1){
+                    Chip priorChip = hourChips.get(chipIndex - 1);
+                    Chip twoPriorChip = hourChips.get(chipIndex - 2);
+                    if(!enabled && !twoPriorChip.isEnabled()){
+                        priorChip.setEnabled(false);
+                    }
+                }
+                chip.setEnabled(enabled);
             }
 
             hoursProgressBar.setVisibility(View.GONE);
