@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.Tasks;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -91,7 +92,9 @@ public class DataBaseManager {
                 });
     }
 
-    public void getCurrentUserBookings(ReservaCallback callback){
+    //primer valor: reservas, segundo valor: reservas compuestas
+    public LiveData<Object[]> getCurrentUserBookings(){
+        MutableLiveData<Object[]> result = new MutableLiveData<>();
         String uid = mAuth.getCurrentUser().getUid();
 
         db.collection("reserva")
@@ -106,11 +109,12 @@ public class DataBaseManager {
                         .addOnCompleteListener(task2 -> {
                             if (task2.isSuccessful()) {
                                 List<ReservaCompuesta> reservasCompuestas = task2.getResult().toObjects(ReservaCompuesta.class);
-                                callback.onCallback(reservas, reservasCompuestas);
+                                result.setValue(new Object[]{reservas, reservasCompuestas});
                             }
                         });
                 }
             });
+        return result;
     }
 
     public void getBookings(ReservasCallback callback){

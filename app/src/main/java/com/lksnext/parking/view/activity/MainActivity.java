@@ -110,11 +110,10 @@ public class MainActivity extends BaseActivity {
         });
     }
     private void setBookingData(){
-        dataBaseManager.getCurrentUserBookings(new ReservaCallback() {
-            @Override
-            public void onCallback(List<Reserva> reservas, List<ReservaCompuesta> compuestas) {
-                viewModel.setListaReservas(reservas, compuestas);
-            }
+        dataBaseManager.getCurrentUserBookings().observe(this, result -> {
+            List<Reserva> reservas = (List<Reserva>) result[0];
+            List<ReservaCompuesta> compuestas = (List<ReservaCompuesta>) result[1];
+            viewModel.setListaReservas(reservas, compuestas);
         });
     }
 

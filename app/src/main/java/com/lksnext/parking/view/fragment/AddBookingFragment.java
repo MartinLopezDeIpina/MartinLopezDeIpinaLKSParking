@@ -21,6 +21,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.lksnext.parking.R;
 import com.lksnext.parking.databinding.FragmentAddBookingBinding;
+import com.lksnext.parking.domain.Parking;
 import com.lksnext.parking.domain.TipoPlaza;
 import com.lksnext.parking.view.adapter.AvailableSpotsAdapter;
 import com.lksnext.parking.viewmodel.BookViewModel;
@@ -99,7 +100,8 @@ private FragmentAddBookingBinding binding;
             bookingResult.observe(getViewLifecycleOwner(), result -> {
                 if(result != null){
                     generalProgressBar.setVisibility(View.GONE);
-                    mainViewModel.navigateToMainFragment(false);
+                    mainViewModel.updateReservas();
+                    mainViewModel.navigateToMainFragment(true);
                 }
             });
         });

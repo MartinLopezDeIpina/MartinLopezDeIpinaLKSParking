@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lksnext.parking.R;
+import com.lksnext.parking.domain.DiaSemana;
 import com.lksnext.parking.domain.Parking;
 import com.lksnext.parking.domain.Reserva;
 import com.lksnext.parking.domain.ReservaCompuesta;
@@ -69,7 +70,8 @@ public class ComposedReservationViewHolder extends RecyclerView.ViewHolder{
                 .collect(Collectors.toList());
 
         for (Reserva reserva : reservas) {
-            switch(reserva.getDiaSemana()) {
+            DiaSemana diaSemana = reserva.getDiaSemana();
+            switch(diaSemana) {
                 case LUNES:
                     lunes.setAlpha(1f);
                     break;

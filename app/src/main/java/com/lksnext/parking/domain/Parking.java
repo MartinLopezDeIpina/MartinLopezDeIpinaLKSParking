@@ -63,4 +63,5 @@ public class Parking {
                 .map(Plaza::getTipoPlaza)
                 .orElse(null);
     }
+
 }
