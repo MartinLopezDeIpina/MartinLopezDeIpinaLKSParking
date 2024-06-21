@@ -286,6 +286,11 @@ public class BookViewModel extends ViewModel {
                         }
                     }
                     boolean disponible = countHoraConflicto < tipoPlazaCount;
+
+                    if(DateUtils.horaYaPasada(hora, dia)){
+                        disponible = false;
+                    }
+
                     availableHours.put(hora, disponible);
                 }
 
