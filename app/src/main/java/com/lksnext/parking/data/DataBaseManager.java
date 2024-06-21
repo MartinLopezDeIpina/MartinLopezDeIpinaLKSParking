@@ -183,7 +183,7 @@ public class DataBaseManager {
                Task<QuerySnapshot> task1 = db.collection("reserva")
                        .whereEqualTo("tipoPlaza", tipoPlaza)
                        .whereIn("fecha", dias)
-                       .whereLessThanOrEqualTo("hora.horaInicio", horaInicio)
+                       .whereLessThan("hora.horaInicio", horaInicio)
                        .whereGreaterThan("hora.horaFin", horaInicio)
                        .get();
 
@@ -191,7 +191,7 @@ public class DataBaseManager {
                Task<QuerySnapshot> task2 = db.collection("reserva")
                        .whereEqualTo("tipoPlaza", tipoPlaza)
                        .whereIn("fecha", dias)
-                       .whereGreaterThanOrEqualTo("hora.horaInicio", horaInicio)
+                       .whereGreaterThan("hora.horaInicio", horaInicio)
                        .whereLessThan("hora.horaFin", horaFin)
                        .get();
 
