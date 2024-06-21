@@ -16,6 +16,9 @@ public class Reserva {
 
     Long plazaID;
 
+    //Para facilitar las consultas a la base de datos
+    TipoPlaza tipoPlaza;
+
     Hora hora;
 
     boolean insideReservaMultiple;
@@ -35,6 +38,7 @@ public class Reserva {
         this.plazaID = plazaID;
         this.hora = hora;
         this.insideReservaMultiple = insideReservaMultiple;
+        this.tipoPlaza = Parking.getInstance().getTipoPlazaReserva(plazaID);
     }
     public Reserva(String fecha, Hora hora){
         this.fecha = fecha;
@@ -66,6 +70,12 @@ public class Reserva {
 
     public void setPlazaID(Long plazaID) {
         this.plazaID = plazaID;
+    }
+    public TipoPlaza getTipoPlaza() {
+        return tipoPlaza;
+    }
+    public void setTipoPlaza(TipoPlaza tipoPlaza) {
+        this.tipoPlaza = tipoPlaza;
     }
     public String getId() {
         return id;
