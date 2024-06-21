@@ -7,6 +7,7 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.lksnext.parking.data.DataBaseManager;
 import com.lksnext.parking.domain.Parking;
 import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.Reserva;
@@ -15,6 +16,7 @@ import com.lksnext.parking.domain.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MainViewModel extends ViewModel {
 
@@ -46,20 +48,31 @@ public class MainViewModel extends ViewModel {
         parking.setReservasCompuestas(compuestas);
         updateReservas();
     }
-    private void updateReservas(){
-        List<Reserva> reservas = parking.getReservas();
-        List<Reserva> activas = new ArrayList<>();
-        List<Reserva> pasadas = new ArrayList<>();
-        for (Reserva reserva : reservas) {
-            if (reserva.isCaducada()) {
-                pasadas.add(reserva);
-            } else {
-                activas.add(reserva);
+    public void updateReservas(){
+        LiveData<Object[]> reservasLiveData = DataBaseManager.getInstance().getCurrentUserBookings();
+
+        reservasLiveData.observeForever(result -> {
+            List<Reserva> reservas = (List<Reserva>) result[0];
+            List<ReservaCompuesta> reservasCompuestas = (List<ReservaCompuesta>) result[1];
+
+            Parking.getInstance().setReservas(reservas);
+            Parking.getInstance().setReservasCompuestas(reservasCompuestas);
+
+            List<Reserva> activas = new ArrayList<>();
+            List<Reserva> pasadas = new ArrayList<>();
+            for (Reserva reserva : reservas) {
+                if (reserva.isCaducada()) {
+                    pasadas.add(reserva);
+                } else {
+                    activas.add(reserva);
+                }
             }
-        }
-        List<ReservaCompuesta> compuestas = parking.getReservasCompuestas();
-        reservasActivas.setValue(new Pair<>(activas, compuestas));
-        reservasPasadas.setValue(pasadas);
+
+            reservasActivas.setValue(new Pair<>(activas, reservasCompuestas));
+            reservasPasadas.setValue(pasadas);
+        });
+
+
     }
 
 
