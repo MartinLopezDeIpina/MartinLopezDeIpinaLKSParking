@@ -1,19 +1,28 @@
 package com.lksnext.parking.view.adapter;
 
+
+import android.icu.util.Calendar;
+import androidx.databinding.DataBindingUtil;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lksnext.parking.R;
+import com.lksnext.parking.databinding.ItemComposedReservationBinding;
 import com.lksnext.parking.domain.DiaSemana;
 import com.lksnext.parking.domain.Parking;
 import com.lksnext.parking.domain.Reserva;
 import com.lksnext.parking.domain.ReservaCompuesta;
 import com.lksnext.parking.domain.TipoPlaza;
+import com.lksnext.parking.util.DateUtils;
 
+import org.w3c.dom.Text;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,9 +32,13 @@ public class ComposedReservationViewHolder extends RecyclerView.ViewHolder{
     TextView reservationHour;
     ImageView reservationVehicleImage;
     TextView lunes, martes, miercoles, jueves, viernes, sabado, domingo;
+    TextView[] dayTextViews;
+    ItemComposedReservationBinding binding;
+
 
     public ComposedReservationViewHolder(@NonNull View itemView) {
         super(itemView);
+        binding = DataBindingUtil.bind(itemView);
         reservationPlaza = itemView.findViewById(R.id.plaza);
         reservationHour = itemView.findViewById(R.id.hora);
         reservationVehicleImage = itemView.findViewById(R.id.vehiculoIcono);
@@ -36,9 +49,14 @@ public class ComposedReservationViewHolder extends RecyclerView.ViewHolder{
         viernes = itemView.findViewById(R.id.viernes);
         sabado = itemView.findViewById(R.id.sabado);
         domingo = itemView.findViewById(R.id.domingo);
+        dayTextViews = new TextView[]{
+            lunes, martes, miercoles, jueves, viernes, sabado, domingo
+        };
     }
 
     public void bind(ReservaCompuesta reservaCompuesta) {
+        String[] dayStrings = DateUtils.getNextSevenDaysInitials();
+        binding.setDayStrings(dayStrings);
 
         reservationPlaza.setText(String.format("Plaza %s",reservaCompuesta.getPlazaID()));
 
@@ -71,30 +89,8 @@ public class ComposedReservationViewHolder extends RecyclerView.ViewHolder{
 
         for (Reserva reserva : reservas) {
             DiaSemana diaSemana = reserva.getDiaSemana();
-            switch(diaSemana) {
-                case LUNES:
-                    lunes.setAlpha(1f);
-                    break;
-                case MARTES:
-                    martes.setAlpha(1f);
-                    break;
-                case MIERCOLES:
-                    miercoles.setAlpha(1f);
-                    break;
-                case JUEVES:
-                    jueves.setAlpha(1f);
-                    break;
-                case VIERNES:
-                    viernes.setAlpha(1f);
-                    break;
-                case SABADO:
-                    sabado.setAlpha(1f);
-                    break;
-                case DOMINGO:
-                    domingo.setAlpha(1f);
-                    break;
-            }
-
+            int index = DateUtils.getDiaSemanaIndexInCurrentWeek(diaSemana)+1;
+            dayTextViews[index].setAlpha(1.0f);
         }
 
     }

@@ -1,148 +1,160 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:backgroundTint="?attr/colorSurfaceContainer"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
-    android:layout_marginTop="8dp"
-    android:gravity="center"
-    android:background="@drawable/rounded_container"
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
-    <ImageButton
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:backgroundTint="?attr/colorSurfaceContainerHighest"
-        android:background="@drawable/rounded_button_edit"
-        android:src="@drawable/editicon"
-        android:scaleType="center"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        />
+<data>
+    <variable
+        name="dayStrings"
+        type="String[]" />
+</data>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:backgroundTint="?attr/colorSurfaceContainer"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:background="@drawable/rounded_container"
         >
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            >
-            <TextView
-                android:id="@+id/lunes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/monday"
-                style="@style/diaSemana"
-                >
-            </TextView>
-            <TextView
-                android:id="@+id/martes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tuesday"
-                style="@style/diaSemana"
-                >
-            </TextView>
-            <TextView
-                android:id="@+id/miercoles"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/wednesday"
-                style="@style/diaSemana"
-                />
-            <TextView
-                android:id="@+id/jueves"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/thursday"
-                style="@style/diaSemana"
-                />
-            <TextView
-                android:id="@+id/viernes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/friday"
-                style="@style/diaSemana"
-                />
-            <TextView
-                android:id="@+id/sabado"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/saturday"
-                style="@style/diaSemana"
-                />
-            <TextView
-                android:id="@+id/domingo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sunday"
-                style="@style/diaSemana"
-                />
-        </LinearLayout>
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:backgroundTint="?attr/colorSurfaceContainerHighest"
+            android:background="@drawable/rounded_button_edit"
+            android:src="@drawable/editicon"
+            android:scaleType="center"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            />
 
         <LinearLayout
+            android:id="@+id/diasLinearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:orientation="horizontal"
-            android:gravity="start"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
             >
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginRight="35dp"
                 >
-
                 <TextView
-                    android:id="@+id/plaza"
+                    android:id="@+id/lunes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:text="@{dayStrings[0]}"
+                    style="@style/diaSemana"
+                    >
+                </TextView>
+                <TextView
+                    android:id="@+id/martes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{dayStrings[1]}"
+                    style="@style/diaSemana"
+                    >
+                </TextView>
+                <TextView
+                    android:id="@+id/miercoles"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{dayStrings[2]}"
+                    style="@style/diaSemana"
                     />
+                <TextView
+                    android:id="@+id/jueves"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{dayStrings[3]}"
+                    style="@style/diaSemana"
+                    />
+                <TextView
+                    android:id="@+id/viernes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{dayStrings[4]}"
+                    style="@style/diaSemana"
+                    />
+                <TextView
+                    android:id="@+id/sabado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{dayStrings[5]}"
+                    style="@style/diaSemana"
+                    />
+                <TextView
+                    android:id="@+id/domingo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{dayStrings[6]}"
+                    style="@style/diaSemana"
+                    />
+            </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/vehiculoIcono"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:src="@drawable/cocheicono"
-                    app:tint="?attr/colorOnSurfaceVariant"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="horizontal"
+                android:gravity="start"
+                >
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginRight="35dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/plaza"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        />
+
+                    <ImageView
+                        android:id="@+id/vehiculoIcono"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/cocheicono"
+                        app:tint="?attr/colorOnSurfaceVariant"
+                        />
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/hora"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/colorOnPrimaryContainer"
+                    android:textSize="14sp"
                     />
 
             </LinearLayout>
 
 
-            <TextView
-                android:id="@+id/hora"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorOnPrimaryContainer"
-                android:textSize="14sp"
-                />
-
         </LinearLayout>
 
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:backgroundTint="?attr/colorTertiaryContainer"
+            android:background="@drawable/rounded_button_edit"
+            android:src="@drawable/deleteicon"
+            android:scaleType="center"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            />
 
-    </LinearLayout>
-
-    <ImageButton
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:backgroundTint="?attr/colorTertiaryContainer"
-        android:background="@drawable/rounded_button_edit"
-        android:src="@drawable/deleteicon"
-        android:scaleType="center"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        />
-
-</RelativeLayout>
+    </RelativeLayout>
+</layout>
