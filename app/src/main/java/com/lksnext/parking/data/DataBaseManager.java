@@ -1,5 +1,7 @@
 package com.lksnext.parking.data;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -172,30 +174,52 @@ public class DataBaseManager {
     }
 
     public LiveData<List<Reserva>> getBookingsSpotTypeDayAndHours(TipoPlaza tipoPlaza, List<String> dias, String horaInicio, String horaFin){
+        List<String> horas = new ArrayList<>();
        return new LiveData<List<Reserva>>(){
+
            @Override
            protected void onActive(){
-               List<Long> plazasID = Parking.getInstance().getPlazasIDOfType(tipoPlaza);
-
+               //si la reserva empieza antes y acaba después de que empiece la hora especificada
                Task<QuerySnapshot> task1 = db.collection("reserva")
+                       .whereEqualTo("tipoPlaza", tipoPlaza)
                        .whereIn("fecha", dias)
-                       .whereIn("plazaID", plazasID)
-                       .whereGreaterThanOrEqualTo("hora.horaInicio", horaInicio)
+                       .whereLessThanOrEqualTo("hora.horaInicio", horaInicio)
+                       .whereGreaterThan("hora.horaFin", horaInicio)
                        .get();
 
+               //si la reserva empieza después y acaba antes de que acabe la hora especificada
                Task<QuerySnapshot> task2 = db.collection("reserva")
+                       .whereEqualTo("tipoPlaza", tipoPlaza)
                        .whereIn("fecha", dias)
-                       .whereIn("plazaID", plazasID)
+                       .whereGreaterThanOrEqualTo("hora.horaInicio", horaInicio)
+                       .whereLessThan("hora.horaFin", horaFin)
+                       .get();
+
+               //si la reserva empieza antes y acaba después de que acabe la hora especificada
+               Task<QuerySnapshot> task3 = db.collection("reserva")
+                       .whereEqualTo("tipoPlaza", tipoPlaza)
+                       .whereIn("fecha", dias)
+                       .whereLessThanOrEqualTo("hora.horaInicio", horaFin)
+                       .whereGreaterThanOrEqualTo("hora.horaFin", horaFin)
+                       .get();
+
+               //si la reserva empieza después y acaba antes de que empiece la hora especificada
+               Task<QuerySnapshot> task4 = db.collection("reserva")
+                       .whereEqualTo("tipoPlaza", tipoPlaza)
+                       .whereIn("fecha", dias)
+                       .whereGreaterThanOrEqualTo("hora.horaInicio", horaInicio)
                        .whereLessThanOrEqualTo("hora.horaFin", horaFin)
                        .get();
 
-               Task<List<QuerySnapshot>> combinedTask = Tasks.whenAllSuccess(task1, task2);
+               Task<List<QuerySnapshot>> combinedTask = Tasks.whenAllSuccess(task1, task2, task3, task4);
 
 
                combinedTask.addOnCompleteListener(task -> {
                    if (task.isSuccessful()) {
                        List<Reserva> reservasTask1 = new ArrayList<>();
                        List<Reserva> reservasTask2 = new ArrayList<>();
+                       List<Reserva> reservasTask3 = new ArrayList<>();
+                       List<Reserva> reservasTask4 = new ArrayList<>();
                        List<QuerySnapshot> results = task.getResult();
 
                        for (DocumentSnapshot document : results.get(0).getDocuments()) {
@@ -206,10 +230,21 @@ public class DataBaseManager {
                            reservasTask2.add(document.toObject(Reserva.class));
                        }
 
-                       reservasTask1.retainAll(reservasTask2);
+                       for (DocumentSnapshot document : task3.getResult().getDocuments()) {
+                           reservasTask3.add(document.toObject(Reserva.class));
+                       }
+                       for (DocumentSnapshot document : task4.getResult().getDocuments()) {
+                           reservasTask4.add(document.toObject(Reserva.class));
+                       }
 
-                       setValue(reservasTask1);
+                       Set<Reserva> reservasSet = new HashSet<>(reservasTask1);
+                       reservasSet.addAll(reservasTask2);
+                       reservasSet.addAll(reservasTask3);
+                       reservasSet.addAll(reservasTask4);
+
+                       setValue(new ArrayList<>(reservasSet));
                    } else {
+                       Log.d("DataBaseManager", "Error getting documents: ", task.getException());
                        setValue(new ArrayList<>());
                    }
                });
