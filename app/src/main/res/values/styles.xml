@@ -27,6 +27,9 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
+    <style name="HeadingSecondaryStyleAddBooking" parent="HeadingSecondaryStyle">
+        <item name="android:layout_marginTop">25dp</item>
+    </style>
     <style name="LoginHeadingStyle" parent="HeadingStyle">
         <item name="android:layout_marginTop">48dp</item>
         <item name="android:layout_marginStart">108dp</item>
@@ -93,6 +96,7 @@
         <item name="android:alpha">0.2</item>
     </style>
     <style name="iconoAtras">
+        <item name="android:tint">?attr/colorOnSurfaceVariant</item>
         <item name="android:layout_width">25dp</item>
         <item name="android:layout_height">25dp</item>
         <item name="android:layout_marginStart">30dp</item>
