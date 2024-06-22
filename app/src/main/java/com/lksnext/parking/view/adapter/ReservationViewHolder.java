@@ -57,7 +57,7 @@ public class ReservationViewHolder extends RecyclerView.ViewHolder {
 
         deleteButton.setOnClickListener(v -> {
             MainActivity activity = (MainActivity) v.getContext();
-            DeleteBookingDialogFragment deleteDialog = new DeleteBookingDialogFragment();
+            DeleteBookingDialogFragment deleteDialog = new DeleteBookingDialogFragment(reservation.getId());
             deleteDialog.show(activity.getSupportFragmentManager(), "deleteDialog");
         });
     }

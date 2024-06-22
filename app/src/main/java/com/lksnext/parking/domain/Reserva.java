@@ -189,4 +189,8 @@ public class Reserva {
     public boolean overlapsHour(String hora) {
         return this.hora.getHoraInicio().compareTo(hora) < 0 && this.hora.getHoraFin().compareTo(hora) >= 0;
     }
+
+    public boolean getEsCompuesta() {
+        return insideReservaMultiple;
+    }
 }

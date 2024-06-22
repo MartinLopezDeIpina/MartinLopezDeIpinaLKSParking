@@ -63,11 +63,15 @@ public class DataBaseManager {
         return result;
     }
 
-    public LiveData<String> addReservaCompuestaToDB(ReservaCompuesta reservaCompuesta){
+    public LiveData<String> addReservaCompuestaToDB(String userUuid, List<String> reservasID, Long plazaID,Hora hora){
         MutableLiveData<String> result = new MutableLiveData<>();
         DocumentReference docRef = db.collection("reservaCompuesta").document();
-        docRef.set(reservaCompuesta)
-            .addOnSuccessListener(aVoid -> result.setValue(docRef.getId()))
+        docRef.set(new ReservaCompuesta(userUuid, reservasID, plazaID, hora))
+            .addOnSuccessListener(aVoid -> {
+                String id = docRef.getId();
+                docRef.update("id", id);
+                result.setValue(id);
+            })
             .addOnFailureListener(e -> result.setValue(null));
         return result;
     }
@@ -289,5 +293,22 @@ public class DataBaseManager {
                 });
             }
         };
+    }
+
+    public LiveData<Boolean> deleteBooking(String reservationID) {
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+        Task task = db.collection("reserva").document(reservationID).delete();
+        task.addOnCompleteListener(task1 -> {
+            if (task1.isSuccessful()) {
+                result.setValue(true);
+            } else {
+                result.setValue(false);
+            }
+        });
+        return result;
+    }
+
+    public void deleteReservaCompuesta(String id) {
+        db.collection("reservaCompuesta").document(id).delete();
     }
 }
