@@ -1,6 +1,7 @@
 package com.lksnext.parking.view.fragment;
 
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.lksnext.parking.domain.Hora;
 import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.Reserva;
+import com.lksnext.parking.domain.ReservaCompuesta;
 import com.lksnext.parking.domain.TipoPlaza;
 import com.lksnext.parking.view.adapter.ComposedReservationAdapter;
 import com.lksnext.parking.view.adapter.ReservationAdapter;
@@ -43,7 +46,8 @@ public class BookActiveHistoryContainerFragment extends Fragment {
         recyclerView = binding.bookRecyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        mainViewModel.getReservasActivas().observe(getViewLifecycleOwner(), newReservations -> {
+        LiveData<Pair<List<Reserva>, List<ReservaCompuesta>>> reservasActivas = mainViewModel.getCombinedReservas();
+        reservasActivas.observe(getViewLifecycleOwner(), newReservations -> {
             composedAdapter = new ComposedReservationAdapter(newReservations.first, newReservations.second);
             recyclerView.setAdapter(composedAdapter);
         });

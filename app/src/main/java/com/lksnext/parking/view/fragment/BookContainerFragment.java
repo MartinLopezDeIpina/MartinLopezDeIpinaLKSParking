@@ -44,7 +44,7 @@ public class BookContainerFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mainViewModel.getReservasActivas().observe(getViewLifecycleOwner(), newReservations -> {
-            adapter = new ReservationAdapter(newReservations.first);
+            adapter = new ReservationAdapter(newReservations);
             recyclerView.setAdapter(adapter);
         });
 

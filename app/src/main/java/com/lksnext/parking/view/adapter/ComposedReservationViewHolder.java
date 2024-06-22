@@ -88,9 +88,11 @@ public class ComposedReservationViewHolder extends RecyclerView.ViewHolder{
                 .collect(Collectors.toList());
 
         for (Reserva reserva : reservas) {
-            DiaSemana diaSemana = reserva.getDiaSemana();
-            int index = DateUtils.getDiaSemanaIndexInCurrentWeek(diaSemana)+1;
-            dayTextViews[index].setAlpha(1.0f);
+            if(reserva != null){
+                DiaSemana diaSemana = reserva.getDiaSemana();
+                int index = DateUtils.getDiaSemanaIndexInCurrentWeek(diaSemana)+1;
+                dayTextViews[index].setAlpha(1.0f);
+            }
         }
 
     }

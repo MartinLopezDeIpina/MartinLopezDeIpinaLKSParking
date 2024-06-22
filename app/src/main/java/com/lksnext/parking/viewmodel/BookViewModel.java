@@ -226,8 +226,7 @@ public class BookViewModel extends ViewModel {
                     reservasID.add(s);
                 }
                 if (counter.incrementAndGet() == totalLiveData) {
-                    ReservaCompuesta reservaCompuestaObject = new ReservaCompuesta(userUuid, reservasID, plazaID, hora);
-                    LiveData<String> reservaCompuestaID = db.addReservaCompuestaToDB(reservaCompuestaObject);
+                    LiveData<String> reservaCompuestaID = db.addReservaCompuestaToDB(userUuid, reservasID, plazaID, hora);
                     result.addSource(reservaCompuestaID, result::setValue);
                 }
             });
