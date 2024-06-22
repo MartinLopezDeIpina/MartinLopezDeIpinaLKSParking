@@ -3,10 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="30dp"
     android:orientation="vertical"
     tools:context=".view.fragment.ProfileFragment"
-    tools:layout_marginTop="20dp">
+    >
 
     <LinearLayout
         android:id="@+id/heading"
@@ -17,10 +16,8 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            style="@style/iconoAtras"
             android:id="@+id/returning"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="30dp"
             android:src="@drawable/iconoactras" />
 
         <TextView

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/booking_nav"
+app:startDestination="@id/booking_history">
+
+<fragment
+    android:id="@+id/booking_history"
+    android:name="com.lksnext.parking.view.fragment.BookingHistoryFragment"
+    android:label="@string/fragment_main"
+    tools:layout="@layout/fragment_booking_history">
+</fragment>
+<fragment
+    android:id="@+id/add_booking"
+    android:name="com.lksnext.parking.view.fragment.AddBookingFragment"
+    android:label="@string/fragment_add_booking"
+    tools:layout="@layout/fragment_add_booking">
+</fragment>
+</navigation>

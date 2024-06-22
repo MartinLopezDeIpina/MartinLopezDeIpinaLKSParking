@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.fragment.BookingFragment">
+
+    <TextView
+        android:id="@+id/heading"
+        style="@style/HeadingStyle"
+        android:text="@string/booking_history"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <LinearLayout
+        android:id="@+id/sortingChips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/heading"
+        >
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/fechaChip"
+            style="@style/sortingChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date"
+            app:chipMinHeight="40dp"
+            app:chipCornerRadius="15dp"
+            app:chipEndPadding="10dp"
+            app:chipStartPadding="10dp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/horaChip"
+            style="@style/sortingChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/time"
+            app:chipMinHeight="40dp"
+            app:chipCornerRadius="15dp"
+            app:chipStartPadding="10dp"
+            app:chipEndPadding="10dp"
+            />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/plazaChip"
+            style="@style/sortingChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorOnSecondaryContainer"
+            android:text="@string/spot"
+            app:chipMinHeight="40dp"
+            app:chipCornerRadius="15dp"
+            app:chipEndPadding="10dp"
+            app:chipStartPadding="10dp" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/vehiculoChip"
+            style="@style/sortingChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vehicle"
+            app:chipMinHeight="40dp"
+            app:chipCornerRadius="15dp"
+            app:chipStartPadding="10dp"
+            app:chipEndPadding="10dp"
+            />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/commposed_book_container"
+        android:layout_width="325dp"
+        android:layout_height="186dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sortingChips"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

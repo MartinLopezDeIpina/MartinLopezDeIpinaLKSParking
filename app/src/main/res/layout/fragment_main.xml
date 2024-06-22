@@ -17,7 +17,7 @@
     <FrameLayout
         android:id="@+id/book_container"
         android:layout_width="325dp"
-        android:layout_height="275dp"
+        android:layout_height="274dp"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,6 +43,7 @@
             >
 
             <ImageButton
+                android:id="@+id/add_button"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
                 android:contentDescription="@string/add"
@@ -70,6 +71,7 @@
             >
 
             <ImageButton
+                android:id="@+id/view_more_button"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
                 android:contentDescription="@string/more"

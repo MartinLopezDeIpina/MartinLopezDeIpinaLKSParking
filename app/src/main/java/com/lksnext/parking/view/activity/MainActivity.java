@@ -1,6 +1,7 @@
 package com.lksnext.parking.view.activity;
 
 import android.os.Bundle;
+import android.util.Pair;
 import android.util.TypedValue;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -18,6 +19,7 @@ import com.lksnext.parking.data.UserCallback;
 import com.lksnext.parking.databinding.ActivityMainBinding;
 import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.Reserva;
+import com.lksnext.parking.domain.ReservaCompuesta;
 import com.lksnext.parking.domain.Usuario;
 import com.lksnext.parking.viewmodel.MainViewModel;
 
@@ -76,6 +78,9 @@ public class MainActivity extends BaseActivity {
 
         // Establece el color de la barra de navegación
         getWindow().setNavigationBarColor(color);
+
+        setBookFragmentNavigationListener();
+        setMainFragmentNavigationListener();
     }
 
     @Override
@@ -105,11 +110,36 @@ public class MainActivity extends BaseActivity {
         });
     }
     private void setBookingData(){
-        dataBaseManager.getCurrentUserBookings(new ReservaCallback() {
-            @Override
-            public void onCallback(List<Reserva> reservas) {
-                viewModel.setListaReservas(reservas);
+        dataBaseManager.getCurrentUserBookings().observe(this, result -> {
+            List<Reserva> reservas = (List<Reserva>) result[0];
+            List<ReservaCompuesta> compuestas = (List<ReservaCompuesta>) result[1];
+            viewModel.setListaReservas(reservas, compuestas);
+        });
+    }
+
+    private void setBookFragmentNavigationListener(){
+        viewModel.getNavigateToBookingFragment().observe(this, shouldNavigate -> {
+            if (shouldNavigate) {
+                navigateToBookingHistory();
+                viewModel.navigateToBookingFragment(false, viewModel.getBookingNavigationPosition());
             }
         });
+    }
+    private void navigateToBookingHistory(){
+        navController.navigate(R.id.bookFragment);
+        bottomNavigationView.setSelectedItemId(R.id.reservations);
+    }
+
+    private void setMainFragmentNavigationListener(){
+        viewModel.getNavigateToMainFragment().observe(this, shouldNavigate -> {
+            if (shouldNavigate) {
+                navigateToMainFragment();
+                viewModel.navigateToMainFragment(false);
+            }
+        });
+    }
+    public void navigateToMainFragment(){
+        navController.navigate(R.id.mainFragment);
+        bottomNavigationView.setSelectedItemId(R.id.newres);
     }
 }

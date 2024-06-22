@@ -22,11 +22,17 @@
     <string name="active_reservations">Reservas activas</string>
     <string name="add_reservation">Añadir reserva</string>
     <string name="settings">Ajustes</string>
+    <string name="booking_history">Historial de reservas</string>
+    <string name="date">Fecha</string>
+    <string name="time">Hora</string>
+    <string name="spot">Plaza</string>
+    <string name="vehicle">Vehículo</string>
 
 
     <string name="selectDate">Selecciona una fecha</string>
 
     <string name="fragment_main">Main</string>
+    <string name="fragment_add_booking">Añadir Reserva</string>
     <string name="fragment_step1">Step 1</string>
     <string name="fragment_step2">Step 2</string>
     <string name="fragment_end">End</string>
@@ -49,5 +55,20 @@
     <string name="terms">He leído y acepto los términos
         de uso de QuickSpot</string>
     <string name="accept_terms">Por favor acepta los términos de uso</string>
+
+    <string name="monday">L</string>
+    <string name="tuesday">M</string>
+    <string name="wednesday">X</string>
+    <string name="thursday">J</string>
+    <string name="friday">V</string>
+    <string name="saturday">S</string>
+    <string name="sunday">D</string>
+
+    <string name="add_booking">Añadir reserva</string>
+    <string name="booking_type">Tipo de plaza</string>
+    <string name="booking_date">Fecha</string>
+    <string name="booking_time">Hora</string>
+    <string name="booking_spot">Plaza</string>
+    <string name="no_booking_spot">Selecciona una reserva válida</string>
 
 </resources>

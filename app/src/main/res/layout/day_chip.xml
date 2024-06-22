@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <data>
+        <variable
+            name="number"
+            type="int" />
+        <variable
+            name="diaSemana"
+            type="java.lang.String" />
+    </data>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{diaSemana}"
+            android:textSize="18sp"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            >
+        </TextView>
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip"
+            style="@style/dateChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{Integer.toString(number)}"
+            android:textSize="18sp"
+            app:chipMinHeight="40dp"
+            app:chipMinTouchTargetSize="20dp"
+            android:layout_marginTop="7dp"
+            app:chipBackgroundColor="@color/chip_tipo_plaza_color"
+            >
+        </com.google.android.material.chip.Chip>
+    </LinearLayout>
+</layout>
