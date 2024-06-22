@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
@@ -414,7 +413,7 @@ private FragmentAddBookingBinding binding;
                 if(intermediateHours.contains(chipText)){
                     chip.setChipBackgroundColorResource(R.color.chip_hour_intermediate);
                 }else {
-                    chip.setChipBackgroundColorResource(R.color.chip_background_color);
+                    chip.setChipBackgroundColorResource(R.color.chip_tipo_plaza_color);
                 }
             }
         });

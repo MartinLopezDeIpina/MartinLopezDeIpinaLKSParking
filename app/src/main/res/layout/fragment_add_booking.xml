@@ -62,7 +62,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/booking_type"
-                        style="@style/HeadingSecondaryStyle"
+                        style="@style/HeadingSecondaryStyleAddBooking"
                         >
 
                     </TextView>
@@ -87,16 +87,16 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/car"
-                                android:textColor="@color/chip_text_color"
-                                app:chipCornerRadius="15dp"
-                                app:chipEndPadding="10dp"
-                                app:chipIcon="@drawable/cocheicono"
-                                app:chipIconTint="@color/chip_text_color"
-                                app:chipBackgroundColor="@color/chip_background_color"
-                                app:chipIconSize="17dp"
+                                android:textColor="@color/chip_tipo_plaza_color_text"
+                                app:chipCornerRadius="10dp"
+                                app:chipIcon="@drawable/car2icon"
+                                app:chipIconTint="@color/chip_tipo_plaza_color_text"
+                                app:chipBackgroundColor="@color/chip_tipo_plaza_color"
                                 app:chipIconVisible="true"
                                 app:chipMinHeight="40dp"
-                                app:chipStartPadding="10dp" />
+                                app:chipEndPadding="15dp"
+                                app:chipStartPadding="15dp"
+                                />
 
                             <com.google.android.material.chip.Chip
                                 android:id="@+id/moto_chip"
@@ -104,16 +104,15 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/motorcycle"
-                                android:textColor="@color/chip_text_color"
-                                app:chipIcon="@drawable/motoicono"
-                                app:chipIconTint="@color/chip_text_color"
-                                app:chipBackgroundColor="@color/chip_background_color"
-                                app:chipIconSize="17dp"
+                                android:textColor="@color/chip_tipo_plaza_color_text"
+                                app:chipIcon="@drawable/moto2icon"
+                                app:chipIconTint="@color/chip_tipo_plaza_color_text"
+                                app:chipBackgroundColor="@color/chip_tipo_plaza_color"
                                 app:chipIconVisible="true"
-                                app:chipCornerRadius="15dp"
-                                app:chipEndPadding="20dp"
+                                app:chipCornerRadius="10dp"
+                                app:chipEndPadding="15dp"
                                 app:chipMinHeight="40dp"
-                                app:chipStartPadding="20dp" />
+                                app:chipStartPadding="15dp" />
 
                             <com.google.android.material.chip.Chip
                                 android:id="@+id/electric_chip"
@@ -121,16 +120,15 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/electric"
-                                android:textColor="@color/chip_text_color"
-                                app:chipIcon="@drawable/electricoicono"
-                                app:chipIconTint="@color/chip_text_color"
-                                app:chipBackgroundColor="@color/chip_background_color"
-                                app:chipIconSize="17dp"
+                                android:textColor="@color/chip_tipo_plaza_color_text"
+                                app:chipIcon="@drawable/eelcric2icon"
+                                app:chipIconTint="@color/chip_tipo_plaza_color_text"
+                                app:chipBackgroundColor="@color/chip_tipo_plaza_color"
                                 app:chipIconVisible="true"
-                                app:chipCornerRadius="15dp"
-                                app:chipEndPadding="20dp"
+                                app:chipCornerRadius="10dp"
+                                app:chipEndPadding="15dp"
                                 app:chipMinHeight="40dp"
-                                app:chipStartPadding="20dp" />
+                                app:chipStartPadding="15dp" />
 
                             <com.google.android.material.chip.Chip
                                 android:id="@+id/special_chip"
@@ -138,16 +136,15 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/special"
-                                android:textColor="@color/chip_text_color"
-                                app:chipIcon="@drawable/especialicono"
-                                app:chipIconTint="@color/chip_text_color"
-                                app:chipBackgroundColor="@color/chip_background_color"
-                                app:chipIconSize="17dp"
+                                android:textColor="@color/chip_tipo_plaza_color_text"
+                                app:chipIcon="@drawable/discapacitado2icon"
+                                app:chipIconTint="@color/chip_tipo_plaza_color_text"
+                                app:chipBackgroundColor="@color/chip_tipo_plaza_color"
                                 app:chipIconVisible="true"
-                                app:chipCornerRadius="15dp"
-                                app:chipEndPadding="20dp"
+                                app:chipCornerRadius="10dp"
+                                app:chipEndPadding="15dp"
                                 app:chipMinHeight="40dp"
-                                app:chipStartPadding="20dp" />
+                                app:chipStartPadding="15dp" />
 
                         </com.google.android.material.chip.ChipGroup>
                     </LinearLayout>
@@ -156,7 +153,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/booking_date"
-                        style="@style/HeadingSecondaryStyle"
+                        style="@style/HeadingSecondaryStyleAddBooking"
                         >
                     </TextView>
                     <include
@@ -170,38 +167,44 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text="@string/booking_time"
-                        style="@style/HeadingSecondaryStyle"
+                        style="@style/HeadingSecondaryStyleAddBooking"
                         >
                     </TextView>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
                         >
-                        <include
-                            android:id="@+id/hour_chip_group"
-                            android:layout_height="wrap_content"
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="wrap_content"
-                            layout="@layout/hour_chip_group"
-                            />
+                            android:layout_height="wrap_content"
+                            >
+                            <include
+                                android:id="@+id/hour_chip_group"
+                                android:layout_height="wrap_content"
+                                android:layout_width="wrap_content"
+                                layout="@layout/hour_chip_group"
+                                />
 
-                        <ProgressBar
-                            android:id="@+id/hour_chip_progressBar"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:indeterminate="true"
-                            android:visibility="gone"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/hour_chip_group"
-                            app:layout_constraintBottom_toBottomOf="@+id/hour_chip_group" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                            <ProgressBar
+                                android:id="@+id/hour_chip_progressBar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:indeterminate="true"
+                                android:visibility="gone"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/hour_chip_group"
+                                app:layout_constraintBottom_toBottomOf="@+id/hour_chip_group" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </LinearLayout>
 
                     <TextView
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text="@string/booking_spot"
-                        style="@style/HeadingSecondaryStyle"
+                        style="@style/HeadingSecondaryStyleAddBooking"
                         >
                     </TextView>
                     <androidx.constraintlayout.widget.ConstraintLayout
