@@ -18,16 +18,14 @@ import com.lksnext.parking.domain.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class MainViewModel extends ViewModel {
 
     private Parking parking = Parking.getInstance();
     private final MutableLiveData<Usuario> user = new MutableLiveData<>(null);
 
-    private final MutableLiveData<List<Reserva>> reservasActivas = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<List<Reserva>> reservasActivas = new MutableLiveData<>();
     public LiveData<List<Reserva>> getReservasActivas() {
         return reservasActivas;
     }
@@ -43,6 +41,7 @@ public class MainViewModel extends ViewModel {
     private final MutableLiveData<List<Reserva>> reservasPasadas = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<Boolean> navigateToBookingFragment = new MutableLiveData<>();
     private  Integer bookingNavigationPosition = 0;
+    private final MutableLiveData<String> bookingModified = new MutableLiveData<>();
 
     private final MutableLiveData<Boolean> navigateToMainFragment = new MutableLiveData<>();
 
@@ -126,6 +125,12 @@ public class MainViewModel extends ViewModel {
     }
     public LiveData<Boolean> getNavigateToBookingFragment() {
         return navigateToBookingFragment;
+    }
+    public LiveData<String> getBookingModified() {
+        return bookingModified;
+    }
+    public void setBookingModified(String reservationID) {
+        bookingModified.setValue(reservationID);
     }
 
     public Integer getBookingNavigationPosition() {
