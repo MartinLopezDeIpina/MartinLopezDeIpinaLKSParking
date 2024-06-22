@@ -4,6 +4,7 @@ package com.lksnext.parking.view.adapter;
 import android.icu.util.Calendar;
 import androidx.databinding.DataBindingUtil;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,6 +20,8 @@ import com.lksnext.parking.domain.Reserva;
 import com.lksnext.parking.domain.ReservaCompuesta;
 import com.lksnext.parking.domain.TipoPlaza;
 import com.lksnext.parking.util.DateUtils;
+import com.lksnext.parking.view.activity.MainActivity;
+import com.lksnext.parking.view.fragment.DeleteBookingDialogFragment;
 
 import org.w3c.dom.Text;
 
@@ -34,6 +37,7 @@ public class ComposedReservationViewHolder extends RecyclerView.ViewHolder{
     TextView lunes, martes, miercoles, jueves, viernes, sabado, domingo;
     TextView[] dayTextViews;
     ItemComposedReservationBinding binding;
+    ImageButton deleteButton;
 
 
     public ComposedReservationViewHolder(@NonNull View itemView) {
@@ -52,6 +56,7 @@ public class ComposedReservationViewHolder extends RecyclerView.ViewHolder{
         dayTextViews = new TextView[]{
             lunes, martes, miercoles, jueves, viernes, sabado, domingo
         };
+        deleteButton = itemView.findViewById(R.id.delete_button);
     }
 
     public void bind(ReservaCompuesta reservaCompuesta) {
@@ -95,5 +100,11 @@ public class ComposedReservationViewHolder extends RecyclerView.ViewHolder{
             }
         }
 
+        deleteButton.setOnClickListener(v -> {
+            MainActivity activity = (MainActivity) v.getContext();
+            DeleteBookingDialogFragment deleteDialog = new DeleteBookingDialogFragment(reservaCompuesta.getId(), true);
+            deleteDialog.show(activity.getSupportFragmentManager(), "deleteDialog");
+
+        });
     }
 }

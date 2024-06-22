@@ -23,8 +23,9 @@ public class DeleteBookingDialogFragment extends DialogFragment {
     String reservationID;
     Boolean esCompuesta;
     MainViewModel mainViewModel;
-    public DeleteBookingDialogFragment (String reservationID) {
+    public DeleteBookingDialogFragment (String reservationID, boolean esCompuesta) {
         this.reservationID = reservationID;
+        this.esCompuesta = esCompuesta;
     }
     @NonNull
     @Override
@@ -35,8 +36,13 @@ public class DeleteBookingDialogFragment extends DialogFragment {
         builder.setTitle(R.string.dialog_cancel_booking);
         builder.setMessage(R.string.dialog_cancel_booking_message)
                 .setPositiveButton(R.string.dialog_accept, new DialogInterface.OnClickListener() {
+                    LiveData<Boolean> bookingDeleted;
                     public void onClick(DialogInterface dialog, int id) {
-                        LiveData<Boolean> bookingDeleted = mainViewModel.deleteBooking(reservationID);
+                        if(esCompuesta){
+                            bookingDeleted = mainViewModel.deleteReservaCompuestaAndChilds(reservationID);
+                        }else{
+                            bookingDeleted = mainViewModel.deleteBooking(reservationID);
+                        }
                         bookingDeleted.observeForever(result -> {
                             if(result){
                                 mainViewModel.setBookingModified(reservationID);
