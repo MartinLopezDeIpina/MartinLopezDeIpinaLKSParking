@@ -221,6 +221,37 @@
                             />
 
 
+                        <LinearLayout
+                            android:id="@+id/no_spot_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center_horizontal"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/available_spots_recycler_view"
+                            app:layout_constraintBottom_toBottomOf="@+id/available_spots_recycler_view"
+                            >
+                            <ImageView
+                                android:src="@drawable/question"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="visible"
+                                app:tint="?attr/colorSurfaceContainerHigh"
+                                />
+                            <TextView
+                                android:textSize="25sp"
+                                android:fontFamily="@font/robotobold"
+                                android:layout_marginTop="20dp"
+                                android:text="@string/no_booking_spot"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="?attr/colorSurfaceContainerHigh"
+                                />
+
+                        </LinearLayout>
+
+
                         <ProgressBar
                             android:id="@+id/plaza_recycler_progressBar"
                             android:layout_width="wrap_content"
@@ -231,6 +262,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/available_spots_recycler_view"
                             app:layout_constraintBottom_toBottomOf="@+id/available_spots_recycler_view" />
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <LinearLayout

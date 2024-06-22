@@ -2,11 +2,11 @@ package com.lksnext.parking.view.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -21,7 +21,6 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.lksnext.parking.R;
 import com.lksnext.parking.databinding.FragmentAddBookingBinding;
-import com.lksnext.parking.domain.Parking;
 import com.lksnext.parking.domain.TipoPlaza;
 import com.lksnext.parking.view.adapter.AvailableSpotsAdapter;
 import com.lksnext.parking.viewmodel.BookViewModel;
@@ -46,6 +45,7 @@ private FragmentAddBookingBinding binding;
     private ProgressBar generalProgressBar;
     private MaterialButton addBookingButton;
     private List<Chip> hourChips;
+    private LinearLayout noSpotIcon;
     public AddBookingFragment() {
         // Es necesario un constructor vacio
     }
@@ -77,6 +77,7 @@ private FragmentAddBookingBinding binding;
         bindSelectedHourChips();
         bindUnselectedHourValue();
         bindVisualPath();
+        noSpotIcon = binding.noSpotIcon;
 
 
         return binding.getRoot();
@@ -116,6 +117,11 @@ private FragmentAddBookingBinding binding;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         bookViewModel.getAvailableSpots().observe(getViewLifecycleOwner(), availableSpots -> {
+            if(availableSpots.isEmpty()){
+                noSpotIcon.setVisibility(View.VISIBLE);
+            }else{
+                noSpotIcon.setVisibility(View.GONE);
+            }
             spotsAdapter = new AvailableSpotsAdapter(availableSpots, bookViewModel);
             recyclerView.setAdapter(spotsAdapter);
             spotsProgressBar.setVisibility(View.GONE);

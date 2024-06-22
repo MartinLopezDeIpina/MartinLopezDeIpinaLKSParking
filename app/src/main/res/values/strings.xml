@@ -69,5 +69,6 @@
     <string name="booking_date">Fecha</string>
     <string name="booking_time">Hora</string>
     <string name="booking_spot">Plaza</string>
+    <string name="no_booking_spot">Selecciona una reserva válida</string>
 
 </resources>
