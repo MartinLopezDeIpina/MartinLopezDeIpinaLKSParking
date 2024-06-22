@@ -113,10 +113,10 @@ public class DateUtils {
 
     public static int getDiaSemanaIndexInCurrentWeek(DiaSemana diaSemana) {
         int diaSemanaOrdinal = diaSemana.ordinal();
-        TimeZone timeZone = TimeZone.getTimeZone("Europe/Madrid"); // Time zone for Spain
+        TimeZone timeZone = TimeZone.getTimeZone("Europe/Madrid");
         Calendar calendar = Calendar.getInstance(timeZone);
-        int currentDayOfWeek = (calendar.get(Calendar.DAY_OF_WEEK) + 5) % 7 + 1;
-        currentDayOfWeek--;
-        return (diaSemanaOrdinal - currentDayOfWeek + 6) % 6;
+        int calendarDay = calendar.get(Calendar.DAY_OF_WEEK);
+        int currentDayOfWeek = (calendarDay - 2) % 7;
+        return ((7 + diaSemanaOrdinal - currentDayOfWeek) % 7) -1;
     }
 }

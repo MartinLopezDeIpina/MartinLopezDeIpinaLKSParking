@@ -76,4 +76,6 @@
     <string name="dialog_cancel_booking">¿Cancelar reserva?</string>
     <string name="dialog_cancel_booking_message">Se borrarán todos los datos correspondientes a la reserva</string>
 
+    <string name="no_active_bookings">Sin reservas activas</string>
+
 </resources>

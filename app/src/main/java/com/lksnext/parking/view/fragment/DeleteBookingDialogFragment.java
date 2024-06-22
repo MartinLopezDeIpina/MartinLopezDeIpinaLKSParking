@@ -39,12 +39,11 @@ public class DeleteBookingDialogFragment extends DialogFragment {
                         LiveData<Boolean> bookingDeleted = mainViewModel.deleteBooking(reservationID);
                         bookingDeleted.observeForever(result -> {
                             if(result){
+                                mainViewModel.setBookingModified(reservationID);
                                 mainViewModel.updateReservas();
                             }
                         });
                     }
-
-
                 })
                 .setNegativeButton(R.string.dialog_close, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
