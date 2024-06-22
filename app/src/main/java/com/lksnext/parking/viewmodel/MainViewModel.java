@@ -150,4 +150,8 @@ public class MainViewModel extends ViewModel {
     public LiveData<Boolean> deleteBooking(String reservationID) {
         return DataBaseManager.getInstance().deleteBooking(reservationID);
     }
+
+    public LiveData<Boolean> deleteReservaCompuestaAndChilds(String reservationID) {
+        return DataBaseManager.getInstance().deleteReservaCompuestaAndChilds(reservationID);
+    }
 }

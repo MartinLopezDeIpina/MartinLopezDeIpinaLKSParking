@@ -311,4 +311,26 @@ public class DataBaseManager {
     public void deleteReservaCompuesta(String id) {
         db.collection("reservaCompuesta").document(id).delete();
     }
+
+    public LiveData<Boolean> deleteReservaCompuestaAndChilds(String reservationID) {
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+        db.collection("reservaCompuesta").document(reservationID).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                ReservaCompuesta reservaCompuesta = task.getResult().toObject(ReservaCompuesta.class);
+                if (reservaCompuesta != null) {
+                    List<String> reservasID = reservaCompuesta.getReservasID();
+                    for (String reservaID : reservasID) {
+                        db.collection("reserva").document(reservaID).delete();
+                    }
+                    db.collection("reservaCompuesta").document(reservationID).delete();
+                    result.setValue(true);
+                } else {
+                    result.setValue(false);
+                }
+            } else {
+                result.setValue(false);
+            }
+        });
+        return result;
+    }
 }
