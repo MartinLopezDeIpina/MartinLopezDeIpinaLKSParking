@@ -1,6 +1,7 @@
 package com.lksnext.parking.view.adapter;
 
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,12 +12,15 @@ import com.lksnext.parking.R;
 import com.lksnext.parking.domain.Parking;
 import com.lksnext.parking.domain.Reserva;
 import com.lksnext.parking.domain.TipoPlaza;
+import com.lksnext.parking.view.activity.MainActivity;
+import com.lksnext.parking.view.fragment.DeleteBookingDialogFragment;
 
 public class ReservationViewHolder extends RecyclerView.ViewHolder {
     TextView reservationPlaza;
     TextView reservationDate;
     TextView reservationHour;
     ImageView reservationVehicleImage;
+    ImageButton deleteButton;
 
     public ReservationViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -24,6 +28,7 @@ public class ReservationViewHolder extends RecyclerView.ViewHolder {
         reservationDate = itemView.findViewById(R.id.fecha);
         reservationHour = itemView.findViewById(R.id.hora);
         reservationVehicleImage = itemView.findViewById(R.id.vehiculoIcono);
+        deleteButton = itemView.findViewById(R.id.delete_button);
     }
 
     public void bind(Reserva reservation) {
@@ -49,5 +54,11 @@ public class ReservationViewHolder extends RecyclerView.ViewHolder {
                 reservationVehicleImage.setImageResource(R.drawable.especialicono);
                 break;
         }
+
+        deleteButton.setOnClickListener(v -> {
+            MainActivity activity = (MainActivity) v.getContext();
+            DeleteBookingDialogFragment deleteDialog = new DeleteBookingDialogFragment();
+            deleteDialog.show(activity.getSupportFragmentManager(), "deleteDialog");
+        });
     }
 }

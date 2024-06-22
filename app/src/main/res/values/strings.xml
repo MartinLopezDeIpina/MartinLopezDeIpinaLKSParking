@@ -71,4 +71,9 @@
     <string name="booking_spot">Plaza</string>
     <string name="no_booking_spot">Selecciona una reserva válida</string>
 
+    <string name="dialog_close">Cerrar</string>
+    <string name="dialog_accept">Aceptar</string>
+    <string name="dialog_cancel_booking">¿Cancelar reserva?</string>
+    <string name="dialog_cancel_booking_message">Se borrarán todos los datos correspondientes a la reserva</string>
+
 </resources>
