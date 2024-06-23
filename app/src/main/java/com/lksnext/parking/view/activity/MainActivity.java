@@ -1,9 +1,9 @@
 package com.lksnext.parking.view.activity;
 
 import android.os.Bundle;
-import android.util.Pair;
 import android.util.TypedValue;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -13,9 +13,6 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.lksnext.parking.R;
 import com.lksnext.parking.data.DataBaseManager;
-import com.lksnext.parking.data.PlazaCallback;
-import com.lksnext.parking.data.ReservaCallback;
-import com.lksnext.parking.data.UserCallback;
 import com.lksnext.parking.databinding.ActivityMainBinding;
 import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.Reserva;
@@ -94,19 +91,15 @@ public class MainActivity extends BaseActivity {
         setBookingData();
     }
     private void setProfileData(){
-        dataBaseManager.getCurrenUser(new UserCallback() {
-            @Override
-            public void onCallback(Usuario usuario) {
-                viewModel.setUser(usuario);
-            }
+        LiveData<Usuario> userLiveData = dataBaseManager.getCurrenUser();
+        userLiveData.observe(this, usuario -> {
+            viewModel.setUser(usuario);
         });
     }
     private void setSpotData(){
-        dataBaseManager.getParkingSpots(new PlazaCallback() {
-            @Override
-            public void onCallback(List<Plaza> plazas) {
-                viewModel.setListaPlazas(plazas);
-            }
+        LiveData<List<Plaza>> plazaLiveData = dataBaseManager.getParkingSpots();
+        plazaLiveData.observe(this, plazas -> {
+            viewModel.setListaPlazas(plazas);
         });
     }
     private void setBookingData(){

@@ -1,4 +1,4 @@
-package com.lksnext.parking.domain;
+package com.lksnext.parking.domain.callbacks;
 
 import com.lksnext.parking.data.LoginErrorType;
 

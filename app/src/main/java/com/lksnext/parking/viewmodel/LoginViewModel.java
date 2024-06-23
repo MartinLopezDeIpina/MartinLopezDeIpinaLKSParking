@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.lksnext.parking.data.DataRepository;
 import com.lksnext.parking.data.LoginErrorType;
-import com.lksnext.parking.domain.LoginCallback;
+import com.lksnext.parking.domain.callbacks.LoginCallback;
 
 public class LoginViewModel extends ViewModel {
 
