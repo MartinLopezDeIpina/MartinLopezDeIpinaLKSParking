@@ -9,16 +9,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lksnext.parking.R;
+import com.lksnext.parking.domain.Reserva;
 import com.lksnext.parking.view.adapter.ComposedReservationAdapter;
+import com.lksnext.parking.view.adapter.PassedBookingsAdapter;
 import com.lksnext.parking.view.adapter.ReservationAdapter;
 import com.lksnext.parking.viewmodel.MainViewModel;
 
+import java.util.List;
+
 public class BookingHistoryFragment extends Fragment {
+
+    MainViewModel mainViewModel;
+    RecyclerView recyclyerViewPassed;
 
     public BookingHistoryFragment() {
         // Es necesario un constructor vacio
@@ -31,11 +39,27 @@ public class BookingHistoryFragment extends Fragment {
         com.lksnext.parking.databinding.FragmentBookingHistoryBinding binding =
                 com.lksnext.parking.databinding.FragmentBookingHistoryBinding.inflate(inflater, container, false);
 
+        mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+
         BookActiveHistoryContainerFragment bookActiveHistoryContainerFragment = new BookActiveHistoryContainerFragment();
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.commposed_book_container, bookActiveHistoryContainerFragment);
         transaction.commit();
 
+
+        recyclyerViewPassed = binding.passedBookingsRecyclerView;
+        recyclyerViewPassed.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        LiveData<List<Reserva>> reservasPasadas = mainViewModel.getReservasPasadas();
+        reservasPasadas.observe(getViewLifecycleOwner(), newReservations -> {
+            if (newReservations.isEmpty()) {
+                //todo
+            }else{
+                //todo
+            }
+            PassedBookingsAdapter adapter = new PassedBookingsAdapter(newReservations);
+            recyclyerViewPassed.setAdapter(adapter);
+        });
 
         return binding.getRoot();
     }
