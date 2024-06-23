@@ -270,7 +270,7 @@ public class BookViewModel extends ViewModel {
             public void onChanged(List<Reserva> reservas) {
 
 
-                for (int i = 0; i < 24; i++) {
+                for (int i = 0; i < 25; i++) {
                     String hora = String.format("%02d:00", i);
                     int countHoraConflicto = 0;
 

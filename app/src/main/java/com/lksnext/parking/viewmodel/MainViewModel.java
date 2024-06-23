@@ -167,4 +167,20 @@ public class MainViewModel extends ViewModel {
     public LiveData<List<Reserva>> getReservasPasadas() {
         return reservasPasadas;
     }
+    public LiveData<Integer[]> getCantidadPlazas(){
+        LiveData<List<Plaza>> plazas = parking.getPlazasLiveData();
+        MutableLiveData<Integer[]> result = new MutableLiveData<>();
+        plazas.observeForever(new Observer<List<Plaza>>() {
+            @Override
+            public void onChanged(List<Plaza> plazas) {
+                result.setValue(new Integer[]{parking.getNumPlazasCoche(), parking.getNumPlazasMoto(), parking.getNumPlazasElectrico(), parking.getNumPlazasEspecial()});
+            }
+        });
+        return result;
+    }
+
+    public LiveData<Integer[]> getCantidadPlazasOcupadas() {
+        return DataBaseManager.getInstance().getPlazasOcupadas();
+    }
+
 }

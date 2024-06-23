@@ -19,6 +19,7 @@ import com.lksnext.parking.domain.TipoPlaza;
 import com.lksnext.parking.domain.Usuario;
 import com.lksnext.parking.domain.Reserva;
 import com.google.android.gms.tasks.Tasks;
+import com.lksnext.parking.util.DateUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -333,4 +334,57 @@ public class DataBaseManager {
         });
         return result;
     }
+
+    public LiveData<Integer[]> getPlazasOcupadas() {
+        MutableLiveData<Integer[]> result = new MutableLiveData<>();
+        String dia = DateUtils.getTodayString();
+        String hora = DateUtils.getNowHourString();
+        Task<QuerySnapshot> taskCoches = db.collection("reserva")
+                .whereEqualTo("fecha", dia)
+                .whereEqualTo("tipoPlaza", TipoPlaza.COCHE)
+                .whereLessThan("hora.horaInicio", hora)
+                .whereGreaterThan("hora.horaFin", hora)
+                .get();
+
+        Task<QuerySnapshot> taskMotos = db.collection("reserva")
+                .whereEqualTo("fecha", dia)
+                .whereEqualTo("tipoPlaza", TipoPlaza.MOTO)
+                .whereLessThan("hora.horaInicio", hora)
+                .whereGreaterThan("hora.horaFin", hora)
+                .get();
+
+        Task<QuerySnapshot> taskElectricos = db.collection("reserva")
+                .whereEqualTo("fecha", dia)
+                .whereEqualTo("tipoPlaza", TipoPlaza.ELECTRICO)
+                .whereLessThan("hora.horaInicio", hora)
+                .whereGreaterThan("hora.horaFin", hora)
+                .get();
+
+        Task<QuerySnapshot> taskEspeciales = db.collection("reserva")
+                .whereEqualTo("fecha", dia)
+                .whereEqualTo("tipoPlaza", TipoPlaza.DISCAPACITADO)
+                .whereLessThan("hora.horaInicio", hora)
+                .whereGreaterThan("hora.horaFin", hora)
+                .get();
+
+        Task<List<QuerySnapshot>> combinedTask = Tasks.whenAllSuccess(taskCoches, taskMotos, taskElectricos, taskEspeciales);
+
+        combinedTask.addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<QuerySnapshot> results = task.getResult();
+                Integer[] counts = new Integer[4];
+                counts[0] = results.get(0).size();
+                counts[1] = results.get(1).size();
+                counts[2] = results.get(2).size();
+                counts[3] = results.get(3).size();
+                result.setValue(counts);
+            } else {
+                Log.d("DataBaseManager", "Error getting documents: ", task.getException());
+                result.setValue(new Integer[]{0, 0, 0, 0});
+            }
+        });
+
+        return result;
+
+}
 }

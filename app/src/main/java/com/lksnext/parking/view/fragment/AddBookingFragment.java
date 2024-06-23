@@ -130,7 +130,7 @@ private FragmentAddBookingBinding binding;
     }
 
     private void fillHourChipBindings(){
-        hourChips = new ArrayList<>(24);
+        hourChips = new ArrayList<>(25);
         GridLayout gridLayout = binding.getRoot().findViewById(R.id.hour_chip_grid);
 
         int count = gridLayout.getChildCount();
