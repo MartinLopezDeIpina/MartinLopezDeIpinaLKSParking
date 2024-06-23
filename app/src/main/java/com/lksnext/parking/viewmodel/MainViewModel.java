@@ -18,6 +18,7 @@ import com.lksnext.parking.domain.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 public class MainViewModel extends ViewModel {
@@ -25,7 +26,7 @@ public class MainViewModel extends ViewModel {
     private Parking parking = Parking.getInstance();
     private final MutableLiveData<Usuario> user = new MutableLiveData<>(null);
 
-    private final MutableLiveData<List<Reserva>> reservasActivas = new MutableLiveData<>();
+    private final MutableLiveData<List<Reserva>> reservasActivas = new MutableLiveData<>(new ArrayList<>());
     public LiveData<List<Reserva>> getReservasActivas() {
         return reservasActivas;
     }
@@ -44,8 +45,10 @@ public class MainViewModel extends ViewModel {
     private final MutableLiveData<String> bookingModified = new MutableLiveData<>();
 
     private final MutableLiveData<Boolean> navigateToMainFragment = new MutableLiveData<>();
+    private AtomicBoolean isFirstTime;
 
     public MainViewModel() {
+        isFirstTime = new AtomicBoolean(true);
         combinedReservas.addSource(reservasActivas, new Observer<List<Reserva>>() {
             @Override
             public void onChanged(@Nullable List<Reserva> reservas) {
@@ -61,6 +64,12 @@ public class MainViewModel extends ViewModel {
         });
     }
 
+    public AtomicBoolean getIsFirstTime() {
+        return isFirstTime;
+    }
+    public void setIsFirstTime(AtomicBoolean isFirstTime) {
+        this.isFirstTime = isFirstTime;
+    }
     public LiveData<Usuario> getUser() {
         return user;
     }
