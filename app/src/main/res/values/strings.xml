@@ -77,5 +77,6 @@
     <string name="dialog_cancel_booking_message">Se borrarán todos los datos correspondientes a la reserva</string>
 
     <string name="no_active_bookings">Sin reservas activas</string>
+    <string name="no_passed_bookings">Sin reservas pasadas</string>
 
 </resources>
