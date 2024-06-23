@@ -58,6 +58,11 @@ public class DateUtils {
         }
     }
 
+    public static String parseStringDate(Date date){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(date);
+    }
+
     public static List<String> getFormatedDays(List<Integer> dayNumbers){
         List<String> formattedDays = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
@@ -118,5 +123,14 @@ public class DateUtils {
         int calendarDay = calendar.get(Calendar.DAY_OF_WEEK);
         int currentDayOfWeek = (calendarDay - 2) % 7;
         return ((7 + diaSemanaOrdinal - currentDayOfWeek) % 7) -1;
+    }
+
+    public static String getTodayString() {
+        return parseStringDate(new Date());
+    }
+
+    public static String getNowHourString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        return sdf.format(new Date());
     }
 }
