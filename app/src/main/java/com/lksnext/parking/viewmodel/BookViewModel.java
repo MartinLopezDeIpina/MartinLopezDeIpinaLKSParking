@@ -226,8 +226,7 @@ public class BookViewModel extends ViewModel {
                     reservasID.add(s);
                 }
                 if (counter.incrementAndGet() == totalLiveData) {
-                    ReservaCompuesta reservaCompuestaObject = new ReservaCompuesta(userUuid, reservasID, plazaID, hora);
-                    LiveData<String> reservaCompuestaID = db.addReservaCompuestaToDB(reservaCompuestaObject);
+                    LiveData<String> reservaCompuestaID = db.addReservaCompuestaToDB(userUuid, reservasID, plazaID, hora);
                     result.addSource(reservaCompuestaID, result::setValue);
                 }
             });
@@ -271,7 +270,7 @@ public class BookViewModel extends ViewModel {
             public void onChanged(List<Reserva> reservas) {
 
 
-                for (int i = 0; i < 24; i++) {
+                for (int i = 0; i < 25; i++) {
                     String hora = String.format("%02d:00", i);
                     int countHoraConflicto = 0;
 

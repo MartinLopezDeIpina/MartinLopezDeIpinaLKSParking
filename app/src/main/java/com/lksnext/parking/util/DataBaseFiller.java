@@ -50,8 +50,7 @@ public class DataBaseFiller {
             reservasParaCompuesta.add(reserva.getId());
         }
 
-        ReservaCompuesta reservaCompuesta = new ReservaCompuesta(userID, reservasParaCompuesta, 3, new Hora("10:00", "11:00"));
-        db.addReservaCompuestaToDB(reservaCompuesta);
+        db.addReservaCompuestaToDB(userID, reservasParaCompuesta, Long.valueOf(3), new Hora("10:00", "11:00"));
 
         Reserva reserva = new Reserva("2021-06-01", userID, 57, new Hora("10:30", "11:30"), false);
         Reserva reserva2 = new Reserva("2021-06-01", userID, 78, new Hora("10:00", "12:00"), false);
@@ -105,6 +104,13 @@ public class DataBaseFiller {
             Reserva reserva = new Reserva(date, userID, plazaID, new Hora("00:00", "23:59"), false);
             db.addBookingToDB(reserva);
             calendar.add(calendar.DAY_OF_MONTH, 1); // increment the day
+        }
+    }
+
+    public void fillReservasPasadas(){
+        for (int i = 0; i < 10; i++) {
+            Reserva reserva = new Reserva("2021-06-0" + i, userID, Long.valueOf(3), new Hora("10:00", "11:00"), true, TipoPlaza.COCHE);
+            db.addBookingToDB(reserva);
         }
     }
 

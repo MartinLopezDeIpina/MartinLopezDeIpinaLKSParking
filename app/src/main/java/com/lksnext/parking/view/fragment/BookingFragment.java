@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,8 @@ public class BookingFragment extends Fragment {
     FragmentBookingBinding binding;
     MainViewModel mainViewModel;
     View view;
+
+    private RecyclerView recyclerView, recyclyerViewPassed;
 
     public BookingFragment() {
         // Es necesario un constructor vacio

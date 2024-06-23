@@ -162,6 +162,12 @@ xmlns:bind="http://schemas.android.com/tools">
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             />
+        <include
+            layout="@layout/hour_chip"
+            bind:hour='@{"24:00"}'
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            />
     </GridLayout>
 
 </LinearLayout>

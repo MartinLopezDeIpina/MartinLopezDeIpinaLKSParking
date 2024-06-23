@@ -19,6 +19,7 @@ import com.lksnext.parking.domain.TipoPlaza;
 import com.lksnext.parking.domain.Usuario;
 import com.lksnext.parking.domain.Reserva;
 import com.google.android.gms.tasks.Tasks;
+import com.lksnext.parking.util.DateUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -63,11 +64,15 @@ public class DataBaseManager {
         return result;
     }
 
-    public LiveData<String> addReservaCompuestaToDB(ReservaCompuesta reservaCompuesta){
+    public LiveData<String> addReservaCompuestaToDB(String userUuid, List<String> reservasID, Long plazaID,Hora hora){
         MutableLiveData<String> result = new MutableLiveData<>();
         DocumentReference docRef = db.collection("reservaCompuesta").document();
-        docRef.set(reservaCompuesta)
-            .addOnSuccessListener(aVoid -> result.setValue(docRef.getId()))
+        docRef.set(new ReservaCompuesta(userUuid, reservasID, plazaID, hora))
+            .addOnSuccessListener(aVoid -> {
+                String id = docRef.getId();
+                docRef.update("id", id);
+                result.setValue(id);
+            })
             .addOnFailureListener(e -> result.setValue(null));
         return result;
     }
@@ -290,4 +295,96 @@ public class DataBaseManager {
             }
         };
     }
+
+    public LiveData<Boolean> deleteBooking(String reservationID) {
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+        Task task = db.collection("reserva").document(reservationID).delete();
+        task.addOnCompleteListener(task1 -> {
+            if (task1.isSuccessful()) {
+                result.setValue(true);
+            } else {
+                result.setValue(false);
+            }
+        });
+        return result;
+    }
+
+    public void deleteReservaCompuesta(String id) {
+        db.collection("reservaCompuesta").document(id).delete();
+    }
+
+    public LiveData<Boolean> deleteReservaCompuestaAndChilds(String reservationID) {
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+        db.collection("reservaCompuesta").document(reservationID).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                ReservaCompuesta reservaCompuesta = task.getResult().toObject(ReservaCompuesta.class);
+                if (reservaCompuesta != null) {
+                    List<String> reservasID = reservaCompuesta.getReservasID();
+                    for (String reservaID : reservasID) {
+                        db.collection("reserva").document(reservaID).delete();
+                    }
+                    db.collection("reservaCompuesta").document(reservationID).delete();
+                    result.setValue(true);
+                } else {
+                    result.setValue(false);
+                }
+            } else {
+                result.setValue(false);
+            }
+        });
+        return result;
+    }
+
+    public LiveData<Integer[]> getPlazasOcupadas() {
+        MutableLiveData<Integer[]> result = new MutableLiveData<>();
+        String dia = DateUtils.getTodayString();
+        String hora = DateUtils.getNowHourString();
+        Task<QuerySnapshot> taskCoches = db.collection("reserva")
+                .whereEqualTo("fecha", dia)
+                .whereEqualTo("tipoPlaza", TipoPlaza.COCHE)
+                .whereLessThan("hora.horaInicio", hora)
+                .whereGreaterThan("hora.horaFin", hora)
+                .get();
+
+        Task<QuerySnapshot> taskMotos = db.collection("reserva")
+                .whereEqualTo("fecha", dia)
+                .whereEqualTo("tipoPlaza", TipoPlaza.MOTO)
+                .whereLessThan("hora.horaInicio", hora)
+                .whereGreaterThan("hora.horaFin", hora)
+                .get();
+
+        Task<QuerySnapshot> taskElectricos = db.collection("reserva")
+                .whereEqualTo("fecha", dia)
+                .whereEqualTo("tipoPlaza", TipoPlaza.ELECTRICO)
+                .whereLessThan("hora.horaInicio", hora)
+                .whereGreaterThan("hora.horaFin", hora)
+                .get();
+
+        Task<QuerySnapshot> taskEspeciales = db.collection("reserva")
+                .whereEqualTo("fecha", dia)
+                .whereEqualTo("tipoPlaza", TipoPlaza.DISCAPACITADO)
+                .whereLessThan("hora.horaInicio", hora)
+                .whereGreaterThan("hora.horaFin", hora)
+                .get();
+
+        Task<List<QuerySnapshot>> combinedTask = Tasks.whenAllSuccess(taskCoches, taskMotos, taskElectricos, taskEspeciales);
+
+        combinedTask.addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<QuerySnapshot> results = task.getResult();
+                Integer[] counts = new Integer[4];
+                counts[0] = results.get(0).size();
+                counts[1] = results.get(1).size();
+                counts[2] = results.get(2).size();
+                counts[3] = results.get(3).size();
+                result.setValue(counts);
+            } else {
+                Log.d("DataBaseManager", "Error getting documents: ", task.getException());
+                result.setValue(new Integer[]{0, 0, 0, 0});
+            }
+        });
+
+        return result;
+
+}
 }
