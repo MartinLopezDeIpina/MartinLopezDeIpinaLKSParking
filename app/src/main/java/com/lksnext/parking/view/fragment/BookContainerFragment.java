@@ -25,6 +25,7 @@ import com.lksnext.parking.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BookContainerFragment extends Fragment {
     private MainViewModel mainViewModel;
@@ -54,15 +55,23 @@ public class BookContainerFragment extends Fragment {
 
         noReservationsLayout = binding.noActiveBookingsIcon;
 
+
+        //para que cuando se cambie de fragmento no se cargue el progressbar
+        AtomicBoolean isFirstTime = mainViewModel.getIsFirstTime();
+
         mainViewModel.getReservasActivas().observe(getViewLifecycleOwner(), newReservations -> {
-            if (newReservations.isEmpty()) {
-                noReservationsLayout.setVisibility(View.VISIBLE);
-            } else {
-                noReservationsLayout.setVisibility(View.GONE);
+            if(isFirstTime.get()){
+                isFirstTime.set(false);
+            }else{
+                if (newReservations.isEmpty()) {
+                    noReservationsLayout.setVisibility(View.VISIBLE);
+                } else {
+                    noReservationsLayout.setVisibility(View.GONE);
+                }
+                adapter = new ReservationAdapter(newReservations);
+                recyclerView.setAdapter(adapter);
+                progressBar.setVisibility(View.GONE);
             }
-            adapter = new ReservationAdapter(newReservations);
-            recyclerView.setAdapter(adapter);
-            progressBar.setVisibility(View.GONE);
         });
 
         mainViewModel.getBookingModified().observe(getViewLifecycleOwner(), modifiedReservation -> {
