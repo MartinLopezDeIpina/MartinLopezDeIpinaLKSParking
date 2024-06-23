@@ -11,9 +11,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.lksnext.parking.domain.LoginCallback;
-import com.lksnext.parking.domain.RegisterCallback;
+import com.lksnext.parking.domain.callbacks.LoginCallback;
+import com.lksnext.parking.domain.callbacks.RegisterCallback;
 import com.lksnext.parking.domain.Usuario;
 
 public class DataRepository {
@@ -26,7 +25,6 @@ public class DataRepository {
         dbManager = DataBaseManager.getInstance();
     }
 
-    //Creación de la instancia en caso de que no exista.
     public static synchronized DataRepository getInstance(){
         if (instance==null){
             instance = new DataRepository();
@@ -34,7 +32,6 @@ public class DataRepository {
         return instance;
     }
 
-    //Petición del login.
     public void login( String email, String pass, LoginCallback callback){
         if(email.isEmpty()){
             callback.onFailure(LoginErrorType.EMPTY_EMAIL);
@@ -77,7 +74,6 @@ public class DataRepository {
         return message;
     }
 
-    //Todo: gestionar como añadir esto a la base de datos
     public void register(String email, String password, String name, String phone, RegisterCallback callback){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {

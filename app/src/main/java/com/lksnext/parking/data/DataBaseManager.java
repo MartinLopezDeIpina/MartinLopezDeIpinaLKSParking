@@ -77,24 +77,32 @@ public class DataBaseManager {
         return result;
     }
 
-    public void getCurrenUser(UserCallback callback){
+    public LiveData<Usuario> getCurrenUser(){
+        MutableLiveData<Usuario> result = new MutableLiveData<>();
         String uid = mAuth.getCurrentUser().getUid();
         db.collection("usuario").document(uid).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Usuario usuario = task.getResult().toObject(Usuario.class);
-                callback.onCallback(usuario);
+                result.setValue(usuario);
+            }else{
+                result.setValue(null);
             }
         });
+        return result;
     }
-    public void getParkingSpots(PlazaCallback callback){
+    public LiveData<List<Plaza>> getParkingSpots(){
+        MutableLiveData<List<Plaza>> result = new MutableLiveData<>();
         db.collection("plaza")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         List<Plaza> plazas = task.getResult().toObjects(Plaza.class);
-                        callback.onCallback(plazas);
+                        result.setValue(plazas);
+                    }else{
+                        result.setValue(new ArrayList<>());
                     }
                 });
+        return result;
     }
 
     //primer valor: reservas, segundo valor: reservas compuestas
@@ -122,42 +130,6 @@ public class DataBaseManager {
         return result;
     }
 
-    public void getBookings(ReservasCallback callback){
-        db.collection("reserva").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                List<Reserva> reservas = task.getResult().toObjects(Reserva.class);
-                callback.onCallback(reservas);
-            } else {
-                callback.onCallback(null);
-            }
-        });
-    }
-
-    public List<Reserva> getBookingsSpotNotExpired(long plazaID) {
-        try {
-            Task<List<DocumentSnapshot>> task = db.collection("reserva")
-                    .whereEqualTo("plazaID", plazaID)
-                    .get()
-                    .continueWith(task1 -> task1.getResult().getDocuments());
-
-            List<DocumentSnapshot> documents = Tasks.await(task);
-
-            List<Reserva> reservas = new ArrayList<>();
-            for (DocumentSnapshot document : documents) {
-                String fecha = document.getString("fecha");
-                Hora hora = document.toObject(Hora.class);
-                Reserva reserva = new Reserva(fecha, hora);
-                if(!reserva.isCaducada()){
-                    reservas.add(reserva);
-                }
-            }
-
-            return reservas;
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     //todo: hacer que las reservas solo tengan dos valores para ver si es más eficiente así
     public LiveData<List<Reserva>> getBookingsSpotDay(String dia, TipoPlaza tipoPlaza) {
@@ -259,41 +231,6 @@ public class DataBaseManager {
                });
            }
        };
-    }
-
-    public LiveData<Integer> getCountBookingsConflictingSpotTypeDayHour(String dia, String hora, TipoPlaza tipoPlaza){
-        return new LiveData<Integer>() {
-            @Override
-            protected void onActive() {
-                Task<QuerySnapshot> task1 = db.collection("reserva")
-                    .whereEqualTo("fecha", dia)
-                    .whereEqualTo("tipoPlaza", tipoPlaza)
-                    .whereLessThanOrEqualTo("hora.horaInicio", hora)
-                    .get();
-
-                Task<QuerySnapshot> task2 = db.collection("reserva")
-                    .whereEqualTo("fecha", dia)
-                    .whereEqualTo("tipoPlaza", tipoPlaza)
-                    .whereGreaterThan("hora.horaFin", hora)
-                    .get();
-
-                Task<List<QuerySnapshot>> combinedTask = Tasks.whenAllSuccess(task1, task2);
-
-                combinedTask.addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Set<String> uniqueIds = new HashSet<>();
-                        for (QuerySnapshot querySnapshot : task.getResult()) {
-                            for (DocumentSnapshot document : querySnapshot.getDocuments()) {
-                                uniqueIds.add(document.getId());
-                            }
-                        }
-                        setValue(uniqueIds.size());
-                    } else {
-                        setValue(0);
-                    }
-                });
-            }
-        };
     }
 
     public LiveData<Boolean> deleteBooking(String reservationID) {

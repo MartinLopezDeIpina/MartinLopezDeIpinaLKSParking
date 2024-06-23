@@ -6,8 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.lksnext.parking.data.DataRepository;
 import com.lksnext.parking.data.RegisterErrorType;
-import com.lksnext.parking.domain.LoginCallback;
-import com.lksnext.parking.domain.RegisterCallback;
+import com.lksnext.parking.domain.callbacks.RegisterCallback;
 
 public class RegisterViewModel extends ViewModel {
     MutableLiveData<RegisterErrorType> registerError = new MutableLiveData<>(null);
