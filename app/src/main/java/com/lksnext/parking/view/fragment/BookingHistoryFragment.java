@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +30,8 @@ public class BookingHistoryFragment extends Fragment {
 
     MainViewModel mainViewModel;
     RecyclerView recyclyerViewPassed;
+    LinearLayout noActiveBookingsIcon;
+    ProgressBar progressBar;
 
     public BookingHistoryFragment() {
         // Es necesario un constructor vacio
@@ -50,15 +55,19 @@ public class BookingHistoryFragment extends Fragment {
         recyclyerViewPassed = binding.passedBookingsRecyclerView;
         recyclyerViewPassed.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        noActiveBookingsIcon = binding.noPassedBookings;
+        progressBar = binding.passedBookingsProgressbar;
+
         LiveData<List<Reserva>> reservasPasadas = mainViewModel.getReservasPasadas();
         reservasPasadas.observe(getViewLifecycleOwner(), newReservations -> {
             if (newReservations.isEmpty()) {
-                //todo
+                binding.noPassedBookings.setVisibility(View.VISIBLE);
             }else{
-                //todo
+                binding.noPassedBookings.setVisibility(View.GONE);
             }
             PassedBookingsAdapter adapter = new PassedBookingsAdapter(newReservations);
             recyclyerViewPassed.setAdapter(adapter);
+            progressBar.setVisibility(View.GONE);
         });
 
         return binding.getRoot();
