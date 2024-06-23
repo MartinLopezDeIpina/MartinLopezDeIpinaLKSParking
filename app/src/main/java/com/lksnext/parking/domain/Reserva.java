@@ -40,6 +40,16 @@ public class Reserva {
         this.insideReservaMultiple = insideReservaMultiple;
         this.tipoPlaza = Parking.getInstance().getTipoPlazaReserva(plazaID);
     }
+    //para crear desde código
+    public Reserva(String fecha, String usuarioID, Long plazaID, Hora hora, Boolean insideReservaMultiple, TipoPlaza tipoPlaza){
+        this.id = UUID.randomUUID().toString();
+        this.fecha = fecha;
+        this.usuarioID = usuarioID;
+        this.plazaID = plazaID;
+        this.hora = hora;
+        this.insideReservaMultiple = insideReservaMultiple;
+        this.tipoPlaza = tipoPlaza;
+    }
     public Reserva(String fecha, Hora hora){
         this.fecha = fecha;
         this.hora = hora;

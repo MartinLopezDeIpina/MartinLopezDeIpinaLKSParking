@@ -38,7 +38,7 @@ public class MainViewModel extends ViewModel {
         return combinedReservas;
     }
     private final MediatorLiveData<Pair<List<Reserva>, List<ReservaCompuesta>>> combinedReservas = new MediatorLiveData<>();
-    private final MutableLiveData<List<Reserva>> reservasPasadas = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<List<Reserva>> reservasPasadas = new MutableLiveData<>();
     private final MutableLiveData<Boolean> navigateToBookingFragment = new MutableLiveData<>();
     private  Integer bookingNavigationPosition = 0;
     private final MutableLiveData<String> bookingModified = new MutableLiveData<>();
@@ -153,5 +153,9 @@ public class MainViewModel extends ViewModel {
 
     public LiveData<Boolean> deleteReservaCompuestaAndChilds(String reservationID) {
         return DataBaseManager.getInstance().deleteReservaCompuestaAndChilds(reservationID);
+    }
+
+    public LiveData<List<Reserva>> getReservasPasadas() {
+        return reservasPasadas;
     }
 }

@@ -16,6 +16,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.lksnext.parking.R;
+import com.lksnext.parking.databinding.FragmentBookcontainerBinding;
 import com.lksnext.parking.domain.Hora;
 import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.Reserva;
@@ -41,8 +43,8 @@ public class BookActiveHistoryContainerFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        com.lksnext.parking.databinding.FragmentBookcontainerBinding binding =
-                com.lksnext.parking.databinding.FragmentBookcontainerBinding.inflate(inflater, container, false);
+        FragmentBookcontainerBinding binding =
+                FragmentBookcontainerBinding.inflate(inflater, container, false);
 
         mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
 
@@ -64,6 +66,7 @@ public class BookActiveHistoryContainerFragment extends Fragment {
             recyclerView.setAdapter(composedAdapter);
             progressBar.setVisibility(View.GONE);
         });
+
 
         mainViewModel.getBookingModified().observe(getViewLifecycleOwner(), modifiedReservation -> {
             Lifecycle.State life = getViewLifecycleOwner().getLifecycle().getCurrentState();
