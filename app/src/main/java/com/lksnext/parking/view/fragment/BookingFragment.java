@@ -41,6 +41,11 @@ public class BookingFragment extends Fragment {
 
         bookViewModel = new ViewModelProvider(requireActivity()).get(BookViewModel.class);
 
+        if(savedInstanceState != null){
+            int whereToNavigate = savedInstanceState.getInt("whereToNavigate");
+            bookViewModel.setNavigateToBookingFragment(whereToNavigate);
+        }
+
         return view;
     }
 
@@ -63,5 +68,14 @@ public class BookingFragment extends Fragment {
         }else{
             Navigation.findNavController(view).navigate(R.id.add_booking);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState){
+        if(bookViewModel == null){
+            return;
+        }
+        super.onSaveInstanceState(outState);
+        outState.putInt("whereToNavigate", bookViewModel.getCurrentFragment());
     }
 }

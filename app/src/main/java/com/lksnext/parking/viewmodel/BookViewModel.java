@@ -32,6 +32,7 @@ public class BookViewModel extends ViewModel {
 
     private final MutableLiveData<Integer> navigateToBookingFragment = new MutableLiveData<>();
     private final MutableLiveData<Boolean> navigateToMainFragment = new MutableLiveData<>();
+    private int currentFragment;
 
     private String lastSelectedHour;
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>(true);
@@ -90,8 +91,15 @@ public class BookViewModel extends ViewModel {
         intermediateSelectedHours.setValue(horas);
     }
 
+    public void setCurrentFragment(int currentFragment) {
+        this.currentFragment = currentFragment;
+    }
+    public int getCurrentFragment() {
+        return currentFragment;
+    }
     public void setNavigateToBookingFragment(Integer navigateToBookingFragment) {
         this.navigateToBookingFragment.setValue(navigateToBookingFragment);
+        this.currentFragment = navigateToBookingFragment;
     }
     public LiveData<Integer> getNavigateToBookingFragment() {
         return navigateToBookingFragment;

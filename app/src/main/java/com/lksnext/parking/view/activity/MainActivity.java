@@ -66,6 +66,7 @@ public class MainActivity extends BaseActivity implements OnEditClickListener, O
                 return true;
             } else if (itemId == R.id.reservations) {
                 navController.navigate(R.id.bookFragment);
+                bookViewModel.setNavigateToBookingFragment(1);
                 return true;
             } else if (itemId == R.id.person) {
                 navController.navigate(R.id.profileFragment);

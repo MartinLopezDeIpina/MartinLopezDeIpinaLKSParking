@@ -64,6 +64,8 @@ private FragmentAddBookingBinding binding;
 
         binding.setBookViewModel(bookViewModel);
 
+        bookViewModel.setCurrentFragment(2);
+
         bindSelectedSpot();
         bindAddBookingButton();
         bindProgressBars();
