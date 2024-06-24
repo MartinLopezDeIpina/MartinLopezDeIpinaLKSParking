@@ -1,5 +1,6 @@
 package com.lksnext.parking.view.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,16 +16,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.lksnext.parking.domain.Hora;
-import com.lksnext.parking.domain.Plaza;
-import com.lksnext.parking.domain.Reserva;
-import com.lksnext.parking.domain.TipoPlaza;
-import com.lksnext.parking.view.adapter.ComposedReservationAdapter;
+import com.lksnext.parking.view.activity.OnDeleteClickListener;
+import com.lksnext.parking.view.activity.OnEditClickListener;
 import com.lksnext.parking.view.adapter.ReservationAdapter;
 import com.lksnext.parking.viewmodel.MainViewModel;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BookContainerFragment extends Fragment {
@@ -33,6 +29,8 @@ public class BookContainerFragment extends Fragment {
     private ReservationAdapter adapter;
     private ProgressBar progressBar;
     private LinearLayout noReservationsLayout;
+    private OnEditClickListener onEditClickListener;
+    OnDeleteClickListener onDeleteClickListener;
 
     public BookContainerFragment() {
         // Es necesario un constructor vacio
@@ -55,7 +53,6 @@ public class BookContainerFragment extends Fragment {
 
         noReservationsLayout = binding.noActiveBookingsIcon;
 
-
         //para que cuando se cambie de fragmento no se cargue el progressbar
         AtomicBoolean isFirstTime = mainViewModel.getIsFirstTime();
 
@@ -68,7 +65,7 @@ public class BookContainerFragment extends Fragment {
                 } else {
                     noReservationsLayout.setVisibility(View.GONE);
                 }
-                adapter = new ReservationAdapter(newReservations);
+                adapter = new ReservationAdapter(newReservations, onEditClickListener, onDeleteClickListener);
                 recyclerView.setAdapter(adapter);
                 progressBar.setVisibility(View.GONE);
             }
@@ -89,5 +86,12 @@ public class BookContainerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        onEditClickListener = (OnEditClickListener) context;
+        onDeleteClickListener = (OnDeleteClickListener) context;
     }
 }

@@ -182,5 +182,4 @@ public class MainViewModel extends ViewModel {
     public LiveData<Integer[]> getCantidadPlazasOcupadas() {
         return DataBaseManager.getInstance().getPlazasOcupadas();
     }
-
 }

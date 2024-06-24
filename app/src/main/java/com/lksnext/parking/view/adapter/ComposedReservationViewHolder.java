@@ -1,12 +1,10 @@
 package com.lksnext.parking.view.adapter;
 
 
-import android.icu.util.Calendar;
 import androidx.databinding.DataBindingUtil;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,11 +19,11 @@ import com.lksnext.parking.domain.ReservaCompuesta;
 import com.lksnext.parking.domain.TipoPlaza;
 import com.lksnext.parking.util.DateUtils;
 import com.lksnext.parking.view.activity.MainActivity;
+import com.lksnext.parking.view.activity.OnDeleteClickListener;
+import com.lksnext.parking.view.activity.OnEditClickListener;
 import com.lksnext.parking.view.fragment.DeleteBookingDialogFragment;
 
-import org.w3c.dom.Text;
-
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +36,7 @@ public class ComposedReservationViewHolder extends RecyclerView.ViewHolder{
     TextView[] dayTextViews;
     ItemComposedReservationBinding binding;
     ImageButton deleteButton;
+    ImageButton editButton;
 
 
     public ComposedReservationViewHolder(@NonNull View itemView) {
@@ -57,9 +56,10 @@ public class ComposedReservationViewHolder extends RecyclerView.ViewHolder{
             lunes, martes, miercoles, jueves, viernes, sabado, domingo
         };
         deleteButton = itemView.findViewById(R.id.delete_button);
+        editButton = itemView.findViewById(R.id.edit_button);
     }
 
-    public void bind(ReservaCompuesta reservaCompuesta) {
+    public void bind(ReservaCompuesta reservaCompuesta, OnEditClickListener onEditClickListener, OnDeleteClickListener onDeleteClickListener) {
         String[] dayStrings = DateUtils.getNextSevenDaysInitials();
         binding.setDayStrings(dayStrings);
 
@@ -101,10 +101,14 @@ public class ComposedReservationViewHolder extends RecyclerView.ViewHolder{
         }
 
         deleteButton.setOnClickListener(v -> {
-            MainActivity activity = (MainActivity) v.getContext();
-            DeleteBookingDialogFragment deleteDialog = new DeleteBookingDialogFragment(reservaCompuesta.getId(), true);
-            deleteDialog.show(activity.getSupportFragmentManager(), "deleteDialog");
-
+            onDeleteClickListener.onDeleteClick(reservaCompuesta.getId(), true);
+        });
+        editButton.setOnClickListener(v ->{
+            List<Reserva> reservations = new ArrayList<>();
+            reservaCompuesta.getReservasID().forEach(reserva -> {
+                reservations.add(Parking.getInstance().getReserva(reserva));
+            });
+            onEditClickListener.onEditClick(reservations);
         });
     }
 }
