@@ -48,12 +48,6 @@ public class BookingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
-        Integer whereToNavigate = bookViewModel.getNavigateToBookingFragment().getValue();
-        if(whereToNavigate == null || whereToNavigate == 0) {
-           whereToNavigate = 1;
-        }
-
-        navigate(whereToNavigate);
         bindWhereToNavigate();
     }
 
