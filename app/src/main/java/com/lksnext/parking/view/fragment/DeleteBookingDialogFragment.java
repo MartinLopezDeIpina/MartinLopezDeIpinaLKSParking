@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.lksnext.parking.R;
@@ -20,39 +21,26 @@ import com.lksnext.parking.viewmodel.MainViewModel;
 import java.util.List;
 
 public class DeleteBookingDialogFragment extends DialogFragment {
-    String reservationID;
-    Boolean esCompuesta;
-    MainViewModel mainViewModel;
-    public DeleteBookingDialogFragment (String reservationID, boolean esCompuesta) {
-        this.reservationID = reservationID;
-        this.esCompuesta = esCompuesta;
+    MutableLiveData<Boolean> deleteClicked = new MutableLiveData<>();
+    public DeleteBookingDialogFragment () {
+    }
+    public LiveData<Boolean> getDeleteClicked() {
+        return deleteClicked;
     }
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.dialog_cancel_booking);
         builder.setMessage(R.string.dialog_cancel_booking_message)
                 .setPositiveButton(R.string.dialog_accept, new DialogInterface.OnClickListener() {
-                    LiveData<Boolean> bookingDeleted;
                     public void onClick(DialogInterface dialog, int id) {
-                        if(esCompuesta){
-                            bookingDeleted = mainViewModel.deleteReservaCompuestaAndChilds(reservationID);
-                        }else{
-                            bookingDeleted = mainViewModel.deleteBooking(reservationID);
-                        }
-                        bookingDeleted.observeForever(result -> {
-                            if(result){
-                                mainViewModel.setBookingModified(reservationID);
-                                mainViewModel.updateReservas();
-                            }
-                        });
+                        deleteClicked.setValue(true);
                     }
                 })
                 .setNegativeButton(R.string.dialog_close, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        deleteClicked.setValue(false);
                     }
                 });
         Dialog dialog = builder.create();
