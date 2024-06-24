@@ -29,6 +29,10 @@ import java.util.stream.Collectors;
 public class BookViewModel extends ViewModel {
     private Parking parking = Parking.getInstance();
     private DataBaseManager db = DataBaseManager.getInstance();
+
+    private final MutableLiveData<Integer> navigateToBookingFragment = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> navigateToMainFragment = new MutableLiveData<>();
+
     private String lastSelectedHour;
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>(true);
     private MutableLiveData<TipoPlaza> selectedTipoPlaza = new MutableLiveData<>();
@@ -84,6 +88,19 @@ public class BookViewModel extends ViewModel {
     }
     public void setIntermediateSelectedHours(List<String> horas) {
         intermediateSelectedHours.setValue(horas);
+    }
+
+    public void setNavigateToBookingFragment(Integer navigateToBookingFragment) {
+        this.navigateToBookingFragment.setValue(navigateToBookingFragment);
+    }
+    public LiveData<Integer> getNavigateToBookingFragment() {
+        return navigateToBookingFragment;
+    }
+    public void setNavigateToMainFragment(Boolean navigateToMainFragment) {
+        this.navigateToMainFragment.setValue(navigateToMainFragment);
+    }
+    public LiveData<Boolean> getNavigateToMainFragment() {
+        return navigateToMainFragment;
     }
 
     public void setPlazasAvailables(Boolean available) {

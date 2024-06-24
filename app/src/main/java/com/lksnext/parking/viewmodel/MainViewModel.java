@@ -40,12 +40,11 @@ public class MainViewModel extends ViewModel {
     }
     private final MediatorLiveData<Pair<List<Reserva>, List<ReservaCompuesta>>> combinedReservas = new MediatorLiveData<>();
     private final MutableLiveData<List<Reserva>> reservasPasadas = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> navigateToBookingFragment = new MutableLiveData<>();
-    private  Integer bookingNavigationPosition = 0;
     private final MutableLiveData<String> bookingModified = new MutableLiveData<>();
-
-    private final MutableLiveData<Boolean> navigateToMainFragment = new MutableLiveData<>();
     private AtomicBoolean isFirstTime;
+
+    private final MutableLiveData<Integer> shouldNavigateTooBookingFragment = new MutableLiveData<>();
+
 
     public MainViewModel() {
         isFirstTime = new AtomicBoolean(true);
@@ -127,14 +126,6 @@ public class MainViewModel extends ViewModel {
 
     }
 
-
-    public void navigateToBookingFragment(boolean shouldNavigate, Integer position) {
-        setBookingNavigationPosition(position);
-        navigateToBookingFragment.setValue(shouldNavigate);
-    }
-    public LiveData<Boolean> getNavigateToBookingFragment() {
-        return navigateToBookingFragment;
-    }
     public LiveData<String> getBookingModified() {
         return bookingModified;
     }
@@ -142,20 +133,14 @@ public class MainViewModel extends ViewModel {
         bookingModified.setValue(reservationID);
     }
 
-    public Integer getBookingNavigationPosition() {
-        return bookingNavigationPosition;
+    public LiveData<Integer> getShouldNavigateTooBookingFragment() {
+        return shouldNavigateTooBookingFragment;
+    }
+    public void setShouldNavigateTooBookingFragment(Integer position) {
+        shouldNavigateTooBookingFragment.setValue(position);
     }
 
-    public void setBookingNavigationPosition(Integer position) {
-        bookingNavigationPosition = position;
-    }
 
-    public void navigateToMainFragment(boolean shouldNavigate) {
-        navigateToMainFragment.setValue(shouldNavigate);
-    }
-    public LiveData<Boolean> getNavigateToMainFragment() {
-        return navigateToMainFragment;
-    }
     public LiveData<Boolean> deleteBooking(String reservationID) {
         return DataBaseManager.getInstance().deleteBooking(reservationID);
     }

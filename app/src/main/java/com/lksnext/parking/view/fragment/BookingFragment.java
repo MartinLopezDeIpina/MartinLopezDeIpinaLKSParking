@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -18,11 +19,12 @@ import android.view.ViewGroup;
 
 import com.lksnext.parking.R;
 import com.lksnext.parking.databinding.FragmentBookingBinding;
+import com.lksnext.parking.viewmodel.BookViewModel;
 import com.lksnext.parking.viewmodel.MainViewModel;
 
 public class BookingFragment extends Fragment {
     FragmentBookingBinding binding;
-    MainViewModel mainViewModel;
+    BookViewModel bookViewModel;
     View view;
 
     private RecyclerView recyclerView, recyclyerViewPassed;
@@ -37,7 +39,7 @@ public class BookingFragment extends Fragment {
         binding = FragmentBookingBinding.inflate(inflater, container, false);
         view = binding.getRoot();
 
-        mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+        bookViewModel = new ViewModelProvider(requireActivity()).get(BookViewModel.class);
 
         return view;
     }
@@ -46,18 +48,26 @@ public class BookingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
-        setCurrentFragment();
+        Integer whereToNavigate = bookViewModel.getNavigateToBookingFragment().getValue();
+        if(whereToNavigate == null || whereToNavigate == 0) {
+           whereToNavigate = 1;
+        }
+
+        navigate(whereToNavigate);
+        bindWhereToNavigate();
     }
 
-    private void setCurrentFragment(){
-        NavHostFragment navHostFragment = (NavHostFragment) getChildFragmentManager().findFragmentById(R.id.flFragment);
-        NavController navController = navHostFragment.getNavController();
+    private void bindWhereToNavigate(){
+        bookViewModel.getNavigateToBookingFragment().observe(getViewLifecycleOwner(), whereToNavigate -> {
+            navigate(whereToNavigate);
+        });
+    }
 
-        if(mainViewModel.getBookingNavigationPosition() == 0){
-            navController.navigate(R.id.booking_history);
+    private void navigate(int whereToNavigate){
+        if(whereToNavigate == 0 || whereToNavigate == 1){
+            Navigation.findNavController(view).navigate(R.id.booking_history);
         }else{
-            navController.navigate(R.id.add_booking);
-            mainViewModel.setBookingNavigationPosition(0);
+            Navigation.findNavController(view).navigate(R.id.add_booking);
         }
     }
 }
