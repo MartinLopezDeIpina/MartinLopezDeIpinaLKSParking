@@ -101,7 +101,7 @@ private FragmentAddBookingBinding binding;
                 if(result != null){
                     generalProgressBar.setVisibility(View.GONE);
                     mainViewModel.updateReservas();
-                    mainViewModel.navigateToMainFragment(true);
+                    bookViewModel.setNavigateToMainFragment(true);
                 }
             });
         });
@@ -145,7 +145,7 @@ private FragmentAddBookingBinding binding;
 
     private void bindReturnButton(){
         binding.returning.setOnClickListener(v -> {
-           mainViewModel.navigateToMainFragment(true);
+            bookViewModel.setNavigateToMainFragment(true);
         });
     }
 

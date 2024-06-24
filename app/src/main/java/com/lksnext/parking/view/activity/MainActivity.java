@@ -19,6 +19,7 @@ import com.lksnext.parking.domain.Reserva;
 import com.lksnext.parking.domain.ReservaCompuesta;
 import com.lksnext.parking.domain.Usuario;
 import com.lksnext.parking.view.fragment.DeleteBookingDialogFragment;
+import com.lksnext.parking.viewmodel.BookViewModel;
 import com.lksnext.parking.viewmodel.MainViewModel;
 
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.List;
 public class MainActivity extends BaseActivity implements OnEditClickListener, OnDeleteClickListener{
 
     MainViewModel mainViewModel;
+    BookViewModel bookViewModel;
     BottomNavigationView bottomNavigationView;
     ActivityMainBinding binding;
     NavController navController;
@@ -39,6 +41,7 @@ public class MainActivity extends BaseActivity implements OnEditClickListener, O
         //Asignamos la vista/interfaz main (layout)
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        bookViewModel = new ViewModelProvider(this).get(BookViewModel.class);
         binding.setMainViewModel(mainViewModel);
         setCurrentUserDataFromDB();
 
@@ -52,6 +55,8 @@ public class MainActivity extends BaseActivity implements OnEditClickListener, O
         //Asignamos los botones de navegacion que se encuentran en la vista (layout)
         bottomNavigationView = binding.bottomNavigationView;
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
+        bindFragmentNavigationListeners();
 
         //Dependendiendo que boton clique el usuario de la navegacion se hacen distintas cosas
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -77,8 +82,6 @@ public class MainActivity extends BaseActivity implements OnEditClickListener, O
         // Establece el color de la barra de navegación
         getWindow().setNavigationBarColor(color);
 
-        setBookFragmentNavigationListener();
-        setMainFragmentNavigationListener();
     }
 
     @Override
@@ -142,27 +145,27 @@ public class MainActivity extends BaseActivity implements OnEditClickListener, O
         });
     }
 
-    private void setBookFragmentNavigationListener(){
-        mainViewModel.getNavigateToBookingFragment().observe(this, shouldNavigate -> {
+    private void bindFragmentNavigationListeners(){
+        mainViewModel.getShouldNavigateTooBookingFragment().observe(this, entero -> {
+            if (entero != 0) {
+                navigateToBookingFragment();
+                bookViewModel.setNavigateToBookingFragment(entero);
+                mainViewModel.setShouldNavigateTooBookingFragment(0);
+            }
+        });
+        bookViewModel.getNavigateToMainFragment().observe(this, shouldNavigate -> {
             if (shouldNavigate) {
-                navigateToBookingHistory();
-                mainViewModel.navigateToBookingFragment(false, mainViewModel.getBookingNavigationPosition());
+                navigateToMainFragment();
+                bookViewModel.setNavigateToMainFragment(false);
             }
         });
     }
-    private void navigateToBookingHistory(){
+
+    private void navigateToBookingFragment(){
         navController.navigate(R.id.bookFragment);
         bottomNavigationView.setSelectedItemId(R.id.reservations);
     }
 
-    private void setMainFragmentNavigationListener(){
-        mainViewModel.getNavigateToMainFragment().observe(this, shouldNavigate -> {
-            if (shouldNavigate) {
-                navigateToMainFragment();
-                mainViewModel.navigateToMainFragment(false);
-            }
-        });
-    }
     public void navigateToMainFragment(){
         navController.navigate(R.id.mainFragment);
         bottomNavigationView.setSelectedItemId(R.id.newres);
