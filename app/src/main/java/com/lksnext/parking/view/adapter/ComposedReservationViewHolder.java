@@ -56,7 +56,7 @@ public class ComposedReservationViewHolder extends RecyclerView.ViewHolder{
             lunes, martes, miercoles, jueves, viernes, sabado, domingo
         };
         deleteButton = itemView.findViewById(R.id.delete_button);
-        editButton = itemView.findViewById(R.id.edit_button);
+        editButton = itemView.findViewById(R.id.edit_button_composed);
     }
 
     public void bind(ReservaCompuesta reservaCompuesta, OnEditClickListener onEditClickListener, OnDeleteClickListener onDeleteClickListener) {
