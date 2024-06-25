@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -80,7 +81,7 @@ private FragmentAddBookingBinding binding;
         bindSelectedHourChips();
         bindUnselectedHourValue();
         bindVisualPath();
-        bindTitle();
+        bindChangeTitleAndAddButtonTextWhenEditing();
         noSpotIcon = binding.noSpotIcon;
 
 
@@ -431,12 +432,14 @@ private FragmentAddBookingBinding binding;
         });
     }
 
-    private void bindTitle(){
+    private void bindChangeTitleAndAddButtonTextWhenEditing(){
         title = binding.title;
         if(bookViewModel.getIsEditing()){
             title.setText(R.string.edit_booking);
+            addBookingButton.setText(R.string.edit_booking);
         }else{
             title.setText(R.string.add_booking);
+            addBookingButton.setText(R.string.add_booking);
         }
     }
 }

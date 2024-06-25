@@ -15,12 +15,10 @@ import com.lksnext.parking.domain.ReservaCompuesta;
 import com.lksnext.parking.domain.TipoPlaza;
 import com.lksnext.parking.util.DateUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -139,18 +137,30 @@ public class BookViewModel extends ViewModel {
         //Eliminarla para que al editar salgan los valores disponibles
         //En el onPause del fragmento se vuelve a añadir por si se cancela la edición
         reservations.forEach(reserva -> db.deleteBooking(reserva.getId()));
-
         if(isReservaCompuesta){
             db.deleteReservaCompuesta(reservaCompuesta.getId());
         }
-        bindReservationsToEdit();
+
+        setEditReservationValues();
     }
-    private void bindReservationsToEdit(){
+
+    private void setEditReservationValues(){
         TipoPlaza tipoPlaza = this.reservationsToEdit.get(0).getTipoPlaza();
         List<Integer> dias = this.reservationsToEdit.stream()
                 .map(Reserva::getFecha)
                 .map(DateUtils::getFechaDay)
+                //Si el día de la reserva no es de los próximos 7 días no incluirla porque estará caducada
+                .filter(dia -> Arrays.asList(dayNumbers).contains(dia))
                 .collect(Collectors.toList());
+        String editHora1 = this.reservationsToEdit.get(0).getHora().getHoraInicio();
+        String editHora2 = this.reservationsToEdit.get(0).getHora().getHoraFin();
+        Long plazaID = this.reservationsToEdit.get(0).getPlazaID();
+
+        selectedTipoPlaza.setValue(tipoPlaza);
+        selectedDias.setValue(dias);
+        selectedHora1.setValue(editHora1);
+        selectedHora2.setValue(editHora2);
+        selectedSpot.setValue(plazaID);
     }
 
     public void addEditingReservationIfEditCancelled() {
