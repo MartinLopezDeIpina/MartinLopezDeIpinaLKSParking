@@ -78,5 +78,6 @@
 
     <string name="no_active_bookings">Sin reservas activas</string>
     <string name="no_passed_bookings">Sin reservas pasadas</string>
+    <string name="edit_booking">Editar Reserva</string>
 
 </resources>
