@@ -235,14 +235,40 @@ public class DataBaseManager {
 
     public LiveData<Boolean> deleteBooking(String reservationID) {
         MutableLiveData<Boolean> result = new MutableLiveData<>();
-        Task task = db.collection("reserva").document(reservationID).delete();
-        task.addOnCompleteListener(task1 -> {
-            if (task1.isSuccessful()) {
-                result.setValue(true);
-            } else {
-                result.setValue(false);
+        Task<Void> task1 = db.collection("reserva").document(reservationID).delete();
+
+        Reserva reserva = Parking.getInstance().getReserva(reservationID);
+        Task<Void> task2 = null;
+        //eliminar la reserva de su reserva múltiple
+        if(reserva.isInsideReservaMultiple()){
+            ReservaCompuesta reservaCompuesta = Parking.getInstance().getReservaCompuestaThatContains(reservationID);
+            reservaCompuesta.getReservasID().remove(reservationID);
+            if(!reservaCompuesta.getReservasID().isEmpty()){
+                task2 = db.collection("reservaCompuesta").document(reservaCompuesta.getId()).set(reservaCompuesta);
+            }else{
+                task2 = db.collection("reservaCompuesta").document(reservaCompuesta.getId()).delete();
             }
-        });
+        }
+
+        if (task2 != null) {
+            Task combinedTask = Tasks.whenAllSuccess(task1, task2);
+            combinedTask.addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    result.setValue(true);
+                } else {
+                    result.setValue(false);
+                }
+            });
+        } else {
+            task1.addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    result.setValue(true);
+                } else {
+                    result.setValue(false);
+                }
+            });
+        }
+
         return result;
     }
 
