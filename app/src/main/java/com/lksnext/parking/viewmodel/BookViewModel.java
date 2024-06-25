@@ -47,6 +47,12 @@ public class BookViewModel extends ViewModel {
     private List<Reserva> reservationsToEdit;
     private ReservaCompuesta reservaCompuestaToEdit;
     private boolean editSuccesful;
+    private TipoPlaza editingBookingTipoPlaza;
+    private List<Integer> editingBookingDias;
+    private String editingBookingHora1;
+    private String editingBookingHora2;
+    private Long editingBookingSpot;
+    private boolean editingHoursAlredySet;
 
 
     private Integer[] dayNumbers = new Integer[7];
@@ -128,8 +134,34 @@ public class BookViewModel extends ViewModel {
     public boolean getIsEditing(){
         return isEditing;
     }
+    public TipoPlaza getEditingBookingTipoPlaza() {
+        return editingBookingTipoPlaza;
+    }
+    public List<Integer> getEditingBookingDias() {
+        return editingBookingDias;
+    }
+    public List<Integer> getEditingBookingOffsets(){
+        return editingBookingDias.stream().map(dia -> Arrays.asList(dayNumbers).indexOf(dia)).collect(Collectors.toList());
+    }
+    public String getEditingBookingHora1() {
+        return editingBookingHora1;
+    }
+    public String getEditingBookingHora2() {
+        return editingBookingHora2;
+    }
+    public Long getEditingBookingSpot() {
+        return editingBookingSpot;
+    }
+    public boolean isEditingHoursAlredySet() {
+        return editingHoursAlredySet;
+    }
+    public void setEditingHoursAlredySet(){
+        this.editingHoursAlredySet = true;
+    }
+
     public void setReservationsToEdit(List<Reserva> reservations, ReservaCompuesta reservaCompuesta) {
         this.editSuccesful = false;
+        this.editingHoursAlredySet = false;
         this.reservaCompuestaToEdit = reservaCompuesta;
         this.reservationsToEdit = reservations;
         boolean isReservaCompuesta = reservaCompuesta != null;
@@ -143,7 +175,6 @@ public class BookViewModel extends ViewModel {
 
         setEditReservationValues();
     }
-
     private void setEditReservationValues(){
         TipoPlaza tipoPlaza = this.reservationsToEdit.get(0).getTipoPlaza();
         List<Integer> dias = this.reservationsToEdit.stream()
@@ -156,11 +187,11 @@ public class BookViewModel extends ViewModel {
         String editHora2 = this.reservationsToEdit.get(0).getHora().getHoraFin();
         Long plazaID = this.reservationsToEdit.get(0).getPlazaID();
 
-        selectedTipoPlaza.setValue(tipoPlaza);
-        selectedDias.setValue(dias);
-        selectedHora1.setValue(editHora1);
-        selectedHora2.setValue(editHora2);
-        selectedSpot.setValue(plazaID);
+        this.editingBookingTipoPlaza = tipoPlaza;
+        this.editingBookingDias = dias;
+        this.editingBookingHora1 = editHora1;
+        this.editingBookingHora2 = editHora2;
+        this.editingBookingSpot = plazaID;
     }
 
     public void addEditingReservationIfEditCancelled() {

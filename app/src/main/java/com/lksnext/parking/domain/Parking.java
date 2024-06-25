@@ -49,6 +49,12 @@ public class Parking {
     public void setReservasCompuestas(List<ReservaCompuesta> compuestas){
         reservasCompuestas.addAll(compuestas);
     }
+    public ReservaCompuesta getReservaCompuesta(String reservaID){
+        return reservasCompuestas.stream()
+                .filter(reserva -> reserva.getId().equals(reservaID))
+                .findFirst()
+                .orElse(null);
+    }
     public List<Reserva> getReservas(){
         return reservas;
     }
@@ -60,6 +66,12 @@ public class Parking {
     }
     public List<ReservaCompuesta> getReservasCompuestas(){
         return reservasCompuestas;
+    }
+    public ReservaCompuesta getReservaCompuestaThatContains(String reservationID) {
+        return getReservasCompuestas().stream()
+                .filter(reservaCompuesta -> reservaCompuesta.getReservasID().contains(reservationID))
+                .findFirst()
+                .orElse(null);
     }
     public TipoPlaza getTipoPlazaReserva(Long plazaID){
         return getPlazas().stream()
@@ -89,4 +101,5 @@ public class Parking {
                 .filter(plaza -> plaza.getTipoPlaza() == TipoPlaza.DISCAPACITADO)
                 .count();
     }
+
 }

@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -85,8 +84,11 @@ private FragmentAddBookingBinding binding;
         noSpotIcon = binding.noSpotIcon;
 
 
+
         return binding.getRoot();
     }
+
+
     @Override
     public void onPause(){
         super.onPause();
@@ -180,6 +182,24 @@ private FragmentAddBookingBinding binding;
         binding.specialChip.setOnClickListener(v -> {
             bookViewModel.toggleSelectedTipoPlaza(TipoPlaza.DISCAPACITADO);
         });
+
+        if(bookViewModel.getIsEditing()){
+            TipoPlaza tipoPlaza = bookViewModel.getEditingBookingTipoPlaza();
+            switch (tipoPlaza){
+                case COCHE:
+                    binding.cocheChip.performClick();
+                    break;
+                case MOTO:
+                    binding.motoChip.performClick();
+                    break;
+                case ELECTRICO:
+                    binding.electricChip.performClick();
+                    break;
+                case DISCAPACITADO:
+                    binding.specialChip.performClick();
+                    break;
+            }
+        }
     }
     private void bindSelectedDias(){
         Chip lunesChip = binding.getRoot().findViewById(R.id.lunes_chip).findViewById(R.id.chip);
@@ -189,28 +209,24 @@ private FragmentAddBookingBinding binding;
         Chip viernesChip = binding.getRoot().findViewById(R.id.viernes_chip).findViewById(R.id.chip);
         Chip sabadoChip = binding.getRoot().findViewById(R.id.sabado_chip).findViewById(R.id.chip);
         Chip domingoChip = binding.getRoot().findViewById(R.id.domingo_chip).findViewById(R.id.chip);
+        Chip[] diasChips = new Chip[]{lunesChip, martesChip, miercolesChip, juevesChip, viernesChip, sabadoChip, domingoChip};
 
-        lunesChip.setOnClickListener(v -> {
-            bookViewModel.toggleDia(0);
-        });
-        martesChip.setOnClickListener(v -> {
-            bookViewModel.toggleDia(1);
-        });
-        miercolesChip.setOnClickListener(v -> {
-            bookViewModel.toggleDia(2);
-        });
-        juevesChip.setOnClickListener(v -> {
-            bookViewModel.toggleDia(3);
-        });
-        viernesChip.setOnClickListener(v -> {
-            bookViewModel.toggleDia(4);
-        });
-        sabadoChip.setOnClickListener(v -> {
-            bookViewModel.toggleDia(5);
-        });
-        domingoChip.setOnClickListener(v -> {
-            bookViewModel.toggleDia(6);
-        });
+        for(int i = 0; i < diasChips.length; i++){
+            int finalI = i;
+            diasChips[i].setOnClickListener(v -> {
+                bookViewModel.toggleDia(finalI);
+            });
+        }
+
+        if(bookViewModel.getIsEditing()){
+            List<Integer> dias = bookViewModel.getEditingBookingOffsets();
+            if(dias != null){
+                for(int dia : dias){
+                    diasChips[dia].performClick();
+                }
+            }
+        }
+
     }
 
     private void bindDisableOrEnableHourChips(){
@@ -289,9 +305,25 @@ private FragmentAddBookingBinding binding;
                 }
                 chip.setEnabled(enabled);
             }
+            if(bookViewModel.getIsEditing() && !bookViewModel.isEditingHoursAlredySet()){
+                bookViewModel.setEditingHoursAlredySet();
+                setEditingHours();
+            }
 
             hoursProgressBar.setVisibility(View.GONE);
         });
+    }
+
+    private void setEditingHours(){
+        String hora1 = bookViewModel.getEditingBookingHora1();
+        String hora2 = bookViewModel.getEditingBookingHora2();
+
+        for(Chip hourChip : hourChips){
+            if(hourChip.getText().toString().equals(hora1) || hourChip.getText().toString().equals(hora2)){
+                hourChip.performClick();
+            }
+        }
+
     }
 
     public String getStringFormatDateFromDayNumber(int day) {
@@ -442,4 +474,5 @@ private FragmentAddBookingBinding binding;
             addBookingButton.setText(R.string.add_booking);
         }
     }
+
 }
