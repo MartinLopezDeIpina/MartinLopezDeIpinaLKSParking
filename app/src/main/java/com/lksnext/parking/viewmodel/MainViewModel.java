@@ -107,14 +107,18 @@ public class MainViewModel extends ViewModel {
             }
             for(ReservaCompuesta reservaCompuesta : reservasCompuestasActivas){
                 for(String reservaID : reservaCompuesta.getReservasID()){
+                    int numReservasActivas = 0;
                     List<String> reservasActivasID = activas.stream().map(Reserva::getId).collect(Collectors.toList());
                     //En caso de que la reserva haya caducado o haya sido eliminada no añadir la reserva compuesta
                     if(reservasActivasID.contains(reservaID)){
+                        numReservasActivas++;
                         reservasCompActivas.add(reservaCompuesta);
                         break;
                     }
-                    //En caso de que la reserva haya caducado o haya sido eliminada eliminar la reserva compuesta
-                    DataBaseManager.getInstance().deleteReservaCompuesta(reservaCompuesta.getId());
+                    //En caso de que todas las reservas de la reserva compuesta hayan caducado o hayan sido eliminadas eliminar la reserva compuesta de la bd
+                    if(numReservasActivas == 0){
+                        DataBaseManager.getInstance().deleteReservaCompuesta(reservaCompuesta.getId());
+                    }
                 }
             }
 
