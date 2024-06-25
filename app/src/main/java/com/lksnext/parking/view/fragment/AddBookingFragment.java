@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,6 +46,7 @@ private FragmentAddBookingBinding binding;
     private MaterialButton addBookingButton;
     private List<Chip> hourChips;
     private LinearLayout noSpotIcon;
+    private TextView title;
     public AddBookingFragment() {
         // Es necesario un constructor vacio
     }
@@ -78,11 +80,18 @@ private FragmentAddBookingBinding binding;
         bindSelectedHourChips();
         bindUnselectedHourValue();
         bindVisualPath();
+        bindTitle();
         noSpotIcon = binding.noSpotIcon;
 
 
         return binding.getRoot();
     }
+    @Override
+    public void onPause(){
+        super.onPause();
+        bookViewModel.addEditingReservationIfEditCancelled();
+    }
+
     private void bindSelectedSpot(){
         bookViewModel.getSelectedSpot().observe(getViewLifecycleOwner(), selectedSpot -> {
             if(selectedSpot != null){
@@ -101,6 +110,7 @@ private FragmentAddBookingBinding binding;
             LiveData<String> bookingResult = bookViewModel.bookSpot();
             bookingResult.observe(getViewLifecycleOwner(), result -> {
                 if(result != null){
+                    bookViewModel.setSuccssEditIfEditing();
                     generalProgressBar.setVisibility(View.GONE);
                     mainViewModel.updateReservas();
                     bookViewModel.setNavigateToMainFragment(true);
@@ -421,5 +431,12 @@ private FragmentAddBookingBinding binding;
         });
     }
 
-
+    private void bindTitle(){
+        title = binding.title;
+        if(bookViewModel.getIsEditing()){
+            title.setText(R.string.edit_booking);
+        }else{
+            title.setText(R.string.add_booking);
+        }
+    }
 }

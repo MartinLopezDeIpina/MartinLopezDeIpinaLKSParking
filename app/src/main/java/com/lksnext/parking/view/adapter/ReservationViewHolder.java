@@ -69,7 +69,7 @@ public class ReservationViewHolder extends RecyclerView.ViewHolder {
         editButton.setOnClickListener(v ->{
             ArrayList<Reserva> reservations = new ArrayList<>();
             reservations.add(reservation);
-            listener.onEditClick(reservations);
+            listener.onEditClick(reservations, null);
         });
     }
 }

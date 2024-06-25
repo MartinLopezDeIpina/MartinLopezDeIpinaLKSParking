@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 public class Parking {
     private static Parking instance;
-
     private List<Reserva> reservas;
     private List<ReservaCompuesta> reservasCompuestas;
     private MutableLiveData<List<Plaza>> plazas = new MutableLiveData<>();
@@ -37,6 +36,9 @@ public class Parking {
                .filter(plaza -> plaza.getTipoPlaza() == tipo)
                .map(Plaza::getId)
                .collect(Collectors.toList());
+    }
+    public void setUsuario(Usuario usuario){
+        this.usuario = usuario;
     }
     public void setPlazas(List<Plaza> plazas){
        this.plazas.setValue(plazas);
@@ -87,5 +89,4 @@ public class Parking {
                 .filter(plaza -> plaza.getTipoPlaza() == TipoPlaza.DISCAPACITADO)
                 .count();
     }
-
 }

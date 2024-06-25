@@ -43,7 +43,7 @@ public class MainViewModel extends ViewModel {
     private final MutableLiveData<String> bookingModified = new MutableLiveData<>();
     private AtomicBoolean isFirstTime;
 
-    private final MutableLiveData<Integer> shouldNavigateTooBookingFragment = new MutableLiveData<>();
+    private final MutableLiveData<Pair<Integer, Boolean>> shouldNavigateTooBookingFragment = new MutableLiveData<>();
 
 
     public MainViewModel() {
@@ -133,10 +133,10 @@ public class MainViewModel extends ViewModel {
         bookingModified.setValue(reservationID);
     }
 
-    public LiveData<Integer> getShouldNavigateTooBookingFragment() {
+    public LiveData<Pair<Integer, Boolean>> getShouldNavigateTooBookingFragment() {
         return shouldNavigateTooBookingFragment;
     }
-    public void setShouldNavigateTooBookingFragment(Integer position) {
+    public void setShouldNavigateTooBookingFragment(Pair<Integer, Boolean> position) {
         shouldNavigateTooBookingFragment.setValue(position);
     }
 

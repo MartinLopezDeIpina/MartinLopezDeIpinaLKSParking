@@ -1,6 +1,7 @@
 package com.lksnext.parking.view.activity;
 
 import android.os.Bundle;
+import android.util.Pair;
 import android.util.TypedValue;
 
 import androidx.lifecycle.LiveData;
@@ -14,6 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.lksnext.parking.R;
 import com.lksnext.parking.data.DataBaseManager;
 import com.lksnext.parking.databinding.ActivityMainBinding;
+import com.lksnext.parking.domain.Parking;
 import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.Reserva;
 import com.lksnext.parking.domain.ReservaCompuesta;
@@ -65,8 +67,7 @@ public class MainActivity extends BaseActivity implements OnEditClickListener, O
                 navController.navigate(R.id.mainFragment);
                 return true;
             } else if (itemId == R.id.reservations) {
-                navController.navigate(R.id.bookFragment);
-                bookViewModel.setNavigateToBookingFragment(1);
+                mainViewModel.setShouldNavigateTooBookingFragment(new Pair<>(1, false));
                 return true;
             } else if (itemId == R.id.person) {
                 navController.navigate(R.id.profileFragment);
@@ -91,8 +92,9 @@ public class MainActivity extends BaseActivity implements OnEditClickListener, O
     }
 
     @Override
-    public void onEditClick(List<Reserva> reservations) {
-       //todo
+    public void onEditClick(List<Reserva> reservations, ReservaCompuesta reservaCompuesta) {
+        bookViewModel.setReservationsToEdit(reservations, reservaCompuesta);
+        mainViewModel.setShouldNavigateTooBookingFragment(new Pair<>(2, true));
     }
 
     @Override
@@ -129,6 +131,7 @@ public class MainActivity extends BaseActivity implements OnEditClickListener, O
     private void setProfileData(){
         LiveData<Usuario> userLiveData = dataBaseManager.getCurrenUser();
         userLiveData.observe(this, usuario -> {
+            Parking.getInstance().setUsuario(usuario);
             mainViewModel.setUser(usuario);
         });
     }
@@ -148,10 +151,13 @@ public class MainActivity extends BaseActivity implements OnEditClickListener, O
 
     private void bindFragmentNavigationListeners(){
         mainViewModel.getShouldNavigateTooBookingFragment().observe(this, entero -> {
-            if (entero != 0) {
+            Integer position = entero.first;
+            Boolean isEditing = entero.second;
+            if (position != 0) {
                 navigateToBookingFragment();
-                bookViewModel.setNavigateToBookingFragment(entero);
-                mainViewModel.setShouldNavigateTooBookingFragment(0);
+                bookViewModel.setNavigateToBookingFragment(position);
+                bookViewModel.setIsEditing(isEditing);
+                mainViewModel.setShouldNavigateTooBookingFragment(new Pair<>(0, false));
             }
         });
         bookViewModel.getNavigateToMainFragment().observe(this, shouldNavigate -> {

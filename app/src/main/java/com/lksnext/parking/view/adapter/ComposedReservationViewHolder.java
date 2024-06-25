@@ -108,7 +108,7 @@ public class ComposedReservationViewHolder extends RecyclerView.ViewHolder{
             reservaCompuesta.getReservasID().forEach(reserva -> {
                 reservations.add(Parking.getInstance().getReserva(reserva));
             });
-            onEditClickListener.onEditClick(reservations);
+            onEditClickListener.onEditClick(reservations, reservaCompuesta);
         });
     }
 }

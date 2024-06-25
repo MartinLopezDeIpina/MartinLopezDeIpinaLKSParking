@@ -44,6 +44,13 @@ public class BookViewModel extends ViewModel {
     private MutableLiveData<String> unselectedHora = new MutableLiveData<>();
     private MutableLiveData<List<Long>> availableSpots = new MutableLiveData<>();
     private MutableLiveData<Long> selectedSpot = new MutableLiveData<>();
+
+    private Boolean isEditing;
+    private List<Reserva> reservationsToEdit;
+    private ReservaCompuesta reservaCompuestaToEdit;
+    private boolean editSuccesful;
+
+
     private Integer[] dayNumbers = new Integer[7];
     public LiveData<Boolean> getIsLoading() {
         return isLoading;
@@ -91,6 +98,7 @@ public class BookViewModel extends ViewModel {
         intermediateSelectedHours.setValue(horas);
     }
 
+
     public void setCurrentFragment(int currentFragment) {
         this.currentFragment = currentFragment;
     }
@@ -110,6 +118,55 @@ public class BookViewModel extends ViewModel {
     public LiveData<Boolean> getNavigateToMainFragment() {
         return navigateToMainFragment;
     }
+
+
+
+    public boolean getEditSuccesful() {
+        return editSuccesful;
+    }
+    public void setIsEditing(boolean isEditing){
+        this.isEditing = isEditing;
+    }
+    public boolean getIsEditing(){
+        return isEditing;
+    }
+    public void setReservationsToEdit(List<Reserva> reservations, ReservaCompuesta reservaCompuesta) {
+        this.editSuccesful = false;
+        this.reservaCompuestaToEdit = reservaCompuesta;
+        this.reservationsToEdit = reservations;
+        boolean isReservaCompuesta = reservaCompuesta != null;
+
+        //Eliminarla para que al editar salgan los valores disponibles
+        //En el onPause del fragmento se vuelve a añadir por si se cancela la edición
+        reservations.forEach(reserva -> db.deleteBooking(reserva.getId()));
+
+        if(isReservaCompuesta){
+            db.deleteReservaCompuesta(reservaCompuesta.getId());
+        }
+        bindReservationsToEdit();
+    }
+    private void bindReservationsToEdit(){
+        TipoPlaza tipoPlaza = this.reservationsToEdit.get(0).getTipoPlaza();
+        List<Integer> dias = this.reservationsToEdit.stream()
+                .map(Reserva::getFecha)
+                .map(DateUtils::getFechaDay)
+                .collect(Collectors.toList());
+    }
+
+    public void addEditingReservationIfEditCancelled() {
+        if(isEditing && !editSuccesful){
+            reservationsToEdit.forEach(reserva -> db.addBookingToDB(reserva));
+            List<String> reservasIDs = reservationsToEdit.stream().map(Reserva::getId).collect(Collectors.toList());
+            if(reservaCompuestaToEdit != null){
+                db.addReservaCompuestaToDB(FirebaseAuth.getInstance().getCurrentUser().getUid(), reservasIDs, reservaCompuestaToEdit.getPlazaID(), reservaCompuestaToEdit.getHora());
+            }
+        }
+    }
+
+    public void setSuccssEditIfEditing() {
+        editSuccesful = true;
+    }
+
 
     public void setPlazasAvailables(Boolean available) {
         MutableLiveData<Boolean> result = new MutableLiveData<>();
