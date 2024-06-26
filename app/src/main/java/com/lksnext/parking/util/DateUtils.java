@@ -149,4 +149,8 @@ public class DateUtils {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         return sdf.format(new Date());
     }
+
+    public static String getHourFromInteger(Integer hour) {
+        return String.format("%02d:00", hour);
+    }
 }
