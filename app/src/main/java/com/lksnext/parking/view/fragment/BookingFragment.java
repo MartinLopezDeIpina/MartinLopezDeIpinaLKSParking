@@ -50,6 +50,12 @@ public class BookingFragment extends Fragment {
     }
 
     @Override
+    public void onPause(){
+        super.onPause();
+        bookViewModel.setCurrentFragment(0);
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 

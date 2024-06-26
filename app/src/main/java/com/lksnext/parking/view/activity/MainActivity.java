@@ -154,7 +154,10 @@ public class MainActivity extends BaseActivity implements OnEditClickListener, O
             Integer position = entero.first;
             Boolean isEditing = entero.second;
             if (position != 0) {
-                navigateToBookingFragment();
+                //Si ya está en el fragmento de reservas, no se navega
+                if(bookViewModel.getCurrentFragment() == 0){
+                    navigateToBookingFragment();
+                }
                 bookViewModel.setNavigateToBookingFragment(position);
                 bookViewModel.setIsEditing(isEditing);
                 mainViewModel.setShouldNavigateTooBookingFragment(new Pair<>(0, false));
@@ -177,5 +180,4 @@ public class MainActivity extends BaseActivity implements OnEditClickListener, O
         navController.navigate(R.id.mainFragment);
         bottomNavigationView.setSelectedItemId(R.id.newres);
     }
-
 }

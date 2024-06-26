@@ -23,12 +23,14 @@ import com.lksnext.parking.domain.ReservaCompuesta;
 import com.lksnext.parking.view.activity.OnDeleteClickListener;
 import com.lksnext.parking.view.adapter.ComposedReservationAdapter;
 import com.lksnext.parking.view.activity.OnEditClickListener;
+import com.lksnext.parking.viewmodel.BookViewModel;
 import com.lksnext.parking.viewmodel.MainViewModel;
 
 import java.util.List;
 
 public class BookActiveHistoryContainerFragment extends Fragment {
     private MainViewModel mainViewModel;
+    private BookViewModel bookViewModel;
     private RecyclerView recyclerView;
     private ComposedReservationAdapter composedAdapter;
     private ProgressBar progressBar;
@@ -47,6 +49,7 @@ public class BookActiveHistoryContainerFragment extends Fragment {
                 FragmentBookcontainerBinding.inflate(inflater, container, false);
 
         mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+        bookViewModel = new ViewModelProvider(requireActivity()).get(BookViewModel.class);
 
         progressBar = binding.activeBookingsProgessbar;
         progressBar.setVisibility(View.VISIBLE);

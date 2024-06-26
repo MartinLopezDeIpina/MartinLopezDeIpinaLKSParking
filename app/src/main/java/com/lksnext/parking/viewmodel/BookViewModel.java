@@ -14,6 +14,7 @@ import com.lksnext.parking.domain.Reserva;
 import com.lksnext.parking.domain.ReservaCompuesta;
 import com.lksnext.parking.domain.TipoPlaza;
 import com.lksnext.parking.util.DateUtils;
+import com.lksnext.parking.util.SingleLiveEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,19 +41,20 @@ public class BookViewModel extends ViewModel {
     private MutableLiveData<String> selectedHora2 = new MutableLiveData<>();
     private MutableLiveData<List<String>> intermediateSelectedHours = new MutableLiveData<>();
     private MutableLiveData<String> unselectedHora = new MutableLiveData<>();
-    private MutableLiveData<List<Long>> availableSpots = new MutableLiveData<>();
+    private SingleLiveEvent<List<Long>> availableSpots = new SingleLiveEvent<>();
     private MutableLiveData<Long> selectedSpot = new MutableLiveData<>();
 
     private Boolean isEditing;
+    private boolean editingHoursAlredySet;
+    private boolean editSuccesful;
+    private boolean editSpotAlredySet;
     private List<Reserva> reservationsToEdit;
     private ReservaCompuesta reservaCompuestaToEdit;
-    private boolean editSuccesful;
     private TipoPlaza editingBookingTipoPlaza;
     private List<Integer> editingBookingDias;
     private String editingBookingHora1;
     private String editingBookingHora2;
     private Long editingBookingSpot;
-    private boolean editingHoursAlredySet;
 
 
     private Integer[] dayNumbers = new Integer[7];
@@ -82,6 +84,9 @@ public class BookViewModel extends ViewModel {
     }
     public LiveData<List<Long>> getAvailableSpots() {
         return availableSpots;
+    }
+    public void setAvailableSpots(List<Long> availableSpots) {
+        this.availableSpots.setValue(availableSpots);
     }
     public String getLastSelectedHour() {
         return lastSelectedHour;
@@ -124,9 +129,12 @@ public class BookViewModel extends ViewModel {
     }
 
 
-
     public boolean getEditSuccesful() {
         return editSuccesful;
+    }
+
+    public void setEditSuccesful(boolean b){
+        this.editSuccesful = b;
     }
     public void setIsEditing(boolean isEditing){
         this.isEditing = isEditing;
@@ -155,8 +163,22 @@ public class BookViewModel extends ViewModel {
     public boolean isEditingHoursAlredySet() {
         return editingHoursAlredySet;
     }
-    public void setEditingHoursAlredySet(){
+    public void setEditingHoursAlredySet(boolean b){
         this.editingHoursAlredySet = true;
+    }
+
+    public boolean isEditingSpotAlreadySet() {
+        return editSpotAlredySet;
+    }
+    public void setEditingSpotAlreadySet(boolean b){
+        this.editSpotAlredySet = b;
+    }
+
+    public boolean getIsReservaCompuestaEdit() {
+        return reservaCompuestaToEdit != null;
+    }
+    public void setEditingReservaCompuesta(ReservaCompuesta reservaCompuesta){
+        this.reservaCompuestaToEdit = reservaCompuesta;
     }
 
     public void setReservationsToEdit(List<Reserva> reservations, ReservaCompuesta reservaCompuesta) {
@@ -244,7 +266,9 @@ public class BookViewModel extends ViewModel {
             });
 
         }else{
-            availableSpots.setValue(new ArrayList<>());
+            if(availableSpots.getValue() != null && !availableSpots.getValue().isEmpty()){
+                availableSpots.setValue(new ArrayList<>());
+            }
             result.setValue(false);
         }
     }
@@ -431,6 +455,5 @@ public class BookViewModel extends ViewModel {
     public static Integer[] getNextSevenDays() {
         return DateUtils.getNextSevenDays();
     }
-
 
 }
