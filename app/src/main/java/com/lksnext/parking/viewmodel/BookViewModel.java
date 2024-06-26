@@ -326,6 +326,10 @@ public class BookViewModel extends ViewModel {
        emptySelectedHours();
     }
 
+    public void emptyBookingBelowData() {
+        emptySelectedHours();
+    }
+
     public void toggleDia(Integer dia_index){
         emptySelectedHours();
         int dia = dayNumbers[dia_index];
