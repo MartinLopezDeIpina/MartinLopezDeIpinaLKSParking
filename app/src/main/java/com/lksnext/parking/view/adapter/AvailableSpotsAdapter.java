@@ -16,18 +16,20 @@ import java.util.List;
 
 public class AvailableSpotsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     List<Long> availableSpots;
+    Long editingSpotID;
     BookViewModel bookViewModel;
     
-    public AvailableSpotsAdapter(List<Long> availableSpots, BookViewModel bookViewModel) {
+    public AvailableSpotsAdapter(List<Long> availableSpots, BookViewModel bookViewModel, Long editingSpotID) {
         availableSpots.sort(Long::compareTo);
         this.availableSpots = availableSpots;
+        this.editingSpotID = editingSpotID;
         this.bookViewModel = bookViewModel;
     }
     @NonNull
     @Override
     public AvailableSpotsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_available_spot, parent, false);
-        return new AvailableSpotsViewHolder(view, bookViewModel);
+        return new AvailableSpotsViewHolder(view, bookViewModel, editingSpotID);
     }
 
     @Override
@@ -49,12 +51,13 @@ public class AvailableSpotsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         return availableSpots.size();
     }
 
+
     static class AvailableSpotsViewHolder extends RecyclerView.ViewHolder {
         TextView spotIDTextView;
-        Long plazaID;
+        Long editingSpotID;
 
 
-        public AvailableSpotsViewHolder(@NonNull View itemView, BookViewModel bookViewModel) {
+        public AvailableSpotsViewHolder(@NonNull View itemView, BookViewModel bookViewModel, Long editingSpotID) {
             super(itemView);
             spotIDTextView = itemView.findViewById(R.id.plazaID);
 
@@ -70,7 +73,7 @@ public class AvailableSpotsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 }
             });
 
-
+            //todo: cambiar esta peruanada
             bookViewModel.getSelectedSpot().observeForever(selectedSpot -> {
                 String text = spotIDTextView.getText().toString();
                 if(text.isEmpty()){
@@ -86,7 +89,9 @@ public class AvailableSpotsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         itemView.setSelected(false);
                     }
                 }
+
             });
+
         }
 
         public void bind(Long plazaID) {

@@ -93,6 +93,12 @@ private FragmentAddBookingBinding binding;
     public void onPause(){
         super.onPause();
         bookViewModel.addEditingReservationIfEditCancelled();
+        bookViewModel.setIsEditing(false);
+        bookViewModel.setEditingHoursAlredySet(false);
+        bookViewModel.setEditSuccesful(false);
+        bookViewModel.setEditingReservaCompuesta(null);
+        bookViewModel.setAvailableSpots(new ArrayList<>());
+        bookViewModel.setEditingSpotAlreadySet(false);
     }
 
     private void bindSelectedSpot(){
@@ -127,6 +133,7 @@ private FragmentAddBookingBinding binding;
         generalProgressBar = binding.generalProgressBar;
     }
     private void bindSpotsRecyclerView(){
+
         recyclerView = binding.availableSpotsRecyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -136,12 +143,22 @@ private FragmentAddBookingBinding binding;
             }else{
                 noSpotIcon.setVisibility(View.GONE);
             }
-            spotsAdapter = new AvailableSpotsAdapter(availableSpots, bookViewModel);
+            spotsAdapter = new AvailableSpotsAdapter(availableSpots, bookViewModel, bookViewModel.getEditingBookingSpot());
             recyclerView.setAdapter(spotsAdapter);
             spotsProgressBar.setVisibility(View.GONE);
             addBookingButton.setSelected(false);
             addBookingButton.setAlpha(0.5f);
+
+            setEditingSpotIfEditing();
         });
+
+    }
+
+    private void setEditingSpotIfEditing(){
+        if(bookViewModel.getIsEditing() && !bookViewModel.isEditingSpotAlreadySet()){
+            bookViewModel.setSelectedSpot(bookViewModel.getEditingBookingSpot());
+            bookViewModel.setEditingSpotAlreadySet(true);
+        }
     }
 
     private void fillHourChipBindings(){
@@ -306,7 +323,7 @@ private FragmentAddBookingBinding binding;
                 chip.setEnabled(enabled);
             }
             if(bookViewModel.getIsEditing() && !bookViewModel.isEditingHoursAlredySet()){
-                bookViewModel.setEditingHoursAlredySet();
+                bookViewModel.setEditingHoursAlredySet(false);
                 setEditingHours();
             }
 
