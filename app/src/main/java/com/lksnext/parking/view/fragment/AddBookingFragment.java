@@ -54,7 +54,23 @@ private FragmentAddBookingBinding binding;
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        bookViewModel.emptyBooking();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putBoolean("carChecked", binding.cocheChip.isChecked());
+        savedInstanceState.putBoolean("motoChecked", binding.motoChip.isChecked());
+        savedInstanceState.putBoolean("electricChecked", binding.electricChip.isChecked());
+        savedInstanceState.putBoolean("specialChecked", binding.specialChip.isChecked());
+
+        savedInstanceState.putBoolean("lunesChecked", binding.dateChipGroup.lunesChip.chip.isChecked());
+        savedInstanceState.putBoolean("martesChecked", binding.dateChipGroup.martesChip.chip.isChecked());
+        savedInstanceState.putBoolean("miercolesChecked", binding.dateChipGroup.miercolesChip.chip.isChecked());
+        savedInstanceState.putBoolean("juevesChecked", binding.dateChipGroup.juevesChip.chip.isChecked());
+        savedInstanceState.putBoolean("viernesChecked", binding.dateChipGroup.viernesChip.chip.isChecked());
+        savedInstanceState.putBoolean("sabadoChecked", binding.dateChipGroup.sabadoChip.chip.isChecked());
+        savedInstanceState.putBoolean("domingoChecked", binding.dateChipGroup.domingoChip.chip.isChecked());
     }
 
     @Override
@@ -66,7 +82,30 @@ private FragmentAddBookingBinding binding;
 
         binding.setBookViewModel(bookViewModel);
 
+        if(savedInstanceState == null){
+            //Si se entra desde otro fragmento que la reserva empiece desde 0
+            bookViewModel.emptyBooking();
+        }
+
         bookViewModel.setCurrentFragment(2);
+
+        if(savedInstanceState != null){
+            if(savedInstanceState.getBoolean("carChecked")){
+                bookViewModel.toggleSelectedTipoPlaza(TipoPlaza.COCHE);
+                binding.motoChip.setChecked(savedInstanceState.getBoolean("motoChecked"));
+            }
+            binding.motoChip.setChecked(savedInstanceState.getBoolean("motoChecked"));
+            binding.electricChip.setChecked(savedInstanceState.getBoolean("electricChecked"));
+            binding.specialChip.setChecked(savedInstanceState.getBoolean("specialChecked"));
+
+            binding.dateChipGroup.lunesChip.chip.setChecked(savedInstanceState.getBoolean("lunesChecked"));
+            binding.dateChipGroup.martesChip.chip.setChecked(savedInstanceState.getBoolean("martesChecked"));
+            binding.dateChipGroup.miercolesChip.chip.setChecked(savedInstanceState.getBoolean("miercolesChecked"));
+            binding.dateChipGroup.juevesChip.chip.setChecked(savedInstanceState.getBoolean("juevesChecked"));
+            binding.dateChipGroup.viernesChip.chip.setChecked(savedInstanceState.getBoolean("viernesChecked"));
+            binding.dateChipGroup.sabadoChip.chip.setChecked(savedInstanceState.getBoolean("sabadoChecked"));
+            binding.dateChipGroup.domingoChip.chip.setChecked(savedInstanceState.getBoolean("domingoChecked"));
+        }
 
         bindSelectedSpot();
         bindAddBookingButton();
