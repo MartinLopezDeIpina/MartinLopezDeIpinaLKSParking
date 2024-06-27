@@ -9,6 +9,7 @@ import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -33,6 +34,23 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int screenHeight = displayMetrics.heightPixels;
+        System.out.println("Screen Height: " + screenHeight);
+
+        Resources resources = getResources();
+        int dpValue = 197; // replace with your dp value
+        int pxValue = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                dpValue,
+                resources.getDisplayMetrics()
+        );
+
+        float percentage = (float) pxValue / screenHeight * 100;
+        System.out.println("Percentage: " + percentage);
+
 
         DataBaseFiller dataBaseFiller = new DataBaseFiller();
         //dataBaseFiller.fillReservas();
