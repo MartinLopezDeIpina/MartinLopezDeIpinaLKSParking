@@ -47,6 +47,8 @@ android {
 }
 
 dependencies {
+    implementation 'com.github.Spikeysanju:MotionToast:1.4'
+
     implementation("app.futured.donut:donut:2.2.3")
 
     implementation platform('com.google.firebase:firebase-bom:33.0.0')

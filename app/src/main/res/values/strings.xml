@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">QuickSpot</string>
 
-    <string name="usuario_hint">Usuario</string>
+    <string name="usuario_hint">Correo electrónico</string>
     <string name="usuario_helper">Introduce el correo asociado a la cuenta</string>
     <string name="password_hint">Contraseña</string>
     <string name="name_hint">Correo electrónico</string>
