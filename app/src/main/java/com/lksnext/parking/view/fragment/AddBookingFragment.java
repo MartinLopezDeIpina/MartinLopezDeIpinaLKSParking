@@ -63,21 +63,28 @@ private FragmentAddBookingBinding binding;
     public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
 
-        bookViewModel.setIsEditing(false);
+        if(bookViewModel != null){
+
+            bookViewModel.setIsEditing(false);
+
+            savedInstanceState.putString("textHeading", title.getText().toString());
+            savedInstanceState.putString("textButton", addBookingButton.getText().toString());
+
+            savedInstanceState.putBoolean("carChecked", cocheChip.isChecked());
+            savedInstanceState.putBoolean("motoChecked", motoChip.isChecked());
+            savedInstanceState.putBoolean("electricChecked", electricChip.isChecked());
+            savedInstanceState.putBoolean("specialChecked", specialChip.isChecked());
+
+            savedInstanceState.putBoolean("lunesChecked", lunesChip.isChecked());
+            savedInstanceState.putBoolean("martesChecked", lunesChip.isChecked());
+            savedInstanceState.putBoolean("miercolesChecked", miercolesChip.isChecked());
+            savedInstanceState.putBoolean("juevesChecked", juevesChip.isChecked());
+            savedInstanceState.putBoolean("viernesChecked", viernesChip.isChecked());
+            savedInstanceState.putBoolean("sabadoChecked", sabadoChip.isChecked());
+            savedInstanceState.putBoolean("domingoChecked", domingoChip.isChecked());
+        }
 
 
-        savedInstanceState.putBoolean("carChecked", cocheChip.isChecked());
-        savedInstanceState.putBoolean("motoChecked", motoChip.isChecked());
-        savedInstanceState.putBoolean("electricChecked", electricChip.isChecked());
-        savedInstanceState.putBoolean("specialChecked", specialChip.isChecked());
-
-        savedInstanceState.putBoolean("lunesChecked", lunesChip.isChecked());
-        savedInstanceState.putBoolean("martesChecked", lunesChip.isChecked());
-        savedInstanceState.putBoolean("miercolesChecked", miercolesChip.isChecked());
-        savedInstanceState.putBoolean("juevesChecked", juevesChip.isChecked());
-        savedInstanceState.putBoolean("viernesChecked", viernesChip.isChecked());
-        savedInstanceState.putBoolean("sabadoChecked", sabadoChip.isChecked());
-        savedInstanceState.putBoolean("domingoChecked", domingoChip.isChecked());
     }
 
     @Override
@@ -126,6 +133,9 @@ private FragmentAddBookingBinding binding;
                 title.setText(R.string.edit_booking);
                 addBookingButton.setText(R.string.edit_booking);
             }
+
+            title.setText(savedInstanceState.getString("textHeading"));
+            addBookingButton.setText(savedInstanceState.getString("textButton"));
 
             if(savedInstanceState.getBoolean("carChecked")){
                 cocheChip.setChecked(true);
