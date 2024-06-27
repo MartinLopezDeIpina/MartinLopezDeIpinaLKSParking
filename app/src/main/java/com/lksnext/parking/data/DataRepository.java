@@ -1,5 +1,6 @@
 package com.lksnext.parking.data;
 
+import android.telecom.Call;
 import android.util.Patterns;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
+import com.lksnext.parking.domain.callbacks.EmailVerificationCallback;
 import com.lksnext.parking.domain.callbacks.LoginCallback;
 import com.lksnext.parking.domain.callbacks.RegisterCallback;
 import com.lksnext.parking.domain.Usuario;
@@ -19,6 +21,8 @@ public class DataRepository {
 
     private static DataRepository instance;
     private FirebaseAuth mAuth;
+    private FirebaseUser pendingFirebaseUser;
+    private Usuario pendingUser;
     private DataBaseManager dbManager;
     private DataRepository(){
         mAuth = FirebaseAuth.getInstance();
@@ -55,7 +59,13 @@ public class DataRepository {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     FirebaseUser user = mAuth.getCurrentUser();
-                    callback.onSuccess();
+                    if (user != null) {
+                        if (user.isEmailVerified()) {
+                            callback.onSuccess();
+                        } else {
+                            callback.onFailure(LoginErrorType.EMAIL_NOT_VERIFIED);
+                        }
+                    }
                 } else {
                     LoginErrorType error = getLoginErrorMessage(task.getException());
                     callback.onFailure(error);
@@ -81,9 +91,9 @@ public class DataRepository {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
 
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Usuario usuario = new Usuario(user.getUid(), name, email, phone);
-                            dbManager.addUserToDB(usuario);
+                            pendingFirebaseUser = mAuth.getCurrentUser();
+                            pendingUser = new Usuario(pendingFirebaseUser.getUid(), name, email, phone);
+
                             callback.onSuccess();
 
                         } else {
@@ -92,6 +102,20 @@ public class DataRepository {
                         }
                     }
                 });
+    }
+
+    public void sendVerificationEmail(EmailVerificationCallback callback){
+        pendingFirebaseUser.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    dbManager.addUserToDB(pendingUser);
+                    callback.onSuccess();
+                } else {
+                    callback.onFailure(RegisterErrorType.UNKNOWN_ERROR);
+                }
+            }
+        });
     }
 
     private RegisterErrorType getRegisterErrorMessage(Exception exception) {

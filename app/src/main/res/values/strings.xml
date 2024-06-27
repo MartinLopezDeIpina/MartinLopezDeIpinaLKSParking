@@ -83,6 +83,6 @@
     <string name="confirm_email">Confirmar correo</string>
     <string name="email_sent">Hemos enviado un correo de verificación a su correo electrónico</string>
     <string name="click_button">Haga click en el botón de verificar en el correo</string>
-    <string name="resend">Reenviar</string>
+    <string name="accept">Aceptar</string>
 
 </resources>

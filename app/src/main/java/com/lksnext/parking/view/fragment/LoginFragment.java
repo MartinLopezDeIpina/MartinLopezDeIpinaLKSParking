@@ -143,6 +143,7 @@ public class LoginFragment extends Fragment {
                 case EMPTY_EMAIL:
                 case INVALID_EMAIL:
                 case USER_NOT_FOUND:
+                case EMAIL_NOT_VERIFIED:
                     binding.email.setError(error.getMessage());
                     break;
                 case EMPTY_PASSWORD:
@@ -150,6 +151,7 @@ public class LoginFragment extends Fragment {
                 case WRONG_PASSWORD:
                     binding.password.setError(error.getMessage());
                     break;
+
                 case UNKNOWN_ERROR:
                     binding.email.setError("Error en el login");
                     binding.password.setError("Error en el login");
