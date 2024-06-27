@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -33,6 +34,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import www.sanju.motiontoast.MotionToast;
+import www.sanju.motiontoast.MotionToastStyle;
 
 public class AddBookingFragment extends Fragment {
 private FragmentAddBookingBinding binding;
@@ -234,10 +238,34 @@ private FragmentAddBookingBinding binding;
                     generalProgressBar.setVisibility(View.GONE);
                     mainViewModel.updateReservas();
                     bookViewModel.setNavigateToMainFragment(true);
+
+                    setSuccessToast();
                 }
             });
         });
     }
+
+    private void setSuccessToast() {
+        Long plazaID = bookViewModel.getSelectedSpot().getValue();
+        String toastTitle = "Reserva añadida";
+        String toastMessage = String.format("Reserva de plaza %s añadida correctamente", plazaID);
+        if(bookViewModel.getIsEditing()){
+            toastTitle = "Reserva editada";
+            toastMessage = String.format("Reserva de plaza %s editada correctamente", plazaID);
+        }
+
+
+        MotionToast.Companion.createColorToast(
+                getActivity(),
+                toastTitle,
+                toastMessage,
+                MotionToastStyle.SUCCESS,
+                MotionToast.GRAVITY_BOTTOM,
+                MotionToast.LONG_DURATION,
+                ResourcesCompat.getFont(getActivity(),R.font.robotobold)
+        );
+    }
+
     private void bindProgressBars(){
         hoursProgressBar = binding.hourChipProgressBar;
         spotsProgressBar = binding.plazaRecyclerProgressBar;
