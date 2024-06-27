@@ -348,6 +348,21 @@ public class DataBaseManager {
         });
 
         return result;
+    }
 
-}
+    public LiveData<Boolean> getUserExists(String email) {
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+        db.collection("usuario")
+                .whereEqualTo("email", email)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                        result.setValue(!documents.isEmpty());
+                    } else {
+                        result.setValue(false);
+                    }
+                });
+        return result;
+    }
 }

@@ -86,5 +86,9 @@
     <string name="accept">Aceptar</string>
     <string name="remember_spam">Si no lo encuentras en tu bandeja de entrada, recuerda revisar la carpeta de spam o de correo no deseado</string>
 
+    <string name="password_recovery">Recuperar constraseña</string>
+    <string name="password_recovery_message">No te preocupes, te enviaremos un correo para cambiar la contraseña</string>
+
+
 
 </resources>

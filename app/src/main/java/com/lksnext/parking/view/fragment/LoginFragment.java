@@ -30,10 +30,13 @@ import com.lksnext.parking.view.activity.LoginActivity;
 import com.lksnext.parking.view.activity.MainActivity;
 import com.lksnext.parking.viewmodel.LoginViewModel;
 
+import org.w3c.dom.Text;
+
 public class LoginFragment extends Fragment {
 
     private FragmentLoginBinding binding;
     private LoginViewModel loginViewModel;
+    private TextView forgotPassButton;
     private View view;
     public LoginFragment() {
         // Es necesario un constructor vacio
@@ -53,6 +56,7 @@ public class LoginFragment extends Fragment {
         bindRegisterButton();
         bindLoginButton();
         bindDisableInputErrorStates();
+        bindForgotPassword();
 
         observeLogged();
         observeLoginError();
@@ -73,6 +77,13 @@ public class LoginFragment extends Fragment {
             String email = binding.emailText.getText().toString();
             String password = binding.passwordText.getText().toString();
             loginViewModel.loginUser(email, password);
+        });
+    }
+    private void bindForgotPassword(){
+        forgotPassButton = view.findViewById(R.id.forgotPassButton);
+        forgotPassButton.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(R.id.forgot_password_fragment);
         });
     }
 
