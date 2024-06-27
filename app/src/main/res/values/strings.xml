@@ -82,7 +82,9 @@
 
     <string name="confirm_email">Confirmar correo</string>
     <string name="email_sent">Hemos enviado un correo de verificación a su correo electrónico</string>
-    <string name="click_button">Haga click en el botón de verificar en el correo</string>
+    <string name="click_button">Haz click en el enlace de verificación del correo</string>
     <string name="accept">Aceptar</string>
+    <string name="remember_spam">Si no lo encuentras en tu bandeja de entrada, recuerda revisar la carpeta de spam o de correo no deseado</string>
+
 
 </resources>
