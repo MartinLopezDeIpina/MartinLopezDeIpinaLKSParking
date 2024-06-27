@@ -45,6 +45,7 @@ private FragmentAddBookingBinding binding;
     private ProgressBar generalProgressBar;
     private MaterialButton addBookingButton;
     private Chip lunesChip, martesChip, miercolesChip, juevesChip, viernesChip, sabadoChip, domingoChip;
+    private Chip cocheChip, motoChip, electricChip, specialChip;
     private List<Chip> hourChips;
     private LinearLayout noSpotIcon;
     private TextView title;
@@ -56,24 +57,27 @@ private FragmentAddBookingBinding binding;
     public void onDestroyView() {
         super.onDestroyView();
 
-        bookViewModel.emptyBooking();
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putBoolean("carChecked", binding.cocheChip.isChecked());
-        savedInstanceState.putBoolean("motoChecked", binding.motoChip.isChecked());
-        savedInstanceState.putBoolean("electricChecked", binding.electricChip.isChecked());
-        savedInstanceState.putBoolean("specialChecked", binding.specialChip.isChecked());
 
-        savedInstanceState.putBoolean("lunesChecked", binding.dateChipGroup.lunesChip.chip.isChecked());
-        savedInstanceState.putBoolean("martesChecked", binding.dateChipGroup.martesChip.chip.isChecked());
-        savedInstanceState.putBoolean("miercolesChecked", binding.dateChipGroup.miercolesChip.chip.isChecked());
-        savedInstanceState.putBoolean("juevesChecked", binding.dateChipGroup.juevesChip.chip.isChecked());
-        savedInstanceState.putBoolean("viernesChecked", binding.dateChipGroup.viernesChip.chip.isChecked());
-        savedInstanceState.putBoolean("sabadoChecked", binding.dateChipGroup.sabadoChip.chip.isChecked());
-        savedInstanceState.putBoolean("domingoChecked", binding.dateChipGroup.domingoChip.chip.isChecked());
+        bookViewModel.setIsEditing(false);
+
+
+        savedInstanceState.putBoolean("carChecked", cocheChip.isChecked());
+        savedInstanceState.putBoolean("motoChecked", motoChip.isChecked());
+        savedInstanceState.putBoolean("electricChecked", electricChip.isChecked());
+        savedInstanceState.putBoolean("specialChecked", specialChip.isChecked());
+
+        savedInstanceState.putBoolean("lunesChecked", lunesChip.isChecked());
+        savedInstanceState.putBoolean("martesChecked", lunesChip.isChecked());
+        savedInstanceState.putBoolean("miercolesChecked", miercolesChip.isChecked());
+        savedInstanceState.putBoolean("juevesChecked", juevesChip.isChecked());
+        savedInstanceState.putBoolean("viernesChecked", viernesChip.isChecked());
+        savedInstanceState.putBoolean("sabadoChecked", sabadoChip.isChecked());
+        savedInstanceState.putBoolean("domingoChecked", domingoChip.isChecked());
     }
 
     @Override
@@ -86,6 +90,10 @@ private FragmentAddBookingBinding binding;
         binding.setBookViewModel(bookViewModel);
 
         bookViewModel.setCurrentFragment(2);
+
+        if(savedInstanceState == null){
+            bookViewModel.emptyBooking();
+        }
 
 
         bindSelectedSpot();
@@ -112,30 +120,29 @@ private FragmentAddBookingBinding binding;
 
 
         if(savedInstanceState != null){
-
             if(bookViewModel.getIsEditing()){
+                bookViewModel.deleteEditedBookingfromDB();
                 title.setText(R.string.edit_booking);
                 addBookingButton.setText(R.string.edit_booking);
             }
 
             if(savedInstanceState.getBoolean("carChecked")){
-                bookViewModel.toggleSelectedTipoPlaza(TipoPlaza.COCHE);
+                cocheChip.setChecked(true);
             }
             if(savedInstanceState.getBoolean("motoChecked")){
-                bookViewModel.toggleSelectedTipoPlaza(TipoPlaza.MOTO);
+                motoChip.setChecked(true);
             }
             if(savedInstanceState.getBoolean("electricChecked")){
-                bookViewModel.toggleSelectedTipoPlaza(TipoPlaza.ELECTRICO);
+                electricChip.setChecked(true);
             }
             if(savedInstanceState.getBoolean("specialChecked")){
-                bookViewModel.toggleSelectedTipoPlaza(TipoPlaza.DISCAPACITADO);
+                specialChip.setChecked(true);
             }
 
             boolean lunesChecked = savedInstanceState.getBoolean("lunesChecked");
             lunesChip.post(new Runnable() {
                 @Override
                 public void run() {
-                    bookViewModel.toggleDia(0);
                     lunesChip.setChecked(lunesChecked);
                 }
             });
@@ -143,7 +150,6 @@ private FragmentAddBookingBinding binding;
             martesChip.post(new Runnable() {
                 @Override
                 public void run() {
-                    bookViewModel.toggleDia(1);
                     martesChip.setChecked(martesChecked);
                 }
             });
@@ -151,7 +157,6 @@ private FragmentAddBookingBinding binding;
             miercolesChip.post(new Runnable() {
                 @Override
                 public void run() {
-                    bookViewModel.toggleDia(2);
                     miercolesChip.setChecked(miercolesChecked);
                 }
             });
@@ -159,7 +164,6 @@ private FragmentAddBookingBinding binding;
             juevesChip.post(new Runnable() {
                 @Override
                 public void run() {
-                    bookViewModel.toggleDia(3);
                     juevesChip.setChecked(juevesChecked);
                 }
             });
@@ -167,7 +171,6 @@ private FragmentAddBookingBinding binding;
             viernesChip.post(new Runnable() {
                 @Override
                 public void run() {
-                    bookViewModel.toggleDia(4);
                     viernesChip.setChecked(viernesChecked);
                 }
             });
@@ -175,7 +178,6 @@ private FragmentAddBookingBinding binding;
             sabadoChip.post(new Runnable() {
                 @Override
                 public void run() {
-                    bookViewModel.toggleDia(5);
                     sabadoChip.setChecked(sabadoChecked);
                 }
             });
@@ -183,7 +185,6 @@ private FragmentAddBookingBinding binding;
             domingoChip.post(new Runnable() {
                 @Override
                 public void run() {
-                    bookViewModel.toggleDia(6);
                     domingoChip.setChecked(domingoChecked);
                 }
             });
@@ -195,6 +196,9 @@ private FragmentAddBookingBinding binding;
     @Override
     public void onPause(){
         super.onPause();
+        bookViewModel.addEditingReservationIfEditCancelled();
+        bookViewModel.emptyBookingBelowData();
+        bookViewModel.setEditingSpotAlreadySet(false);
     }
 
     private void bindSelectedSpot(){
@@ -283,16 +287,21 @@ private FragmentAddBookingBinding binding;
     }
 
     private void bindSelectedTipoPlaza(){
-        binding.cocheChip.setOnClickListener(v -> {
+        cocheChip = binding.cocheChip;
+        motoChip = binding.motoChip;
+        electricChip = binding.electricChip;
+        specialChip = binding.specialChip;
+
+        cocheChip.setOnClickListener(v -> {
             bookViewModel.toggleSelectedTipoPlaza(TipoPlaza.COCHE);
         });
-        binding.motoChip.setOnClickListener(v -> {
+        motoChip.setOnClickListener(v -> {
             bookViewModel.toggleSelectedTipoPlaza(TipoPlaza.MOTO);
         });
-        binding.electricChip.setOnClickListener(v -> {
+        electricChip.setOnClickListener(v -> {
             bookViewModel.toggleSelectedTipoPlaza(TipoPlaza.ELECTRICO);
         });
-        binding.specialChip.setOnClickListener(v -> {
+        specialChip.setOnClickListener(v -> {
             bookViewModel.toggleSelectedTipoPlaza(TipoPlaza.DISCAPACITADO);
         });
 

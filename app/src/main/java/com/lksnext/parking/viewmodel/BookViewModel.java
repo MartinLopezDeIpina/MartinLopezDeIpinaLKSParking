@@ -186,16 +186,19 @@ public class BookViewModel extends ViewModel {
         this.editingHoursAlredySet = false;
         this.reservaCompuestaToEdit = reservaCompuesta;
         this.reservationsToEdit = reservations;
-        boolean isReservaCompuesta = reservaCompuesta != null;
+
+        deleteEditedBookingfromDB();
+        setEditReservationValues();
+    }
+    public void deleteEditedBookingfromDB(){
+        boolean isReservaCompuesta = reservaCompuestaToEdit != null;
 
         //Eliminarla para que al editar salgan los valores disponibles
         //En el onPause del fragmento se vuelve a añadir por si se cancela la edición
-        reservations.forEach(reserva -> db.deleteBooking(reserva.getId()));
+        reservationsToEdit.forEach(reserva -> db.deleteBooking(reserva.getId()));
         if(isReservaCompuesta){
-            db.deleteReservaCompuesta(reservaCompuesta.getId());
+            db.deleteReservaCompuesta(reservaCompuestaToEdit.getId());
         }
-
-        setEditReservationValues();
     }
     private void setEditReservationValues(){
         TipoPlaza tipoPlaza = this.reservationsToEdit.get(0).getTipoPlaza();
