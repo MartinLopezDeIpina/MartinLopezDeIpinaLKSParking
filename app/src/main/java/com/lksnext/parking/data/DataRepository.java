@@ -3,6 +3,7 @@ package com.lksnext.parking.data;
 import android.util.Patterns;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -125,5 +126,28 @@ public class DataRepository {
             message = RegisterErrorType.UNKNOWN_ERROR;
         }
         return message;
+    }
+
+    public void emailValid(String email, LoginCallback loginCallback) {
+        if(email.isEmpty()){
+            loginCallback.onFailure(LoginErrorType.EMPTY_EMAIL);
+            return;
+        }
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            loginCallback.onFailure(LoginErrorType.INVALID_EMAIL);
+            return;
+        }
+        LiveData<Boolean> userExists = dbManager.getUserExists(email);
+        userExists.observeForever(exists -> {
+            if(exists){
+                loginCallback.onSuccess();
+            }else{
+                loginCallback.onFailure(LoginErrorType.USER_NOT_FOUND);
+            }
+        });
+    }
+
+    public void sendPasswordResetEmail(String email, OnCompleteListener<Void> onCompleteListener) {
+        mAuth.sendPasswordResetEmail(email).addOnCompleteListener(onCompleteListener);
     }
 }
