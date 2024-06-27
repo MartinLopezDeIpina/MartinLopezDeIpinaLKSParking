@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -26,6 +27,9 @@ import com.lksnext.parking.data.LoginErrorType;
 import com.lksnext.parking.data.callbacks.LoginCallback;
 import com.lksnext.parking.databinding.FragmentForgotPasswordBinding;
 import com.lksnext.parking.viewmodel.RegisterViewModel;
+
+import www.sanju.motiontoast.MotionToast;
+import www.sanju.motiontoast.MotionToastStyle;
 
 public class ForgotPasswordFragment extends Fragment {
     private FragmentForgotPasswordBinding binding;
@@ -75,7 +79,15 @@ public class ForgotPasswordFragment extends Fragment {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(getActivity(), String.format("Email de restauración enviado a la dirección %s", email), Toast.LENGTH_SHORT).show();
+                                MotionToast.Companion.createColorToast(
+                                        getActivity(),
+                                        "Email enviado",
+                                        "Email de recuperación correctamente enviado",
+                                        MotionToastStyle.SUCCESS,
+                                        MotionToast.GRAVITY_BOTTOM,
+                                        MotionToast.LONG_DURATION,
+                                        ResourcesCompat.getFont(getActivity(),R.font.robotobold)
+                                );
                                 progressbar.setVisibility(View.GONE);
                                 navController.navigate(R.id.login_fragment);
                             } else {

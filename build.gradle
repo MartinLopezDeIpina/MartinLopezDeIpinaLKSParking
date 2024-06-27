@@ -15,5 +15,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        //Para el toasty toaster
+        maven { url 'https://jitpack.io' }
     }
 }
