@@ -1,6 +1,5 @@
 package com.lksnext.parking.data;
 
-import android.telecom.Call;
 import android.util.Patterns;
 
 import androidx.annotation.NonNull;
@@ -12,9 +11,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
-import com.lksnext.parking.domain.callbacks.EmailVerificationCallback;
-import com.lksnext.parking.domain.callbacks.LoginCallback;
-import com.lksnext.parking.domain.callbacks.RegisterCallback;
+import com.lksnext.parking.data.callbacks.EmailVerificationCallback;
+import com.lksnext.parking.data.callbacks.LoginCallback;
+import com.lksnext.parking.data.callbacks.RegisterCallback;
 import com.lksnext.parking.domain.Usuario;
 
 public class DataRepository {

@@ -38,7 +38,6 @@ public class ConfirmEmailFragmnet extends Fragment {
 
         bindButtonAtras();
         bindButtonAceptar();
-        bindSentText();
 
         return binding.getRoot();
     }
