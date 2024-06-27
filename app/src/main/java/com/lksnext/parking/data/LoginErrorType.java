@@ -7,7 +7,8 @@ public enum LoginErrorType {
     INVALID_PASSWORD("Introduce una contraseña válida"),
     USER_NOT_FOUND("Usuario no encontrado"),
     WRONG_PASSWORD("Contraseña incorrecta"),
-    UNKNOWN_ERROR("Error al iniciar sesión");
+    UNKNOWN_ERROR("Error al iniciar sesión"),
+    EMAIL_NOT_VERIFIED("Debes verificar tu email");
 
     private String message;
 

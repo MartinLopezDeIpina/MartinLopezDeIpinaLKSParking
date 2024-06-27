@@ -15,4 +15,8 @@ app:startDestination="@id/login_fragment">
     android:id="@+id/register_fragment"
     android:name="com.lksnext.parking.view.fragment.RegisterFragment"
     tools:layout="@layout/fragment_register"/>
+<fragment
+    android:id="@+id/confimrm_email_fragment"
+    android:name="com.lksnext.parking.view.fragment.ConfirmEmailFragmnet"
+    tools:layout="@layout/fragment_confirm_email"/>
 </navigation>

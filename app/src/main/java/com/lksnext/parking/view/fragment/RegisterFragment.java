@@ -18,6 +18,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.lksnext.parking.R;
 import com.lksnext.parking.databinding.FragmentProfileBinding;
 import com.lksnext.parking.databinding.FragmentRegisterBinding;
@@ -30,6 +32,7 @@ public class RegisterFragment extends Fragment {
 
         private RegisterViewModel registerViewModel;
         private FragmentRegisterBinding binding;
+        private NavController navController;
         public RegisterFragment() {
             // Es necesario un constructor vacio
         }
@@ -45,14 +48,21 @@ public class RegisterFragment extends Fragment {
                 bindReturnButton();
                 bindCreateAccountButton();
                 bindDisableInputErrorStates();
-                bindRegisteredEmail();
                 observeRegisterError();
+                bindVerificationPendingEmail();
 
                 return binding.getRoot();
         }
+
+        @Override
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+                super.onViewCreated(view, savedInstanceState);
+                navController = Navigation.findNavController(view);
+        }
+
         private void bindReturnButton(){
                 binding.returning.setOnClickListener(v -> {
-                        NavController navController = Navigation.findNavController(v);
+                        navController = Navigation.findNavController(v);
                         navController.navigate(R.id.login_fragment);
                 });
         }
@@ -73,16 +83,11 @@ public class RegisterFragment extends Fragment {
                 });
         }
 
-        private void bindRegisteredEmail(){
-            registerViewModel.getRegisteredEmail().observe(getViewLifecycleOwner(), email -> {
-                if (email == null) return;
-
-                View view = getView();
-                if (view != null) {
-                    NavController navController = Navigation.findNavController(view);
-                    navController.navigate(R.id.login_fragment);
-                }
-            });
+        private void bindVerificationPendingEmail(){
+                registerViewModel.getPendingVerificationEmail().observe(getViewLifecycleOwner(), email -> {
+                        if (email == null) return;
+                        navController.navigate(R.id.confimrm_email_fragment);
+                });
         }
 
         private boolean validateInputs(String email, String password, String checkPassword, String user, String phone, boolean checked) {
