@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 public class Parking {
     private static Parking instance;
-
     private List<Reserva> reservas;
     private List<ReservaCompuesta> reservasCompuestas;
     private MutableLiveData<List<Plaza>> plazas = new MutableLiveData<>();
@@ -38,6 +37,9 @@ public class Parking {
                .map(Plaza::getId)
                .collect(Collectors.toList());
     }
+    public void setUsuario(Usuario usuario){
+        this.usuario = usuario;
+    }
     public void setPlazas(List<Plaza> plazas){
        this.plazas.setValue(plazas);
     }
@@ -46,6 +48,12 @@ public class Parking {
     }
     public void setReservasCompuestas(List<ReservaCompuesta> compuestas){
         reservasCompuestas.addAll(compuestas);
+    }
+    public ReservaCompuesta getReservaCompuesta(String reservaID){
+        return reservasCompuestas.stream()
+                .filter(reserva -> reserva.getId().equals(reservaID))
+                .findFirst()
+                .orElse(null);
     }
     public List<Reserva> getReservas(){
         return reservas;
@@ -58,6 +66,12 @@ public class Parking {
     }
     public List<ReservaCompuesta> getReservasCompuestas(){
         return reservasCompuestas;
+    }
+    public ReservaCompuesta getReservaCompuestaThatContains(String reservationID) {
+        return getReservasCompuestas().stream()
+                .filter(reservaCompuesta -> reservaCompuesta.getReservasID().contains(reservationID))
+                .findFirst()
+                .orElse(null);
     }
     public TipoPlaza getTipoPlazaReserva(Long plazaID){
         return getPlazas().stream()

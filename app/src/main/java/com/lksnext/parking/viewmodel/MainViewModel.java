@@ -40,12 +40,11 @@ public class MainViewModel extends ViewModel {
     }
     private final MediatorLiveData<Pair<List<Reserva>, List<ReservaCompuesta>>> combinedReservas = new MediatorLiveData<>();
     private final MutableLiveData<List<Reserva>> reservasPasadas = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> navigateToBookingFragment = new MutableLiveData<>();
-    private  Integer bookingNavigationPosition = 0;
     private final MutableLiveData<String> bookingModified = new MutableLiveData<>();
-
-    private final MutableLiveData<Boolean> navigateToMainFragment = new MutableLiveData<>();
     private AtomicBoolean isFirstTime;
+
+    private final MutableLiveData<Pair<Integer, Boolean>> shouldNavigateTooBookingFragment = new MutableLiveData<>();
+
 
     public MainViewModel() {
         isFirstTime = new AtomicBoolean(true);
@@ -108,14 +107,18 @@ public class MainViewModel extends ViewModel {
             }
             for(ReservaCompuesta reservaCompuesta : reservasCompuestasActivas){
                 for(String reservaID : reservaCompuesta.getReservasID()){
+                    int numReservasActivas = 0;
                     List<String> reservasActivasID = activas.stream().map(Reserva::getId).collect(Collectors.toList());
                     //En caso de que la reserva haya caducado o haya sido eliminada no añadir la reserva compuesta
                     if(reservasActivasID.contains(reservaID)){
+                        numReservasActivas++;
                         reservasCompActivas.add(reservaCompuesta);
                         break;
                     }
-                    //En caso de que la reserva haya caducado o haya sido eliminada eliminar la reserva compuesta
-                    DataBaseManager.getInstance().deleteReservaCompuesta(reservaCompuesta.getId());
+                    //En caso de que todas las reservas de la reserva compuesta hayan caducado o hayan sido eliminadas eliminar la reserva compuesta de la bd
+                    if(numReservasActivas == 0){
+                        DataBaseManager.getInstance().deleteReservaCompuesta(reservaCompuesta.getId());
+                    }
                 }
             }
 
@@ -127,14 +130,6 @@ public class MainViewModel extends ViewModel {
 
     }
 
-
-    public void navigateToBookingFragment(boolean shouldNavigate, Integer position) {
-        setBookingNavigationPosition(position);
-        navigateToBookingFragment.setValue(shouldNavigate);
-    }
-    public LiveData<Boolean> getNavigateToBookingFragment() {
-        return navigateToBookingFragment;
-    }
     public LiveData<String> getBookingModified() {
         return bookingModified;
     }
@@ -142,20 +137,14 @@ public class MainViewModel extends ViewModel {
         bookingModified.setValue(reservationID);
     }
 
-    public Integer getBookingNavigationPosition() {
-        return bookingNavigationPosition;
+    public LiveData<Pair<Integer, Boolean>> getShouldNavigateTooBookingFragment() {
+        return shouldNavigateTooBookingFragment;
+    }
+    public void setShouldNavigateTooBookingFragment(Pair<Integer, Boolean> position) {
+        shouldNavigateTooBookingFragment.setValue(position);
     }
 
-    public void setBookingNavigationPosition(Integer position) {
-        bookingNavigationPosition = position;
-    }
 
-    public void navigateToMainFragment(boolean shouldNavigate) {
-        navigateToMainFragment.setValue(shouldNavigate);
-    }
-    public LiveData<Boolean> getNavigateToMainFragment() {
-        return navigateToMainFragment;
-    }
     public LiveData<Boolean> deleteBooking(String reservationID) {
         return DataBaseManager.getInstance().deleteBooking(reservationID);
     }
@@ -182,5 +171,4 @@ public class MainViewModel extends ViewModel {
     public LiveData<Integer[]> getCantidadPlazasOcupadas() {
         return DataBaseManager.getInstance().getPlazasOcupadas();
     }
-
 }

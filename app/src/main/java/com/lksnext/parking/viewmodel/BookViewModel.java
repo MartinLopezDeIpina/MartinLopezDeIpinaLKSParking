@@ -14,13 +14,12 @@ import com.lksnext.parking.domain.Reserva;
 import com.lksnext.parking.domain.ReservaCompuesta;
 import com.lksnext.parking.domain.TipoPlaza;
 import com.lksnext.parking.util.DateUtils;
+import com.lksnext.parking.util.SingleLiveEvent;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -29,6 +28,11 @@ import java.util.stream.Collectors;
 public class BookViewModel extends ViewModel {
     private Parking parking = Parking.getInstance();
     private DataBaseManager db = DataBaseManager.getInstance();
+
+    private final MutableLiveData<Integer> navigateToBookingFragment = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> navigateToMainFragment = new MutableLiveData<>();
+    private int currentFragment;
+
     private String lastSelectedHour;
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>(true);
     private MutableLiveData<TipoPlaza> selectedTipoPlaza = new MutableLiveData<>();
@@ -37,8 +41,22 @@ public class BookViewModel extends ViewModel {
     private MutableLiveData<String> selectedHora2 = new MutableLiveData<>();
     private MutableLiveData<List<String>> intermediateSelectedHours = new MutableLiveData<>();
     private MutableLiveData<String> unselectedHora = new MutableLiveData<>();
-    private MutableLiveData<List<Long>> availableSpots = new MutableLiveData<>();
+    private SingleLiveEvent<List<Long>> availableSpots = new SingleLiveEvent<>();
     private MutableLiveData<Long> selectedSpot = new MutableLiveData<>();
+
+    private Boolean isEditing;
+    private boolean editingHoursAlredySet;
+    private boolean editSuccesful;
+    private boolean editSpotAlredySet;
+    private List<Reserva> reservationsToEdit;
+    private ReservaCompuesta reservaCompuestaToEdit;
+    private TipoPlaza editingBookingTipoPlaza;
+    private List<Integer> editingBookingDias;
+    private String editingBookingHora1;
+    private String editingBookingHora2;
+    private Long editingBookingSpot;
+
+
     private Integer[] dayNumbers = new Integer[7];
     public LiveData<Boolean> getIsLoading() {
         return isLoading;
@@ -67,6 +85,9 @@ public class BookViewModel extends ViewModel {
     public LiveData<List<Long>> getAvailableSpots() {
         return availableSpots;
     }
+    public void setAvailableSpots(List<Long> availableSpots) {
+        this.availableSpots.setValue(availableSpots);
+    }
     public String getLastSelectedHour() {
         return lastSelectedHour;
     }
@@ -85,6 +106,133 @@ public class BookViewModel extends ViewModel {
     public void setIntermediateSelectedHours(List<String> horas) {
         intermediateSelectedHours.setValue(horas);
     }
+
+
+    public void setCurrentFragment(int currentFragment) {
+        this.currentFragment = currentFragment;
+    }
+    public int getCurrentFragment() {
+        return currentFragment;
+    }
+    public void setNavigateToBookingFragment(Integer navigateToBookingFragment) {
+        this.navigateToBookingFragment.setValue(navigateToBookingFragment);
+        this.currentFragment = navigateToBookingFragment;
+    }
+    public LiveData<Integer> getNavigateToBookingFragment() {
+        return navigateToBookingFragment;
+    }
+    public void setNavigateToMainFragment(Boolean navigateToMainFragment) {
+        this.navigateToMainFragment.setValue(navigateToMainFragment);
+    }
+    public LiveData<Boolean> getNavigateToMainFragment() {
+        return navigateToMainFragment;
+    }
+
+
+    public boolean getEditSuccesful() {
+        return editSuccesful;
+    }
+
+    public void setEditSuccesful(boolean b){
+        this.editSuccesful = b;
+    }
+    public void setIsEditing(boolean isEditing){
+        this.isEditing = isEditing;
+    }
+    public boolean getIsEditing(){
+        return isEditing;
+    }
+    public TipoPlaza getEditingBookingTipoPlaza() {
+        return editingBookingTipoPlaza;
+    }
+    public List<Integer> getEditingBookingDias() {
+        return editingBookingDias;
+    }
+    public List<Integer> getEditingBookingOffsets(){
+        return editingBookingDias.stream().map(dia -> Arrays.asList(dayNumbers).indexOf(dia)).collect(Collectors.toList());
+    }
+    public String getEditingBookingHora1() {
+        return editingBookingHora1;
+    }
+    public String getEditingBookingHora2() {
+        return editingBookingHora2;
+    }
+    public Long getEditingBookingSpot() {
+        return editingBookingSpot;
+    }
+    public boolean isEditingHoursAlredySet() {
+        return editingHoursAlredySet;
+    }
+    public void setEditingHoursAlredySet(boolean b){
+        this.editingHoursAlredySet = true;
+    }
+
+    public boolean isEditingSpotAlreadySet() {
+        return editSpotAlredySet;
+    }
+    public void setEditingSpotAlreadySet(boolean b){
+        this.editSpotAlredySet = b;
+    }
+
+    public boolean getIsReservaCompuestaEdit() {
+        return reservaCompuestaToEdit != null;
+    }
+    public void setEditingReservaCompuesta(ReservaCompuesta reservaCompuesta){
+        this.reservaCompuestaToEdit = reservaCompuesta;
+    }
+
+    public void setReservationsToEdit(List<Reserva> reservations, ReservaCompuesta reservaCompuesta) {
+        this.editSuccesful = false;
+        this.editingHoursAlredySet = false;
+        this.reservaCompuestaToEdit = reservaCompuesta;
+        this.reservationsToEdit = reservations;
+
+        deleteEditedBookingfromDB();
+        setEditReservationValues();
+    }
+    public void deleteEditedBookingfromDB(){
+        boolean isReservaCompuesta = reservaCompuestaToEdit != null;
+
+        //Eliminarla para que al editar salgan los valores disponibles
+        //En el onPause del fragmento se vuelve a añadir por si se cancela la edición
+        reservationsToEdit.forEach(reserva -> db.deleteBooking(reserva.getId()));
+        if(isReservaCompuesta){
+            db.deleteReservaCompuesta(reservaCompuestaToEdit.getId());
+        }
+    }
+    private void setEditReservationValues(){
+        TipoPlaza tipoPlaza = this.reservationsToEdit.get(0).getTipoPlaza();
+        List<Integer> dias = this.reservationsToEdit.stream()
+                .map(Reserva::getFecha)
+                .map(DateUtils::getFechaDay)
+                //Si el día de la reserva no es de los próximos 7 días no incluirla porque estará caducada
+                .filter(dia -> Arrays.asList(dayNumbers).contains(dia))
+                .collect(Collectors.toList());
+        String editHora1 = this.reservationsToEdit.get(0).getHora().getHoraInicio();
+        String editHora2 = this.reservationsToEdit.get(0).getHora().getHoraFin();
+        Long plazaID = this.reservationsToEdit.get(0).getPlazaID();
+
+        this.editingBookingTipoPlaza = tipoPlaza;
+        this.editingBookingDias = dias;
+        this.editingBookingHora1 = editHora1;
+        this.editingBookingHora2 = editHora2;
+        this.editingBookingSpot = plazaID;
+    }
+
+    public void addEditingReservationIfEditCancelled() {
+        if(isEditing && !editSuccesful){
+            reservationsToEdit.forEach(reserva -> db.addBookingToDB(reserva));
+            List<String> reservasIDs = reservationsToEdit.stream().map(Reserva::getId).collect(Collectors.toList());
+            if(reservaCompuestaToEdit != null){
+                db.addReservaCompuestaToDB(FirebaseAuth.getInstance().getCurrentUser().getUid(), reservasIDs, reservaCompuestaToEdit.getPlazaID(), reservaCompuestaToEdit.getHora());
+            }
+        }
+    }
+
+    public void setSuccssEditIfEditing() {
+        editSuccesful = true;
+    }
+
 
     public void setPlazasAvailables(Boolean available) {
         MutableLiveData<Boolean> result = new MutableLiveData<>();
@@ -121,7 +269,9 @@ public class BookViewModel extends ViewModel {
             });
 
         }else{
-            availableSpots.setValue(new ArrayList<>());
+            if(availableSpots.getValue() != null && !availableSpots.getValue().isEmpty()){
+                availableSpots.setValue(new ArrayList<>());
+            }
             result.setValue(false);
         }
     }
@@ -177,6 +327,10 @@ public class BookViewModel extends ViewModel {
        selectedTipoPlaza.setValue(null);
        selectedDias.setValue(new ArrayList<>());
        emptySelectedHours();
+    }
+
+    public void emptyBookingBelowData() {
+        emptySelectedHours();
     }
 
     public void toggleDia(Integer dia_index){
@@ -308,6 +462,5 @@ public class BookViewModel extends ViewModel {
     public static Integer[] getNextSevenDays() {
         return DateUtils.getNextSevenDays();
     }
-
 
 }

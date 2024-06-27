@@ -63,19 +63,35 @@ public class DateUtils {
         return sdf.format(date);
     }
 
-    public static List<String> getFormatedDays(List<Integer> dayNumbers){
+    public static List<String> getFormatedDays(List<Integer> dayNumbers) {
         List<String> formattedDays = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         for (Integer dayNumber : dayNumbers) {
+            if (calendar.get(Calendar.DAY_OF_MONTH) > dayNumber) {
+                calendar.add(Calendar.MONTH, 1);
+            }
             calendar.set(Calendar.DAY_OF_MONTH, dayNumber);
             String formattedDay = sdf.format(calendar.getTime());
             formattedDays.add(formattedDay);
+            // Reset the calendar month to the current month for the next iteration
+            calendar.setTime(new Date());
         }
-
         return formattedDays;
     }
+
+    public static int getFechaDay(String fecha){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date = sdf.parse(fecha);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            return calendar.get(Calendar.DAY_OF_MONTH);
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Invalid date format. Expected 'yyyy-MM-dd'.", e);
+        }
+}
 
     public static Integer[] getNextSevenDays() {
         Integer[] nextSevenDays = new Integer[7];
@@ -132,5 +148,9 @@ public class DateUtils {
     public static String getNowHourString() {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         return sdf.format(new Date());
+    }
+
+    public static String getHourFromInteger(Integer hour) {
+        return String.format("%02d:00", hour);
     }
 }

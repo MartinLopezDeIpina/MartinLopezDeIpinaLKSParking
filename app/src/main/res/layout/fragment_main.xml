@@ -187,7 +187,7 @@
                 android:id="@+id/chipMoto"
                 android:layout_width="75dp"
                 android:layout_height="50dp"
-                android:textColor="@color/donut_white_text"
+                android:textColor="@color/donut_black_text"
                 app:chipBackgroundColor="@color/donut_moto"
                 app:chipIcon="@drawable/moto2icon"
                 app:chipIconTint="@color/donut_black_text"

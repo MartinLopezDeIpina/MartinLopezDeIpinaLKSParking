@@ -1,5 +1,6 @@
 package com.lksnext.parking.view.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -16,29 +17,30 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.lksnext.parking.R;
 import com.lksnext.parking.databinding.FragmentBookcontainerBinding;
-import com.lksnext.parking.domain.Hora;
-import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.Reserva;
 import com.lksnext.parking.domain.ReservaCompuesta;
-import com.lksnext.parking.domain.TipoPlaza;
+import com.lksnext.parking.view.activity.OnDeleteClickListener;
 import com.lksnext.parking.view.adapter.ComposedReservationAdapter;
-import com.lksnext.parking.view.adapter.ReservationAdapter;
+import com.lksnext.parking.view.activity.OnEditClickListener;
+import com.lksnext.parking.viewmodel.BookViewModel;
 import com.lksnext.parking.viewmodel.MainViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BookActiveHistoryContainerFragment extends Fragment {
     private MainViewModel mainViewModel;
+    private BookViewModel bookViewModel;
     private RecyclerView recyclerView;
     private ComposedReservationAdapter composedAdapter;
     private ProgressBar progressBar;
+    private OnEditClickListener onEditClickListener;
+    private OnDeleteClickListener onDeleteClickListener;
 
     public BookActiveHistoryContainerFragment() {
         // Es necesario un constructor vacio
     }
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -47,6 +49,7 @@ public class BookActiveHistoryContainerFragment extends Fragment {
                 FragmentBookcontainerBinding.inflate(inflater, container, false);
 
         mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+        bookViewModel = new ViewModelProvider(requireActivity()).get(BookViewModel.class);
 
         progressBar = binding.activeBookingsProgessbar;
         progressBar.setVisibility(View.VISIBLE);
@@ -62,7 +65,7 @@ public class BookActiveHistoryContainerFragment extends Fragment {
             }else{
                 binding.noActiveBookingsIcon.setVisibility(View.GONE);
             }
-            composedAdapter = new ComposedReservationAdapter(newReservations.first, newReservations.second);
+            composedAdapter = new ComposedReservationAdapter(newReservations.first, newReservations.second, onEditClickListener, onDeleteClickListener);
             recyclerView.setAdapter(composedAdapter);
             progressBar.setVisibility(View.GONE);
         });
@@ -83,4 +86,12 @@ public class BookActiveHistoryContainerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        onEditClickListener = (OnEditClickListener) context;
+        onDeleteClickListener = (OnDeleteClickListener) context;
+    }
+
 }

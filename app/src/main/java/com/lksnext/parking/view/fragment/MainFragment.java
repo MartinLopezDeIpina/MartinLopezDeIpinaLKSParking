@@ -166,12 +166,12 @@ public class MainFragment extends Fragment {
 
     public void bindAddButton(){
         binding.addButton.setOnClickListener(v -> {
-            mainViewModel.navigateToBookingFragment(true, 1);
+            mainViewModel.setShouldNavigateTooBookingFragment(new Pair<>(2, false));
         });
     }
     public void bindViewMoreButton(){
         binding.viewMoreButton.setOnClickListener(v -> {
-            mainViewModel.navigateToBookingFragment(true, 0);
+            mainViewModel.setShouldNavigateTooBookingFragment(new Pair<>(1, false));
         });
     }
 }

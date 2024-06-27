@@ -12,14 +12,19 @@ import com.lksnext.parking.domain.Reserva;
 
 import java.util.List;
 
-import com.lksnext.parking.view.adapter.ReservationViewHolder;
+import com.lksnext.parking.view.activity.OnDeleteClickListener;
+import com.lksnext.parking.view.activity.OnEditClickListener;
 
 public class ReservationAdapter extends RecyclerView.Adapter<ReservationViewHolder> {
 
     protected final List<Reserva> reservations;
+    private OnEditClickListener onEditClickListener;
+    private OnDeleteClickListener onDeleteClickListener;
 
-    public ReservationAdapter(List<Reserva> reservations) {
+    public ReservationAdapter(List<Reserva> reservations, OnEditClickListener editListener, OnDeleteClickListener deleteListener) {
         this.reservations = reservations;
+        this.onEditClickListener = editListener;
+        this.onDeleteClickListener = deleteListener;
     }
 
     @NonNull
@@ -32,7 +37,7 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationViewHold
     @Override
     public void onBindViewHolder(@NonNull ReservationViewHolder holder, int position) {
         Reserva reservation = reservations.get(position);
-        holder.bind(reservation);
+        holder.bind(reservation, onEditClickListener, onDeleteClickListener);
     }
 
     @Override

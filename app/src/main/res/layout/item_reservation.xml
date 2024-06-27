@@ -13,6 +13,7 @@
     >
 
     <ImageButton
+        android:id="@+id/edit_button"
         android:layout_width="40dp"
         android:layout_height="40dp"
         app:backgroundTint="?attr/colorSurfaceContainerHighest"

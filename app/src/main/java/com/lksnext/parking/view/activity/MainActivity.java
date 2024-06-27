@@ -1,6 +1,7 @@
 package com.lksnext.parking.view.activity;
 
 import android.os.Bundle;
+import android.util.Pair;
 import android.util.TypedValue;
 
 import androidx.lifecycle.LiveData;
@@ -14,17 +15,21 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.lksnext.parking.R;
 import com.lksnext.parking.data.DataBaseManager;
 import com.lksnext.parking.databinding.ActivityMainBinding;
+import com.lksnext.parking.domain.Parking;
 import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.Reserva;
 import com.lksnext.parking.domain.ReservaCompuesta;
 import com.lksnext.parking.domain.Usuario;
+import com.lksnext.parking.view.fragment.DeleteBookingDialogFragment;
+import com.lksnext.parking.viewmodel.BookViewModel;
 import com.lksnext.parking.viewmodel.MainViewModel;
 
 import java.util.List;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements OnEditClickListener, OnDeleteClickListener{
 
-    MainViewModel viewModel;
+    MainViewModel mainViewModel;
+    BookViewModel bookViewModel;
     BottomNavigationView bottomNavigationView;
     ActivityMainBinding binding;
     NavController navController;
@@ -37,8 +42,9 @@ public class MainActivity extends BaseActivity {
 
         //Asignamos la vista/interfaz main (layout)
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        binding.setMainViewModel(viewModel);
+        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        bookViewModel = new ViewModelProvider(this).get(BookViewModel.class);
+        binding.setMainViewModel(mainViewModel);
         setCurrentUserDataFromDB();
 
         setContentView(binding.getRoot());
@@ -52,6 +58,8 @@ public class MainActivity extends BaseActivity {
         bottomNavigationView = binding.bottomNavigationView;
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
+        bindFragmentNavigationListeners();
+
         //Dependendiendo que boton clique el usuario de la navegacion se hacen distintas cosas
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
@@ -59,7 +67,7 @@ public class MainActivity extends BaseActivity {
                 navController.navigate(R.id.mainFragment);
                 return true;
             } else if (itemId == R.id.reservations) {
-                navController.navigate(R.id.bookFragment);
+                mainViewModel.setShouldNavigateTooBookingFragment(new Pair<>(1, false));
                 return true;
             } else if (itemId == R.id.person) {
                 navController.navigate(R.id.profileFragment);
@@ -76,14 +84,44 @@ public class MainActivity extends BaseActivity {
         // Establece el color de la barra de navegación
         getWindow().setNavigationBarColor(color);
 
-        setBookFragmentNavigationListener();
-        setMainFragmentNavigationListener();
     }
 
     @Override
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
     }
+
+    @Override
+    public void onEditClick(List<Reserva> reservations, ReservaCompuesta reservaCompuesta) {
+        bookViewModel.setReservationsToEdit(reservations, reservaCompuesta);
+        mainViewModel.setShouldNavigateTooBookingFragment(new Pair<>(2, true));
+    }
+
+    @Override
+    public void onDeleteClick(String reservationID, boolean esCompuesta) {
+
+        DeleteBookingDialogFragment deleteDialog = new DeleteBookingDialogFragment();
+        deleteDialog.show(getSupportFragmentManager(), "deleteDialog");
+
+        deleteDialog.getDeleteClicked().observe(this, result -> {
+            LiveData<Boolean> bookingDeleted;
+            if(result){
+                if(esCompuesta){
+                    bookingDeleted = mainViewModel.deleteReservaCompuestaAndChilds(reservationID);
+                }else{
+                    bookingDeleted = mainViewModel.deleteBooking(reservationID);
+                }
+                bookingDeleted.observeForever(bookingDeletedResult -> {
+                    if(bookingDeletedResult){
+                        mainViewModel.setBookingModified(reservationID);
+                        mainViewModel.updateReservas();
+                    }
+                });
+            }
+        });
+    }
+
+
 
     private void setCurrentUserDataFromDB(){
         setProfileData();
@@ -93,44 +131,51 @@ public class MainActivity extends BaseActivity {
     private void setProfileData(){
         LiveData<Usuario> userLiveData = dataBaseManager.getCurrenUser();
         userLiveData.observe(this, usuario -> {
-            viewModel.setUser(usuario);
+            Parking.getInstance().setUsuario(usuario);
+            mainViewModel.setUser(usuario);
         });
     }
     private void setSpotData(){
         LiveData<List<Plaza>> plazaLiveData = dataBaseManager.getParkingSpots();
         plazaLiveData.observe(this, plazas -> {
-            viewModel.setListaPlazas(plazas);
+            mainViewModel.setListaPlazas(plazas);
         });
     }
     private void setBookingData(){
         dataBaseManager.getCurrentUserBookings().observe(this, result -> {
             List<Reserva> reservas = (List<Reserva>) result[0];
             List<ReservaCompuesta> compuestas = (List<ReservaCompuesta>) result[1];
-            viewModel.setListaReservas(reservas, compuestas);
+            mainViewModel.setListaReservas(reservas, compuestas);
         });
     }
 
-    private void setBookFragmentNavigationListener(){
-        viewModel.getNavigateToBookingFragment().observe(this, shouldNavigate -> {
+    private void bindFragmentNavigationListeners(){
+        mainViewModel.getShouldNavigateTooBookingFragment().observe(this, entero -> {
+            Integer position = entero.first;
+            Boolean isEditing = entero.second;
+            if (position != 0) {
+                //Si ya está en el fragmento de reservas, no se navega
+                if(bookViewModel.getCurrentFragment() == 0){
+                    navigateToBookingFragment();
+                }
+                bookViewModel.setNavigateToBookingFragment(position);
+                bookViewModel.setIsEditing(isEditing);
+                mainViewModel.setShouldNavigateTooBookingFragment(new Pair<>(0, false));
+            }
+        });
+        bookViewModel.getNavigateToMainFragment().observe(this, shouldNavigate -> {
             if (shouldNavigate) {
-                navigateToBookingHistory();
-                viewModel.navigateToBookingFragment(false, viewModel.getBookingNavigationPosition());
+                navigateToMainFragment();
+                bookViewModel.setNavigateToMainFragment(false);
             }
         });
     }
-    private void navigateToBookingHistory(){
+
+    private void navigateToBookingFragment(){
         navController.navigate(R.id.bookFragment);
         bottomNavigationView.setSelectedItemId(R.id.reservations);
     }
 
-    private void setMainFragmentNavigationListener(){
-        viewModel.getNavigateToMainFragment().observe(this, shouldNavigate -> {
-            if (shouldNavigate) {
-                navigateToMainFragment();
-                viewModel.navigateToMainFragment(false);
-            }
-        });
-    }
     public void navigateToMainFragment(){
         navController.navigate(R.id.mainFragment);
         bottomNavigationView.setSelectedItemId(R.id.newres);

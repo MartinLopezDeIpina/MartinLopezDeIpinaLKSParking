@@ -22,6 +22,7 @@ import com.lksnext.parking.domain.Reserva;
 import com.lksnext.parking.view.adapter.ComposedReservationAdapter;
 import com.lksnext.parking.view.adapter.PassedBookingsAdapter;
 import com.lksnext.parking.view.adapter.ReservationAdapter;
+import com.lksnext.parking.viewmodel.BookViewModel;
 import com.lksnext.parking.viewmodel.MainViewModel;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class BookingHistoryFragment extends Fragment {
     RecyclerView recyclyerViewPassed;
     LinearLayout noActiveBookingsIcon;
     ProgressBar progressBar;
+    BookViewModel bookViewModel;
 
     public BookingHistoryFragment() {
         // Es necesario un constructor vacio
@@ -45,6 +47,9 @@ public class BookingHistoryFragment extends Fragment {
                 com.lksnext.parking.databinding.FragmentBookingHistoryBinding.inflate(inflater, container, false);
 
         mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+        bookViewModel = new ViewModelProvider(requireActivity()).get(BookViewModel.class);
+
+        bookViewModel.setCurrentFragment(2);
 
         BookActiveHistoryContainerFragment bookActiveHistoryContainerFragment = new BookActiveHistoryContainerFragment();
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();

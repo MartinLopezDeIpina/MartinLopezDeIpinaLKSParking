@@ -13,7 +13,11 @@ import com.lksnext.parking.domain.Parking;
 import com.lksnext.parking.domain.Reserva;
 import com.lksnext.parking.domain.TipoPlaza;
 import com.lksnext.parking.view.activity.MainActivity;
+import com.lksnext.parking.view.activity.OnDeleteClickListener;
+import com.lksnext.parking.view.activity.OnEditClickListener;
 import com.lksnext.parking.view.fragment.DeleteBookingDialogFragment;
+
+import java.util.ArrayList;
 
 public class ReservationViewHolder extends RecyclerView.ViewHolder {
     TextView reservationPlaza;
@@ -21,6 +25,8 @@ public class ReservationViewHolder extends RecyclerView.ViewHolder {
     TextView reservationHour;
     ImageView reservationVehicleImage;
     ImageButton deleteButton;
+    ImageButton editButton;
+    MainActivity mainActivity;
 
     public ReservationViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -29,9 +35,11 @@ public class ReservationViewHolder extends RecyclerView.ViewHolder {
         reservationHour = itemView.findViewById(R.id.hora);
         reservationVehicleImage = itemView.findViewById(R.id.vehiculoIcono);
         deleteButton = itemView.findViewById(R.id.delete_button);
+        editButton = itemView.findViewById(R.id.edit_button);
+        mainActivity = (MainActivity) itemView.getContext();
     }
 
-    public void bind(Reserva reservation) {
+    public void bind(Reserva reservation, OnEditClickListener listener, OnDeleteClickListener deleteListener) {
         reservationPlaza.setText(String.format("Plaza %s",reservation.getPlazaID()));
         reservationDate.setText(reservation.getFecha());
 
@@ -56,9 +64,12 @@ public class ReservationViewHolder extends RecyclerView.ViewHolder {
         }
 
         deleteButton.setOnClickListener(v -> {
-            MainActivity activity = (MainActivity) v.getContext();
-            DeleteBookingDialogFragment deleteDialog = new DeleteBookingDialogFragment(reservation.getId(), false);
-            deleteDialog.show(activity.getSupportFragmentManager(), "deleteDialog");
+            deleteListener.onDeleteClick(reservation.getId(), false);
+        });
+        editButton.setOnClickListener(v ->{
+            ArrayList<Reserva> reservations = new ArrayList<>();
+            reservations.add(reservation);
+            listener.onEditClick(reservations, null);
         });
     }
 }
