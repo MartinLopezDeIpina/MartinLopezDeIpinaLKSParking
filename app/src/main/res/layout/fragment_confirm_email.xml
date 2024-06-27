@@ -40,6 +40,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/confirm_email"
             android:layout_marginTop="50dp"
+            app:tint="@color/color_icons"
             >
 
         </ImageView>
@@ -47,6 +48,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:text="@string/email_sent"
             android:layout_marginTop="50dp"
             android:layout_marginStart="30dp"
@@ -54,8 +57,10 @@
             >
         </TextView>
         <TextView
+            android:textSize="16sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:text="@string/click_button"
             android:layout_marginTop="50dp"
             android:layout_marginStart="30dp"
@@ -66,8 +71,8 @@
             android:id="@+id/aceptar_button"
             style="@style/PrimaryButton"
             android:layout_height="wrap_content"
-            android:text="@string/resend"
-            android:layout_marginTop="50dp"
+            android:text="@string/accept"
+            android:layout_marginTop="100dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password" />
