@@ -19,6 +19,7 @@ import com.lksnext.parking.databinding.FragmentConfirmEmailBinding;
 import com.lksnext.parking.viewmodel.RegisterViewModel;
 
 public class ConfirmEmailFragmnet extends Fragment {
+    RegisterViewModel registerViewModel;
     private FragmentConfirmEmailBinding binding;
     private ImageView botonAtras;
     private Button botonAceptar;
@@ -32,10 +33,13 @@ public class ConfirmEmailFragmnet extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         binding = com.lksnext.parking.databinding.FragmentConfirmEmailBinding.inflate(inflater, container, false);
+        registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
 
 
         bindButtonAtras();
         bindButtonAceptar();
+        bindSentText();
+
         return binding.getRoot();
     }
 
@@ -53,5 +57,4 @@ public class ConfirmEmailFragmnet extends Fragment {
         botonAceptar = binding.aceptarButton;
         botonAceptar.setOnClickListener(v -> navController.navigate(R.id.login_fragment));
     }
-
 }
