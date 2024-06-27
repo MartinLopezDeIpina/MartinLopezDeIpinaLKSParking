@@ -122,6 +122,7 @@ private FragmentAddBookingBinding binding;
         if(savedInstanceState != null){
             if(bookViewModel.getIsEditing()){
                 bookViewModel.deleteEditedBookingfromDB();
+                mainViewModel.updateReservas();
                 title.setText(R.string.edit_booking);
                 addBookingButton.setText(R.string.edit_booking);
             }
