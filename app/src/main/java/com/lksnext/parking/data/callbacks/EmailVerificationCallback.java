@@ -1,4 +1,4 @@
-package com.lksnext.parking.domain.callbacks;
+package com.lksnext.parking.data.callbacks;
 
 import com.lksnext.parking.data.RegisterErrorType;
 

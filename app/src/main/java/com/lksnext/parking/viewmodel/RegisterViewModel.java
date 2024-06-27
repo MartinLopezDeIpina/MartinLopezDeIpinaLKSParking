@@ -4,11 +4,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.firebase.auth.FirebaseUser;
 import com.lksnext.parking.data.DataRepository;
 import com.lksnext.parking.data.RegisterErrorType;
-import com.lksnext.parking.domain.callbacks.EmailVerificationCallback;
-import com.lksnext.parking.domain.callbacks.RegisterCallback;
+import com.lksnext.parking.data.callbacks.EmailVerificationCallback;
+import com.lksnext.parking.data.callbacks.RegisterCallback;
 
 public class RegisterViewModel extends ViewModel {
     MutableLiveData<RegisterErrorType> registerError = new MutableLiveData<>(null);
