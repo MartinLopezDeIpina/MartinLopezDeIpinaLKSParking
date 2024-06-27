@@ -2,9 +2,9 @@
     <string name="app_name">QuickSpot</string>
 
     <string name="usuario_hint">Usuario</string>
-    <string name="usuario_helper">Introduce el correo o nombre de usuario</string>
+    <string name="usuario_helper">Introduce el correo asociado a la cuenta</string>
     <string name="password_hint">Contraseña</string>
-    <string name="name_hint">Nombre de usuario</string>
+    <string name="name_hint">Correo electrónico</string>
     <string name="confirm_pass_hint">Confirmar contraseña</string>
     <string name="email_hint">Correo electrónico</string>
     <string name="phone_hint">Número de teléfono  *opcional</string>
@@ -79,5 +79,10 @@
     <string name="no_active_bookings">Sin reservas activas</string>
     <string name="no_passed_bookings">Sin reservas pasadas</string>
     <string name="edit_booking">Editar Reserva</string>
+
+    <string name="confirm_email">Confirmar correo</string>
+    <string name="email_sent">Hemos enviado un correo de verificación a su correo electrónico</string>
+    <string name="click_button">Haga click en el botón de verificar en el correo></string>
+    <string name="resend">Reenviar</string>
 
 </resources>
