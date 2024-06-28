@@ -3,6 +3,7 @@ plugins{
     id 'androidx.navigation.safeargs'
     id 'org.sonarqube'
     id 'com.google.gms.google-services'
+    id 'org.jetbrains.kotlinx.kover' version '0.8.2'
 }
 
 sonarqube {
@@ -12,6 +13,7 @@ sonarqube {
         property "sonar.host.url", "https://sonarcloud.io"
     }
 }
+
 
 android {
     compileSdk 34
