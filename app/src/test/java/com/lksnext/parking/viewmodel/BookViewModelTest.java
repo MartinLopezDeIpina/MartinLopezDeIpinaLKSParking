@@ -7,6 +7,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
 
 import com.lksnext.parking.data.DataBaseManager;
+import com.lksnext.parking.util.LiveDataTestUtil;
+import com.lksnext.parking.viewmodel.BookViewModel;
+import com.lksnext.parking.viewmodel.MainViewModel;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,6 +23,7 @@ public class BookViewModelTest {
     private DataBaseManager db;
 
     private MockedStatic<DataBaseManager> mockStaticDb;
+    private BookViewModel bookViewModel;
 
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
@@ -29,6 +33,8 @@ public class BookViewModelTest {
        db = mock(DataBaseManager.class);
        mockStaticDb = Mockito.mockStatic(DataBaseManager.class);
        mockStaticDb.when(DataBaseManager::getInstance).thenReturn(db);
+
+       bookViewModel = new BookViewModel(db);
     }
 
     @After
@@ -42,13 +48,18 @@ public class BookViewModelTest {
     }
 
     @Test
-    public void getSelectedHora1(){
-        BookViewModel viewModel = new BookViewModel(db);
+    public void getSelectedHora1() throws InterruptedException{
+
         String expectedHora = "12:00";
+        String countValue;
 
-        viewModel.setSelectedHora1(expectedHora);
-        String actualHora = viewModel.getSelectedHora1().getValue();
+        String selectedHora = LiveDataTestUtil.getValue(bookViewModel.getSelectedHora1());
+        assertNull(selectedHora);
 
-        assertEquals(expectedHora, actualHora);
+        bookViewModel.setSelectedHora1(expectedHora);
+        countValue = LiveDataTestUtil.getValue(bookViewModel.getSelectedHora1());
+
+        assertEquals(expectedHora, countValue);
     }
+
 }

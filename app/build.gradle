@@ -3,14 +3,16 @@ plugins{
     id 'androidx.navigation.safeargs'
     id 'org.sonarqube'
     id 'com.google.gms.google-services'
-    id 'org.jetbrains.kotlinx.kover' version '0.8.2'
 }
+
+apply plugin: 'org.jetbrains.kotlinx.kover'
 
 sonarqube {
     properties {
         property "sonar.projectKey", "martinaulalks_parkinglks-martin-lopez-de-ipina"
         property "sonar.organization", "martinaulalks"
         property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/kover/report.xml"
     }
 }
 
@@ -33,6 +35,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug{
+            debuggable true
+            testCoverageEnabled true
         }
     }
 
@@ -77,10 +83,9 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0'
     implementation 'com.google.firebase:firebase-firestore:25.0.0'
 
-    testImplementation 'junit:junit:4.+'
+    testImplementation 'junit:junit:4.13.2'
     testImplementation 'androidx.arch.core:core-testing:2.2.0'
     testImplementation 'org.hamcrest:hamcrest:2.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
     testImplementation 'org.mockito:mockito-inline:3.12.4'
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
 
