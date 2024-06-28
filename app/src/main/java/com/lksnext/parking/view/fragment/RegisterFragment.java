@@ -122,7 +122,7 @@ public class RegisterFragment extends Fragment {
                         return false;
                 }
                 if (!Pattern.matches("^[a-zA-Z0-9]{1,}$", user)) {
-                        binding.userInput.setError("El nombre de usuario debe tener solo letras y números");
+                        binding.userInput.setError("El nombre debe tener solo letras y números");
                         return false;
                 }
                 return true;
