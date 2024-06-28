@@ -44,11 +44,15 @@ public class BookViewModelTest {
 
     @Test
     public void emptyBooking() {
+        System.out.println("ejecutando test emptyBooking()");
         assertTrue(true);
     }
 
     @Test
     public void getSelectedHora1() throws InterruptedException{
+
+        System.out.println("ejecutando test getSelectedHora1()");
+        System.out.println("ejecutando test getSelectedHora1()");
 
         String expectedHora = "12:00";
         String countValue;
@@ -60,6 +64,7 @@ public class BookViewModelTest {
         countValue = LiveDataTestUtil.getValue(bookViewModel.getSelectedHora1());
 
         assertEquals(expectedHora, countValue);
+        assertTrue(1 > 0);
     }
 
 }
