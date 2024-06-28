@@ -106,6 +106,12 @@
         <item name="android:fontFamily">@font/robotomedium</item>
         <item name="android:alpha">0.2</item>
     </style>
+    <style name="iconoAtrasConstrainted">
+        <item name="android:tint">?attr/colorOnSurfaceVariant</item>
+        <item name="android:layout_width">25dp</item>
+        <item name="android:layout_height">25dp</item>
+        <item name="android:layout_marginStart">30dp</item>
+    </style>
     <style name="iconoAtras">
         <item name="android:tint">?attr/colorOnSurfaceVariant</item>
         <item name="android:layout_width">25dp</item>
