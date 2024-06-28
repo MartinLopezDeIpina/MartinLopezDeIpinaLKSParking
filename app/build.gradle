@@ -3,6 +3,9 @@ plugins{
     id 'androidx.navigation.safeargs'
     id 'org.sonarqube'
     id 'com.google.gms.google-services'
+
+    id("org.jetbrains.kotlinx.kover") version "0.8.1"
+
 }
 
 apply plugin: 'org.jetbrains.kotlinx.kover'
@@ -44,26 +47,28 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     buildFeatures {
         dataBinding = true
         viewBinding true
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+    testOptions {
+        execution 'ANDROID_TEST_ORCHESTRATOR'
+        animationsDisabled true
+        unitTests.returnDefaultValues = true
     }
+
+
     namespace 'com.lksnext.parking'
 
     sourceSets {
         test {
             java.srcDirs = ['src/test/java']
-        }
-    }
-
-    testOptions {
-        unitTests.all {
-            finalizedBy 'koverXmlReport'
         }
     }
 

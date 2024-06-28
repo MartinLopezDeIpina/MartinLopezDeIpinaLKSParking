@@ -11,10 +11,6 @@ buildscript {
     }
 }
 
-plugins{
-    id 'org.jetbrains.kotlinx.kover' version '0.8.1' apply false
-}
-
 
 allprojects {
     repositories {
