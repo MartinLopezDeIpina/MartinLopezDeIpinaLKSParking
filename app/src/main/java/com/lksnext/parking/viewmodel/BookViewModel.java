@@ -1,5 +1,7 @@
 package com.lksnext.parking.viewmodel;
 
+import android.provider.ContactsContract;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -27,7 +29,7 @@ import java.util.stream.Collectors;
 
 public class BookViewModel extends ViewModel {
     private Parking parking = Parking.getInstance();
-    private DataBaseManager db = DataBaseManager.getInstance();
+    private DataBaseManager db;
 
     private final MutableLiveData<Integer> navigateToBookingFragment = new MutableLiveData<>();
     private final MutableLiveData<Boolean> navigateToMainFragment = new MutableLiveData<>();
@@ -55,6 +57,14 @@ public class BookViewModel extends ViewModel {
     private String editingBookingHora1;
     private String editingBookingHora2;
     private Long editingBookingSpot;
+
+    public BookViewModel(DataBaseManager db){
+        this.db = db;
+        dayNumbers = DateUtils.getNextSevenDays();
+    }
+    public BookViewModel(){
+        this(DataBaseManager.getInstance());
+    }
 
 
     private Integer[] dayNumbers = new Integer[7];
@@ -276,9 +286,6 @@ public class BookViewModel extends ViewModel {
         }
     }
 
-    public BookViewModel() {
-        dayNumbers = DateUtils.getNextSevenDays();
-    }
 
     public void toggleSelectedHour(String hora){
         if(Objects.equals(selectedHora1.getValue(), hora)){
