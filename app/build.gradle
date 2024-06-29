@@ -111,8 +111,8 @@ dependencies {
     androidTestImplementation('androidx.test:runner:1.6.1')
     androidTestImplementation('androidx.test.espresso:espresso-intents:3.6.1')
 
-
-
+    //para notificaciones
+    implementation 'androidx.core:core-ktx:1.13.1'
 }
 kover {
     reports {
