@@ -25,8 +25,11 @@ public class DataRepository {
     private Usuario pendingUser;
     private DataBaseManager dbManager;
     private DataRepository(){
-        mAuth = FirebaseAuth.getInstance();
-        dbManager = DataBaseManager.getInstance();
+        this(FirebaseAuth.getInstance(), DataBaseManager.getInstance());
+    }
+    public DataRepository(FirebaseAuth auth, DataBaseManager dbManager){
+        mAuth = auth;
+        this.dbManager = dbManager;
     }
 
     public static synchronized DataRepository getInstance(){
@@ -36,7 +39,7 @@ public class DataRepository {
         return instance;
     }
 
-    public void login( String email, String pass, LoginCallback callback){
+    public void login(String email, String pass, LoginCallback callback){
         if(email.isEmpty()){
             callback.onFailure(LoginErrorType.EMPTY_EMAIL);
             return;
@@ -45,7 +48,7 @@ public class DataRepository {
             callback.onFailure(LoginErrorType.EMPTY_PASSWORD);
             return;
         }
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if(!emailValidatesRegex(email)) {
             callback.onFailure(LoginErrorType.INVALID_EMAIL);
             return;
         }
@@ -55,6 +58,7 @@ public class DataRepository {
         }
 
         mAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
@@ -74,7 +78,11 @@ public class DataRepository {
         });
     }
 
-    private LoginErrorType getLoginErrorMessage(Exception exception) {
+    boolean emailValidatesRegex(String email) {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    LoginErrorType getLoginErrorMessage(Exception exception) {
         LoginErrorType message;
         if (exception instanceof FirebaseAuthInvalidCredentialsException ) {
             message = LoginErrorType.WRONG_PASSWORD;
@@ -133,7 +141,7 @@ public class DataRepository {
             loginCallback.onFailure(LoginErrorType.EMPTY_EMAIL);
             return;
         }
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if(!emailValidatesRegex(email)) {
             loginCallback.onFailure(LoginErrorType.INVALID_EMAIL);
             return;
         }
@@ -149,5 +157,9 @@ public class DataRepository {
 
     public void sendPasswordResetEmail(String email, OnCompleteListener<Void> onCompleteListener) {
         mAuth.sendPasswordResetEmail(email).addOnCompleteListener(onCompleteListener);
+    }
+
+    public void setPendingFirebaseUser(FirebaseUser pendingFirebaseUser) {
+        this.pendingFirebaseUser = pendingFirebaseUser;
     }
 }

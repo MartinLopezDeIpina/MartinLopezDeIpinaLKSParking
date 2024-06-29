@@ -131,7 +131,6 @@ public class DataBaseManager {
     }
 
 
-    //todo: hacer que las reservas solo tengan dos valores para ver si es más eficiente así
     public LiveData<List<Reserva>> getBookingsSpotDay(String dia, TipoPlaza tipoPlaza) {
         return new LiveData<List<Reserva>>() {
             @Override

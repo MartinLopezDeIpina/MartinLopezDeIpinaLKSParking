@@ -10,8 +10,17 @@ import com.lksnext.parking.data.callbacks.LoginCallback;
 
 public class LoginViewModel extends ViewModel {
 
+    private DataRepository dataRepository;
     MutableLiveData<Boolean> logged = new MutableLiveData<>(null);
     MutableLiveData<LoginErrorType> loginError = new MutableLiveData<>(null);
+
+    public LoginViewModel(DataRepository dataRepository) {
+        this.dataRepository = dataRepository;
+    }
+    public LoginViewModel() {
+        this(DataRepository.getInstance());
+    }
+
 
     public LiveData<Boolean> isLogged(){
         return logged;
@@ -21,7 +30,7 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void loginUser(String email, String password) {
-        DataRepository.getInstance().login(email, password, new LoginCallback() {
+        dataRepository.login(email, password, new LoginCallback() {
             @Override
             public void onSuccess() {
                 logged.setValue(Boolean.TRUE);
