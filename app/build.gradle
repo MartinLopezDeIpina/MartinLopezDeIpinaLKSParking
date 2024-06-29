@@ -106,12 +106,15 @@ dependencies {
 
 
 }
-
 kover {
-    currentProject {
-        instrumentation {
-            // Exclude classes from instrumentation based on method names
-            excludedClasses.addAll(".*\\.get.*", ".*\\.set.*", ".*\\.is.*")
+    reports {
+        filters {
+            excludes {
+                packages("androidx.*", "com.lksnext.parking.databinding", "com.lksnext.parking.view.*")
+                classes(
+                        "com.lksnext.parking.BR", "com.lksnext.parking.DataBinderMapperImpl", "com.lksnext.parking.DataBindingTriggerClass"
+                )
+            }
         }
     }
 }
