@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -33,7 +35,7 @@ import www.sanju.motiontoast.MotionToastStyle;
 
 public class ForgotPasswordFragment extends Fragment {
     private FragmentForgotPasswordBinding binding;
-    private MaterialButton returnButton;
+    private ImageView returnButton;
     private Button acceptButton;
     private NavController navController;
     private ProgressBar progressbar;
@@ -63,7 +65,7 @@ public class ForgotPasswordFragment extends Fragment {
     }
 
     private void bindReturnButton(){
-        returnButton = binding.aceptarButton;
+        returnButton = binding.returning;
         returnButton.setOnClickListener(v -> navController.navigate(R.id.login_fragment));
     }
 
