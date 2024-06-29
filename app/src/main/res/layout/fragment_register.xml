@@ -59,7 +59,7 @@
                 style="@style/TextInputStyle"
                 android:layout_width="313dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/usuario_hint"
+                android:hint="@string/name_hint"
                 android:inputType="text"
                 app:errorEnabled="true">
 
