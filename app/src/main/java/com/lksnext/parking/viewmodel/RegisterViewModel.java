@@ -15,6 +15,15 @@ public class RegisterViewModel extends ViewModel {
     MutableLiveData<String> registeredEmail = new MutableLiveData<>(null);
     MutableLiveData<String> pendingVerificationEmail = new MutableLiveData<>(null);
 
+    private DataRepository dataRepository;
+
+    public RegisterViewModel() {
+        this(DataRepository.getInstance());
+    }
+    public RegisterViewModel(DataRepository dataRepository) {
+        this.dataRepository = dataRepository;
+    }
+
     @Getter
     public LiveData<RegisterErrorType> getErrorMessage() {
         return registerError;
@@ -29,7 +38,7 @@ public class RegisterViewModel extends ViewModel {
     }
 
     public void registerUser(String email, String password, String name, String phone) {
-        DataRepository.getInstance().register(email, password, name, phone, new RegisterCallback() {
+        dataRepository.register(email, password, name, phone, new RegisterCallback() {
             @Override
             public void onSuccess() {
                 pendingVerificationEmail.setValue(email);
@@ -45,7 +54,7 @@ public class RegisterViewModel extends ViewModel {
 
     private void bindEmailVerification(String email){
 
-        DataRepository.getInstance().sendVerificationEmail(new EmailVerificationCallback() {
+        dataRepository.sendVerificationEmail(new EmailVerificationCallback() {
             @Override
             public void onSuccess() {
                 registeredEmail.setValue(email);
