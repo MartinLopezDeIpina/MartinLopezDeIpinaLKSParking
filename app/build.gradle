@@ -114,6 +114,7 @@ kover {
                 classes(
                         "com.lksnext.parking.BR", "com.lksnext.parking.DataBinderMapperImpl", "com.lksnext.parking.DataBindingTriggerClass"
                 )
+                annotatedBy("com.lksnext.parking.util.annotations.*")
             }
         }
     }
