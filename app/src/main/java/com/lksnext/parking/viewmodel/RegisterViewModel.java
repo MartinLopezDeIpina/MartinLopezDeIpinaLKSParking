@@ -8,18 +8,22 @@ import com.lksnext.parking.data.DataRepository;
 import com.lksnext.parking.data.RegisterErrorType;
 import com.lksnext.parking.data.callbacks.EmailVerificationCallback;
 import com.lksnext.parking.data.callbacks.RegisterCallback;
+import com.lksnext.parking.util.annotations.Getter;
 
 public class RegisterViewModel extends ViewModel {
     MutableLiveData<RegisterErrorType> registerError = new MutableLiveData<>(null);
     MutableLiveData<String> registeredEmail = new MutableLiveData<>(null);
     MutableLiveData<String> pendingVerificationEmail = new MutableLiveData<>(null);
 
+    @Getter
     public LiveData<RegisterErrorType> getErrorMessage() {
         return registerError;
     }
+    @Getter
     public LiveData<String> getRegisteredEmail() {
         return registeredEmail;
     }
+    @Getter
     public LiveData<String> getPendingVerificationEmail() {
         return pendingVerificationEmail;
     }

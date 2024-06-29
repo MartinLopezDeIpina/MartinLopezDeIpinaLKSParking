@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel;
 import com.lksnext.parking.data.DataRepository;
 import com.lksnext.parking.data.LoginErrorType;
 import com.lksnext.parking.data.callbacks.LoginCallback;
+import com.lksnext.parking.util.annotations.Getter;
+import com.lksnext.parking.util.annotations.Is;
 
 public class LoginViewModel extends ViewModel {
 
@@ -22,9 +24,12 @@ public class LoginViewModel extends ViewModel {
     }
 
 
+    @Is
     public LiveData<Boolean> isLogged(){
         return logged;
     }
+
+    @Getter
     public LiveData<LoginErrorType> getErrorMessage(){
         return loginError;
     }
