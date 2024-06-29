@@ -1,7 +1,5 @@
 package com.lksnext.parking.viewmodel;
 
-import android.provider.ContactsContract;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
