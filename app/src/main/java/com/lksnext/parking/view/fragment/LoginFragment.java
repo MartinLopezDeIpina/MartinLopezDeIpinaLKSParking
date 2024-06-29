@@ -74,8 +74,8 @@ public class LoginFragment extends Fragment {
     }
     private void bindLoginButton(){
         binding.loginButton.setOnClickListener(v -> {
-            String email = binding.emailText.getText().toString();
-            String password = binding.passwordText.getText().toString();
+            String email = binding.loginEmailText.getText().toString();
+            String password = binding.loginPasswordText.getText().toString();
             loginViewModel.loginUser(email, password);
         });
     }
@@ -92,14 +92,14 @@ public class LoginFragment extends Fragment {
         disableInputErrorStateTextChanged();
     }
     private void disableInputErrorStateTextChanged(){
-        binding.emailText.addTextChangedListener(new TextWatcher() {
+        binding.loginEmailText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // No action needed here
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                binding.email.setError(null);
+                binding.inputLoginEmail.setError(null);
             }
             @Override
             public void afterTextChanged(Editable s) {
@@ -107,7 +107,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        binding.passwordText.addTextChangedListener(new TextWatcher() {
+        binding.loginPasswordText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // No action needed here
@@ -115,7 +115,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // Clear the error when the text changes
-                binding.password.setError(null);
+                binding.loginInputPassword.setError(null);
             }
             @Override
             public void afterTextChanged(Editable s) {
@@ -124,14 +124,14 @@ public class LoginFragment extends Fragment {
         });
     }
     private void disableInputErrorStateFocused(){
-        binding.emailText.setOnFocusChangeListener((v, hasFocus) -> {
+        binding.loginEmailText.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                binding.email.setError(null);
+                binding.inputLoginEmail.setError(null);
             }
         });
-        binding.passwordText.setOnFocusChangeListener((v, hasFocus) -> {
+        binding.loginPasswordText.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                binding.password.setError(null);
+                binding.loginInputPassword.setError(null);
             }
         });
     }
@@ -155,17 +155,17 @@ public class LoginFragment extends Fragment {
                 case INVALID_EMAIL:
                 case USER_NOT_FOUND:
                 case EMAIL_NOT_VERIFIED:
-                    binding.email.setError(error.getMessage());
+                    binding.inputLoginEmail.setError(error.getMessage());
                     break;
                 case EMPTY_PASSWORD:
                 case INVALID_PASSWORD:
                 case WRONG_PASSWORD:
-                    binding.password.setError(error.getMessage());
+                    binding.loginInputPassword.setError(error.getMessage());
                     break;
 
                 case UNKNOWN_ERROR:
-                    binding.email.setError("Error en el login");
-                    binding.password.setError("Error en el login");
+                    binding.inputLoginEmail.setError("Error en el login");
+                    binding.loginInputPassword.setError("Error en el login");
                     break;
             }
         });
