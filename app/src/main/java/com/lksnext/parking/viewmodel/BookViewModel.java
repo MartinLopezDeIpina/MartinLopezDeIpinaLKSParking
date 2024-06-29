@@ -17,6 +17,9 @@ import com.lksnext.parking.domain.ReservaCompuesta;
 import com.lksnext.parking.domain.TipoPlaza;
 import com.lksnext.parking.util.DateUtils;
 import com.lksnext.parking.util.SingleLiveEvent;
+import com.lksnext.parking.util.annotations.Getter;
+import com.lksnext.parking.util.annotations.Is;
+import com.lksnext.parking.util.annotations.Setter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,125 +71,162 @@ public class BookViewModel extends ViewModel {
 
 
     private Integer[] dayNumbers = new Integer[7];
+    @Getter
     public LiveData<Boolean> getIsLoading() {
         return isLoading;
     }
+    @Getter
     public LiveData<TipoPlaza> getSelectedTipoPlaza() {
         return selectedTipoPlaza;
     }
+    @Getter
     public LiveData<List<Integer>> getSelectedDias() {
         return selectedDias;
     }
+    @Getter
     public LiveData<String> getSelectedHora1() {
         return selectedHora1;
     }
+    @Getter
     public LiveData<String> getSelectedHora2() {
         return selectedHora2;
     }
+    @Getter
     public LiveData<Long> getSelectedSpot() {
         return selectedSpot;
     }
+    @Getter
     public LiveData<List<String>> getIntermediateSelectedHours() {
         return intermediateSelectedHours;
     }
+    @Getter
     public LiveData<String> getUnselectedHora() {
         return unselectedHora;
     }
+    @Getter
     public LiveData<List<Long>> getAvailableSpots() {
         return availableSpots;
     }
+    @Setter
     public void setAvailableSpots(List<Long> availableSpots) {
         this.availableSpots.setValue(availableSpots);
     }
+    @Getter
     public String getLastSelectedHour() {
         return lastSelectedHour;
     }
+    @Getter
     public void setSelectedHora1(String hora) {
         selectedHora1.setValue(hora);
     }
+    @Getter
     public void setSelectedHora2(String hora) {
         selectedHora2.setValue(hora);
     }
+    @Getter
     public void setSelectedSpot(Long plazaID) {
         selectedSpot.setValue(plazaID);
     }
+    @Getter
     private void setLastSelectedHour(String hora) {
         lastSelectedHour = hora;
     }
+    @Getter
     public void setIntermediateSelectedHours(List<String> horas) {
         intermediateSelectedHours.setValue(horas);
     }
 
 
+    @Setter
     public void setCurrentFragment(int currentFragment) {
         this.currentFragment = currentFragment;
     }
+    @Getter
     public int getCurrentFragment() {
         return currentFragment;
     }
+    @Setter
     public void setNavigateToBookingFragment(Integer navigateToBookingFragment) {
         this.navigateToBookingFragment.setValue(navigateToBookingFragment);
         this.currentFragment = navigateToBookingFragment;
     }
+    @Getter
     public LiveData<Integer> getNavigateToBookingFragment() {
         return navigateToBookingFragment;
     }
+    @Setter
     public void setNavigateToMainFragment(Boolean navigateToMainFragment) {
         this.navigateToMainFragment.setValue(navigateToMainFragment);
     }
+    @Getter
     public LiveData<Boolean> getNavigateToMainFragment() {
         return navigateToMainFragment;
     }
 
 
+    @Getter
     public boolean getEditSuccesful() {
         return editSuccesful;
     }
-
+    @Setter
     public void setEditSuccesful(boolean b){
         this.editSuccesful = b;
     }
+    @Setter
     public void setIsEditing(boolean isEditing){
         this.isEditing = isEditing;
     }
+    @Getter
     public boolean getIsEditing(){
         return isEditing;
     }
+    @Getter
     public TipoPlaza getEditingBookingTipoPlaza() {
         return editingBookingTipoPlaza;
     }
+    @Getter
     public List<Integer> getEditingBookingDias() {
         return editingBookingDias;
     }
+    @Getter
     public List<Integer> getEditingBookingOffsets(){
         return editingBookingDias.stream().map(dia -> Arrays.asList(dayNumbers).indexOf(dia)).collect(Collectors.toList());
     }
+    @Getter
     public String getEditingBookingHora1() {
         return editingBookingHora1;
     }
+    @Getter
     public String getEditingBookingHora2() {
         return editingBookingHora2;
     }
+    @Getter
     public Long getEditingBookingSpot() {
         return editingBookingSpot;
     }
+    @Getter
     public boolean isEditingHoursAlredySet() {
         return editingHoursAlredySet;
     }
+    @Setter
     public void setEditingHoursAlredySet(boolean b){
         this.editingHoursAlredySet = true;
     }
 
+    @Is
     public boolean isEditingSpotAlreadySet() {
         return editSpotAlredySet;
     }
+    @Setter
     public void setEditingSpotAlreadySet(boolean b){
         this.editSpotAlredySet = b;
     }
 
+    @Getter
     public boolean getIsReservaCompuestaEdit() {
         return reservaCompuestaToEdit != null;
     }
+    @Setter
     public void setEditingReservaCompuesta(ReservaCompuesta reservaCompuesta){
         this.reservaCompuestaToEdit = reservaCompuesta;
     }
@@ -463,9 +503,11 @@ public class BookViewModel extends ViewModel {
     }
 
 
+    @Getter
     public static String[] getNextSevenDaysInitials() {
         return DateUtils.getNextSevenDaysInitials();
     }
+    @Getter
     public static Integer[] getNextSevenDays() {
         return DateUtils.getNextSevenDays();
     }
