@@ -16,7 +16,7 @@ sonarqube {
         property "sonar.organization", "martinaulalks"
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/kover/report.xml"
-        property "sonar.coverage.exclusions", "**/views"
+        property "sonar.coverage.exclusions", "**/view/**"
     }
 }
 
@@ -115,7 +115,7 @@ kover {
                 classes(
                         "com.lksnext.parking.BR", "com.lksnext.parking.DataBinderMapperImpl", "com.lksnext.parking.DataBindingTriggerClass"
                 )
-                annotatedBy("com.lksnext.parking.util.annotations.Getter", "com.lksnext.parking.util.annotations.Setter", "com.lksnext.parking.util.annotations.Is")
+                annotatedBy("com.lksnext.parking.util.annotations.*")
             }
         }
     }
