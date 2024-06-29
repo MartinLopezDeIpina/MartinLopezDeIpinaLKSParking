@@ -106,3 +106,12 @@ dependencies {
 
 
 }
+
+kover {
+    currentProject {
+        instrumentation {
+            // Exclude classes from instrumentation based on method names
+            excludedClasses.addAll(".*\\.get.*", ".*\\.set.*", ".*\\.is.*")
+        }
+    }
+}
