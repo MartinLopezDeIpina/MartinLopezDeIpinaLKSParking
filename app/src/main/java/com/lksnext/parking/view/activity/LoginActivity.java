@@ -117,17 +117,23 @@ public class LoginActivity extends BaseActivity implements LoginFragment.SignInH
                                             if (acct != null) {
 
                                                 String emailUsuario = acct.getEmail();
+                                                String uid = mAuth.getUid();
                                                 LiveData<Boolean> exists = DataBaseManager.getInstance().getUserExists(emailUsuario);
                                                 exists.observe(LoginActivity.this, userExists -> {
                                                     if (!userExists) {
                                                         //Para tener los datos de los usuarios de firebase en la base de datos
                                                         String name = acct.getDisplayName();
-                                                        String personId = acct.getId();
-                                                        Usuario usuario = new Usuario(personId, name, emailUsuario, "");
+                                                        Usuario usuario = new Usuario(uid, name, emailUsuario, "");
 
-                                                        DataBaseManager.getInstance().addUserToDB(usuario);
+                                                        LiveData<Boolean> registered = DataBaseManager.getInstance().addUserToDB(usuario);
+                                                        registered.observe(LoginActivity.this, registeredUser -> {
+                                                            if (registeredUser) {
+                                                                loginViewModel.setIsLogged(true);
+                                                            }
+                                                        });
+                                                    }else{
+                                                        loginViewModel.setIsLogged(true);
                                                     }
-                                                    loginViewModel.setIsLogged(true);
                                                 });
 
                                             }else{
