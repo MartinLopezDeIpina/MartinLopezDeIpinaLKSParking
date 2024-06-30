@@ -273,7 +273,9 @@ public class BookViewModel extends ViewModel {
 
     public void addEditingReservationIfEditCancelled() {
         if(isEditing && !editSuccesful){
-            reservationsToEdit.forEach(reserva -> db.addBookingToDB(reserva));
+            reservationsToEdit.forEach(reserva -> {
+                db.addBookingWithIDToDB(reserva);
+            });
             List<String> reservasIDs = reservationsToEdit.stream().map(Reserva::getId).collect(Collectors.toList());
             if(reservaCompuestaToEdit != null){
                 db.addReservaCompuestaToDB(FirebaseAuth.getInstance().getCurrentUser().getUid(), reservasIDs, reservaCompuestaToEdit.getPlazaID(), reservaCompuestaToEdit.getHora());
@@ -553,4 +555,12 @@ public class BookViewModel extends ViewModel {
         }
     }
 
+    //si la edición se cancela añadir sus notificaciones de vuelta
+    public void anadirNotificacionesReservaEnEdicion(Context context) {
+        if(isEditing && !editSuccesful){
+            for(Reserva reserva : reservationsToEdit){
+                NotificationsManager.scheduleBookingNotification(reserva, context);
+            }
+        }
+    }
 }

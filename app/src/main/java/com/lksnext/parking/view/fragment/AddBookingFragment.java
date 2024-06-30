@@ -215,6 +215,7 @@ private FragmentAddBookingBinding binding;
     @Override
     public void onPause(){
         super.onPause();
+        bookViewModel.anadirNotificacionesReservaEnEdicion(getContext());
         bookViewModel.addEditingReservationIfEditCancelled();
         bookViewModel.emptyBookingBelowData();
         bookViewModel.setEditingSpotAlreadySet(false);

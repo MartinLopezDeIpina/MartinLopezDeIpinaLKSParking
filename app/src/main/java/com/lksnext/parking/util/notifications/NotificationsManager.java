@@ -11,17 +11,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Build;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 
 import com.lksnext.parking.data.DataBaseManager;
-import com.lksnext.parking.domain.Hora;
 import com.lksnext.parking.domain.Notificacion;
 import com.lksnext.parking.domain.Reserva;
-import com.lksnext.parking.domain.TipoPlaza;
 import com.lksnext.parking.util.DateUtils;
 
 import java.util.Date;

@@ -95,8 +95,14 @@ public class MainActivity extends BaseActivity implements OnEditClickListener, O
 
     @Override
     public void onEditClick(List<Reserva> reservations, ReservaCompuesta reservaCompuesta) {
+        for(Reserva reserva : reservations){
+            cancelBookingNotifications(reserva.getId());
+        }
         bookViewModel.setReservationsToEdit(reservations, reservaCompuesta);
         mainViewModel.setShouldNavigateTooBookingFragment(new Pair<>(2, true));
+    }
+    private void cancelBookingNotifications(String reservationID){
+        NotificationsManager.cancelBookingNotifications(reservationID,this, this);
     }
 
     @Override
