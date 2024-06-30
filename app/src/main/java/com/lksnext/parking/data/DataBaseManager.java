@@ -50,8 +50,12 @@ public class DataBaseManager {
     }
 
 
-    public void addUserToDB(Usuario usuario){
-        db.collection("usuario").document(usuario.getID()).set(usuario);
+    public LiveData<Boolean> addUserToDB(Usuario usuario){
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+        db.collection("usuario").document(usuario.getID()).set(usuario)
+                .addOnSuccessListener(aVoid -> result.setValue(true))
+                .addOnFailureListener(e -> result.setValue(false));
+        return result;
     }
     public void addSpotToDB(Plaza plaza){
         db.collection("plaza").document(Long.toString(plaza.getId())).set(plaza);
