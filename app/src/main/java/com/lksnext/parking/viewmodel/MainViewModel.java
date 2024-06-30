@@ -17,6 +17,7 @@ import com.lksnext.parking.domain.Parking;
 import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.Reserva;
 import com.lksnext.parking.domain.ReservaCompuesta;
+import com.lksnext.parking.domain.TipoPlaza;
 import com.lksnext.parking.domain.Usuario;
 import com.lksnext.parking.util.notifications.NotificationsManager;
 
@@ -179,4 +180,13 @@ public class MainViewModel extends ViewModel {
         return DataBaseManager.getInstance().getPlazasOcupadas();
     }
 
+    public Integer[] getEstadisticasReservas() {
+        List<Reserva> reservasUsuario = parking.getReservas();
+        int numCoche = reservasUsuario.stream().filter(reserva -> reserva.getTipoPlaza().equals(TipoPlaza.COCHE)).collect(Collectors.toList()).size();
+        int numMoto = reservasUsuario.stream().filter(reserva -> reserva.getTipoPlaza().equals(TipoPlaza.MOTO)).collect(Collectors.toList()).size();
+        int numElectrico = reservasUsuario.stream().filter(reserva -> reserva.getTipoPlaza().equals(TipoPlaza.ELECTRICO)).collect(Collectors.toList()).size();
+        int numEspecial = reservasUsuario.stream().filter(reserva -> reserva.getTipoPlaza().equals(TipoPlaza.DISCAPACITADO)).collect(Collectors.toList()).size();
+
+        return new Integer[]{numCoche, numMoto, numElectrico, numEspecial};
+    }
 }

@@ -1,5 +1,6 @@
 package com.lksnext.parking.view.fragment;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -12,16 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.lksnext.parking.R;
-import com.lksnext.parking.databinding.ActivityMainBinding;
-import com.lksnext.parking.databinding.FragmentMainBinding;
 import com.lksnext.parking.databinding.FragmentProfileBinding;
 import com.lksnext.parking.viewmodel.MainViewModel;
-import com.lksnext.parking.viewmodel.ProfileViewModel;
 
 public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
+    private MainViewModel mainViewModel;
 
     public ProfileFragment() {
         // Es necesario un constructor vacio
@@ -32,17 +30,24 @@ public class ProfileFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         binding = FragmentProfileBinding.inflate(inflater, container, false);
-        MainViewModel viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
-        binding.setMainViewModel(viewModel);
+        mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+        binding.setMainViewModel(mainViewModel);
+
+        bindEstadisticas();
+
         return binding.getRoot();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ProfileViewModel mViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-
 
     }
 
+    private void bindEstadisticas(){
+        Integer[] estadisticas = mainViewModel.getEstadisticasReservas();
+        if(estadisticas != null) {
+            binding.cocheNum.numberTextView.setText(estadisticas[0].toString());
+            binding.motoNum.numberTextView.setText(estadisticas[1].toString());
+            binding.electricoNum.numberTextView.setText(estadisticas[2].toString());
+            binding.especialNum.numberTextView.setText(estadisticas[3].toString());
+            int total = estadisticas[0] + estadisticas[1] + estadisticas[2] + estadisticas[3];
+            binding.totalNumberTextView.setText(Integer.toString(total));
+        }
+    }
 }
