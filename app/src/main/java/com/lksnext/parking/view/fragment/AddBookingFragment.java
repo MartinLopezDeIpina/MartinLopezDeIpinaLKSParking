@@ -84,7 +84,7 @@ private FragmentAddBookingBinding binding;
             savedInstanceState.putBoolean("specialChecked", specialChip.isChecked());
 
             savedInstanceState.putBoolean("lunesChecked", lunesChip.isChecked());
-            savedInstanceState.putBoolean("martesChecked", lunesChip.isChecked());
+            savedInstanceState.putBoolean("martesChecked", martesChip.isChecked());
             savedInstanceState.putBoolean("miercolesChecked", miercolesChip.isChecked());
             savedInstanceState.putBoolean("juevesChecked", juevesChip.isChecked());
             savedInstanceState.putBoolean("viernesChecked", viernesChip.isChecked());
