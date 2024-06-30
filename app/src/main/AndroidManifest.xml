@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     >
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/lks_icon"
@@ -9,6 +11,12 @@
         android:roundIcon="@drawable/lks_icon"
         android:supportsRtl="true"
         android:theme="@style/Dark">
+
+        <receiver
+            android:name=".view.activity.NotificationReceiver"
+            android:enabled="true"
+            android:exported="false"/>
+
         <activity
             android:name=".view.activity.LoginActivity"
             android:exported="true">
