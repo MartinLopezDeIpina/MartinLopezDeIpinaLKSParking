@@ -123,6 +123,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (getActivity() instanceof SignInHandler) {
+                    binding.loginTopProgressbar.setVisibility(View.VISIBLE);
                     ((SignInHandler) getActivity()).startOneTapSignIn(signInRequest);
                 }
             }
