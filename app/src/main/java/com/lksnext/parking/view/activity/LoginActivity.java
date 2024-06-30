@@ -20,6 +20,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import android.Manifest;
 import android.util.Log;
@@ -40,6 +41,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.lksnext.parking.data.DataBaseManager;
+import com.lksnext.parking.data.DataRepository;
+import com.lksnext.parking.data.callbacks.RegisterCallback;
+import com.lksnext.parking.domain.Usuario;
 import com.lksnext.parking.util.DataBaseFiller;
 import com.lksnext.parking.util.notifications.NotificationsManager;
 import com.lksnext.parking.view.fragment.LoginFragment;
@@ -104,16 +109,26 @@ public class LoginActivity extends BaseActivity implements LoginFragment.SignInH
                                             FirebaseUser user = mAuth.getCurrentUser();
                                             GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
                                             if (acct != null) {
-                                                String name = acct.getDisplayName();
-                                                String personEmail = acct.getEmail();
 
-                                                String personId = acct.getId();
+                                                String emailUsuario = acct.getEmail();
+                                                LiveData<Boolean> exists = DataBaseManager.getInstance().getUserExists(emailUsuario);
+                                                exists.observe(LoginActivity.this, userExists -> {
+                                                    if (!userExists) {
+                                                        //Para tener los datos de los usuarios de firebase en la base de datos
+                                                        String name = acct.getDisplayName();
+                                                        String personId = acct.getId();
+                                                        Usuario usuario = new Usuario(personId, name, emailUsuario, "");
+
+                                                        DataBaseManager.getInstance().addUserToDB(usuario);
+                                                    }
+                                                    loginViewModel.setIsLogged(true);
+                                                });
+
                                             }else{
                                                 Log.w(TAG, "signInWithCredential:failure", task.getException());
                                                 Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                                             }
                                         } else {
-                                            // If sign in fails, display a message to the user.
                                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                                             Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                                         }
@@ -138,6 +153,7 @@ public class LoginActivity extends BaseActivity implements LoginFragment.SignInH
                 })
                 .addOnFailureListener(this, e -> {
                     Log.d("YourActivity", e.getLocalizedMessage());
+                    Toast.makeText(this, "Couldn't start One Tap UI", Toast.LENGTH_SHORT).show();
                 });
     }
 }

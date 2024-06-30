@@ -75,10 +75,6 @@ public class LoginFragment extends Fragment {
     private LoginViewModel loginViewModel;
     private TextView forgotPassButton;
     private View view;
-    private DataBaseManager db;
-    private FirebaseAuth mAuth;
-    private SignInClient oneTapClient;
-    private GoogleSignInClient googleSignInClient;
 
 
     public LoginFragment() {
@@ -91,8 +87,8 @@ public class LoginFragment extends Fragment {
         binding = FragmentLoginBinding.inflate(inflater, container, false);
         view = binding.getRoot();
 
+        loginViewModel = new ViewModelProvider(getActivity()).get(LoginViewModel.class);
 
-        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         binding.setLoginViewModel(loginViewModel);
 
         binding.setLifecycleOwner(this);
@@ -108,42 +104,19 @@ public class LoginFragment extends Fragment {
         setSpannedTitle();
         setUnderlinedForgotPassword();
 
-/*
-        FirebaseApp.initializeApp(getActivity());
+        bindGoolgeAuthenticationButton();
 
-        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("298070462578-4fbr1vkdb67o6ubujl9fim7o9afm5s80.apps.googleusercontent.com")
-                .requestEmail()
-                .build();
-        googleSignInClient = GoogleSignIn.getClient(getActivity(), options);
+        return view;
+    }
 
-        auth = FirebaseAuth.getInstance();
-
-        Button signInButton = binding.googleButton;
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = googleSignInClient.getSignInIntent();
-                activityResultLauncher.launch(intent);
-            }
-        });*/
-
-        mAuth = FirebaseAuth.getInstance();
-        oneTapClient = Identity.getSignInClient(requireActivity());
-
-        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("298070462578-4fbr1vkdb67o6ubujl9fim7o9afm5s80.apps.googleusercontent.com")
-                .requestEmail()
-                .build();
-        googleSignInClient = GoogleSignIn.getClient(getActivity(), options);
-
+    private void bindGoolgeAuthenticationButton(){
         BeginSignInRequest signInRequest = BeginSignInRequest.builder()
                 .setGoogleIdTokenRequestOptions(BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                         .setSupported(true)
                         // Your server's client ID, not your Android client ID.
                         .setServerClientId("298070462578-1gp367gffjv4kfjp1u4va8955nnspq2q.apps.googleusercontent.com")
                         // Only show accounts previously used to sign in.
-                        .setFilterByAuthorizedAccounts(true)
+                        .setFilterByAuthorizedAccounts(false)
                         .build())
                 .build();
         binding.googleButton.setOnClickListener(new View.OnClickListener() {
@@ -154,9 +127,6 @@ public class LoginFragment extends Fragment {
                 }
             }
         });
-
-
-        return view;
     }
     public interface SignInHandler {
         void startOneTapSignIn(BeginSignInRequest signInRequest);
