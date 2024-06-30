@@ -13,12 +13,7 @@ import com.lksnext.parking.R;
 import com.lksnext.parking.domain.Parking;
 import com.lksnext.parking.domain.Reserva;
 import com.lksnext.parking.domain.TipoPlaza;
-import com.lksnext.parking.view.activity.MainActivity;
-import com.lksnext.parking.view.fragment.DeleteBookingDialogFragment;
-import com.lksnext.parking.viewmodel.BookViewModel;
-import com.lksnext.parking.viewmodel.MainViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PassedBookingsAdapter extends RecyclerView.Adapter<PassedBookingsAdapter.PassedBooksViewHolder>{

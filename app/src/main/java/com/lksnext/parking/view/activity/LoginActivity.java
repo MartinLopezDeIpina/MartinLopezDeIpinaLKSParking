@@ -23,7 +23,10 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import android.Manifest;
+import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
@@ -51,6 +54,8 @@ import com.lksnext.parking.view.fragment.LoginFragment;
 import com.lksnext.parking.viewmodel.LoginViewModel;
 import com.lksnext.parking.R;
 import com.lksnext.parking.databinding.ActivityLoginBinding;
+
+import java.io.Console;
 
 public class LoginActivity extends BaseActivity implements LoginFragment.SignInHandler{
 
@@ -135,6 +140,12 @@ public class LoginActivity extends BaseActivity implements LoginFragment.SignInH
                                         }
                                     }
                                 });
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                binding.getRoot().findViewById(R.id.login_top_progressbar).setVisibility(View.VISIBLE);
+                            }
+                        }, 100);
                     }
                 } catch (ApiException e) {
                     Log.e(TAG, "Error with Google Sign In API", e);
@@ -147,6 +158,7 @@ public class LoginActivity extends BaseActivity implements LoginFragment.SignInH
         oneTapClient.beginSignIn(signInRequest)
                 .addOnSuccessListener(this, result -> {
                     try {
+                        binding.getRoot().findViewById(R.id.login_top_progressbar).setVisibility(View.GONE);
                         startIntentSenderForResult(result.getPendingIntent().getIntentSender(), REQ_ONE_TAP, null, 0, 0, 0, null);
                     } catch (IntentSender.SendIntentException e) {
                         Log.e("YourActivity", "Couldn't start One Tap UI: " + e.getLocalizedMessage());
