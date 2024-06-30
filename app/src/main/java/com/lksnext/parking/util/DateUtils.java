@@ -153,4 +153,13 @@ public class DateUtils {
     public static String getHourFromInteger(Integer hour) {
         return String.format("%02d:00", hour);
     }
+
+    public static Date parseStringDateAndHour(String date, String hour) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        try {
+            return sdf.parse(date + " " + hour);
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Invalid date or hour format. Expected 'yyyy-MM-dd' for date and 'HH:mm' for hour.", e);
+        }
+    }
 }

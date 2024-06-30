@@ -15,19 +15,37 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
+import com.lksnext.parking.domain.Hora;
 import com.lksnext.parking.domain.Reserva;
+import com.lksnext.parking.domain.TipoPlaza;
+import com.lksnext.parking.util.DateUtils;
+
+import java.util.Date;
+import java.util.UUID;
 
 public class NotificationsManager {
 
     public static void scheduleBookingNotification(Reserva reserva, Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Calendar calendar = Calendar.getInstance();
-            // 10 is for how many seconds from now you want to schedule also you can create a custom instance of Callender to set on exact time
-            calendar.add(Calendar.SECOND, 5);
-            // function for creating Notification Channel
+
+            Reserva reservaPrueba = new Reserva("2024-06-30", "2", Long.valueOf(3), new Hora("12:00", "13:00"), true, TipoPlaza.COCHE);
+
+            String horaInicio = reservaPrueba.getHora().getHoraInicio();
+            String date = reservaPrueba.getFecha();
+            Date horaInicioDate = DateUtils.parseStringDateAndHour(date, horaInicio);
+
+            Calendar calendar1 = Calendar.getInstance();
+            calendar1.setTime(horaInicioDate);
+            calendar1.add(Calendar.MINUTE, -2);
+
+            Calendar calendar2 = Calendar.getInstance();
+            calendar2.setTime(horaInicioDate);
+            calendar2.add(Calendar.MINUTE, -1);
+
             createNotificationChannel(context);
-            // function for scheduling the notification
-            scheduleNotification(calendar, context);
+
+            scheduleNotification(calendar1, context);
+            scheduleNotification(calendar2, context);
         }
     }
 
@@ -51,7 +69,7 @@ public class NotificationsManager {
         Intent intent = new Intent(context, NotificationReceiver.class);
         intent.putExtra("titleExtra", "Dynamic Title");
         intent.putExtra("textExtra", "Dynamic Text Body");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, UUID.randomUUID().hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         Toast.makeText(context, "Scheduled ", Toast.LENGTH_LONG).show();
