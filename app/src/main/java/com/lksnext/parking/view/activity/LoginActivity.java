@@ -34,7 +34,6 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        NotificationsManager.scheduleBookingNotification(null, this);
 
 
         DataBaseFiller dataBaseFiller = new DataBaseFiller();
@@ -49,51 +48,5 @@ public class LoginActivity extends BaseActivity {
 
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
     }
-
-
-    private void notification(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "canal1";
-            String description = "descripcion canal1";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("canal1", name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this.
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-
-
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "canal1")
-                .setSmallIcon(R.drawable.reservacheckedicon)
-                .setContentTitle("My notification")
-                .setContentText("Hello World!")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                // Set the intent that fires when the user taps the notification.
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true);
-
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            // public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-
-            return;
-        }
-
-// notificationId is a unique int for each notification that you must define.
-        notificationManager.notify(0, builder.build());
-    }
-
 
 }

@@ -22,7 +22,11 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.lksnext.parking.R;
 import com.lksnext.parking.databinding.FragmentAddBookingBinding;
+import com.lksnext.parking.domain.Parking;
+import com.lksnext.parking.domain.Reserva;
+import com.lksnext.parking.domain.ReservaCompuesta;
 import com.lksnext.parking.domain.TipoPlaza;
+import com.lksnext.parking.util.notifications.NotificationsManager;
 import com.lksnext.parking.view.adapter.AvailableSpotsAdapter;
 import com.lksnext.parking.viewmodel.BookViewModel;
 import com.lksnext.parking.viewmodel.MainViewModel;
@@ -236,7 +240,14 @@ private FragmentAddBookingBinding binding;
                 if(result != null){
                     bookViewModel.setSuccssEditIfEditing();
                     generalProgressBar.setVisibility(View.GONE);
-                    mainViewModel.updateReservas();
+
+                    LiveData<Boolean> reservasUpdated = mainViewModel.updateReservas();
+                    reservasUpdated.observeForever(updated -> {
+                        if(updated){
+                            bookViewModel.anadirNotificaciones(result, getContext());
+                        }
+                    });
+
                     bookViewModel.setNavigateToMainFragment(true);
 
                     setSuccessToast();
