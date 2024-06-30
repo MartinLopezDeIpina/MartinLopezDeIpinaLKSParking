@@ -97,4 +97,10 @@ public class NotificationsManager {
             alarmManager.cancel(pendingIntent);
         }
     }
+
+    //para debug
+    public static void removeAllNotifications(Context context) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
+    }
 }

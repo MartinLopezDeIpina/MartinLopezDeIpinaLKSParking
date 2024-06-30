@@ -34,8 +34,6 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
         DataBaseFiller dataBaseFiller = new DataBaseFiller();
         //dataBaseFiller.fillReservas();
         //dataBaseFiller.fillPlaza98();
