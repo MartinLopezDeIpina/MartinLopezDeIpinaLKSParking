@@ -1,5 +1,8 @@
 package com.lksnext.parking.viewmodel;
 
+import static java.security.AccessController.getContext;
+
+import android.content.Context;
 import android.util.Pair;
 
 import androidx.annotation.Nullable;
@@ -15,6 +18,7 @@ import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.Reserva;
 import com.lksnext.parking.domain.ReservaCompuesta;
 import com.lksnext.parking.domain.Usuario;
+import com.lksnext.parking.util.notifications.NotificationsManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +88,8 @@ public class MainViewModel extends ViewModel {
         parking.setReservasCompuestas(compuestas);
         updateReservas();
     }
-    public void updateReservas(){
+    public LiveData<Boolean> updateReservas(){
+        MutableLiveData<Boolean> reservasUpdated = new MutableLiveData<>();
         LiveData<Object[]> reservasLiveData = DataBaseManager.getInstance().getCurrentUserBookings();
 
         reservasLiveData.observeForever(result -> {
@@ -125,9 +130,11 @@ public class MainViewModel extends ViewModel {
             reservasActivas.setValue(activas);
             reservasCompuestas.setValue(reservasCompActivas);
             reservasPasadas.setValue(pasadas);
+
+            reservasUpdated.setValue(true);
         });
 
-
+        return reservasUpdated;
     }
 
     public LiveData<String> getBookingModified() {
@@ -171,4 +178,5 @@ public class MainViewModel extends ViewModel {
     public LiveData<Integer[]> getCantidadPlazasOcupadas() {
         return DataBaseManager.getInstance().getPlazasOcupadas();
     }
+
 }

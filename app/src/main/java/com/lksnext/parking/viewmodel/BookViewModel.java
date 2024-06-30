@@ -1,5 +1,8 @@
 package com.lksnext.parking.viewmodel;
 
+import android.content.Context;
+
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -18,6 +21,7 @@ import com.lksnext.parking.util.SingleLiveEvent;
 import com.lksnext.parking.util.annotations.Getter;
 import com.lksnext.parking.util.annotations.Is;
 import com.lksnext.parking.util.annotations.Setter;
+import com.lksnext.parking.util.notifications.NotificationsManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -508,6 +512,45 @@ public class BookViewModel extends ViewModel {
     @Getter
     public static Integer[] getNextSevenDays() {
         return DateUtils.getNextSevenDays();
+    }
+
+    public void anadirNotificaciones(String result, Context context){
+        //Añadir notificaciones
+        if(Parking.getInstance().isReservaCompuesta(result)){
+            ReservaCompuesta reservaCompuesta = Parking.getInstance().getReservaCompuesta(result);
+            List<String> reservasID = reservaCompuesta.getReservasID();
+            List<Reserva> reservas = reservasID.stream().map(Parking.getInstance()::getReserva).collect(Collectors.toList());
+            for(Reserva reserva : reservas){
+                if(reserva != null){
+                    NotificationsManager.scheduleBookingNotification(reserva, context);
+                }
+            }
+        }else{
+            Reserva reserva = Parking.getInstance().getReserva(result);
+            if(reserva != null){
+                NotificationsManager.scheduleBookingNotification(reserva, context);
+            }
+        }
+    }
+
+    public void eliminarNotificaciones(String reservaID, LifecycleOwner lifecycleOwner, Context context) {
+        if (Parking.getInstance().isReservaCompuesta(reservaID)) {
+            ReservaCompuesta reservaCompuesta = Parking.getInstance().getReservaCompuesta(reservaID);
+            if (reservaCompuesta != null) {
+                List<String> reservasID = reservaCompuesta.getReservasID();
+                List<Reserva> reservas = reservasID.stream().map(Parking.getInstance()::getReserva).collect(Collectors.toList());
+                for (Reserva reserva : reservas) {
+                    if (reserva != null) {
+                        NotificationsManager.cancelBookingNotifications(reserva.getId(), lifecycleOwner, context);
+                    }
+                }
+            }
+        }else{
+            Reserva reserva = Parking.getInstance().getReserva(reservaID);
+            if (reserva != null) {
+                NotificationsManager.cancelBookingNotifications(reserva.getId(), lifecycleOwner, context);
+            }
+        }
     }
 
 }

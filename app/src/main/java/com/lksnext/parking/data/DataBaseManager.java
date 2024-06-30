@@ -12,6 +12,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.lksnext.parking.domain.Hora;
+import com.lksnext.parking.domain.Notificacion;
 import com.lksnext.parking.domain.Parking;
 import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.ReservaCompuesta;
@@ -20,6 +21,7 @@ import com.lksnext.parking.domain.Usuario;
 import com.lksnext.parking.domain.Reserva;
 import com.google.android.gms.tasks.Tasks;
 import com.lksnext.parking.util.DateUtils;
+import com.lksnext.parking.util.notifications.NotificationsManager;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -46,6 +48,7 @@ public class DataBaseManager {
         }
         return instance;
     }
+
 
     public void addUserToDB(Usuario usuario){
         db.collection("usuario").document(usuario.getID()).set(usuario);
@@ -74,6 +77,32 @@ public class DataBaseManager {
                 result.setValue(id);
             })
             .addOnFailureListener(e -> result.setValue(null));
+        return result;
+    }
+
+    public static void addNotificationToDB(String id, int requestCode) {
+        db.collection("notification").document().set(new Notificacion(requestCode, id));
+    }
+
+    //Para cuando se cancele una reserva
+    public static LiveData<List<Notificacion>> getAndDeleteNotificationsFromDB(String reservaID){
+        MutableLiveData<List<Notificacion>> result = new MutableLiveData<>();
+        db.collection("notification")
+            .whereEqualTo("reservaID", reservaID)
+            .get()
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    List<Notificacion> notifications = new ArrayList<>();
+                    for (DocumentSnapshot document : task.getResult().getDocuments()) {
+                        Notificacion notificacion = document.toObject(Notificacion.class);
+                        notifications.add(notificacion);
+                        db.collection("notification").document(document.getId()).delete();
+                    }
+                    result.postValue(notifications);
+                } else {
+                    Log.d("DataBaseManager", "Error getting documents: ", task.getException());
+                }
+            });
         return result;
     }
 
