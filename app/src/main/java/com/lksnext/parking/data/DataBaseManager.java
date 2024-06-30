@@ -391,10 +391,10 @@ public class DataBaseManager {
         return result;
     }
 
-    public LiveData<Boolean> getUserExists(String email) {
+    public LiveData<Boolean> getUserExists(String uuid) {
         MutableLiveData<Boolean> result = new MutableLiveData<>();
         db.collection("usuario")
-                .whereEqualTo("email", email)
+                .whereEqualTo("id", uuid)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -406,5 +406,6 @@ public class DataBaseManager {
                 });
         return result;
     }
+
 
 }
