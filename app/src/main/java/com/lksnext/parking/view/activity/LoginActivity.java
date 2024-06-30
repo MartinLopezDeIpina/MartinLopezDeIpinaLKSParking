@@ -78,6 +78,7 @@ public class LoginActivity extends BaseActivity implements LoginFragment.SignInH
         setContentView(binding.getRoot());
 
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        loginViewModel.setIsLogged(false);
 
 
         mAuth = FirebaseAuth.getInstance();
