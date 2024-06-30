@@ -67,6 +67,15 @@ public class DataBaseManager {
         return result;
     }
 
+    public LiveData<String> addBookingWithIDToDB(Reserva reserva){
+        MutableLiveData<String> result = new MutableLiveData<>();
+        DocumentReference docRef = db.collection("reserva").document(reserva.getId());
+        docRef.set(reserva)
+                .addOnSuccessListener(aVoid -> result.setValue(docRef.getId()))
+                .addOnFailureListener(e -> result.setValue(null));
+        return result;
+    }
+
     public LiveData<String> addReservaCompuestaToDB(String userUuid, List<String> reservasID, Long plazaID,Hora hora){
         MutableLiveData<String> result = new MutableLiveData<>();
         DocumentReference docRef = db.collection("reservaCompuesta").document();
