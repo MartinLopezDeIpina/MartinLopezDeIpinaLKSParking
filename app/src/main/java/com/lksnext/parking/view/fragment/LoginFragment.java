@@ -14,23 +14,19 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.lksnext.parking.R;
 import com.lksnext.parking.databinding.FragmentLoginBinding;
-import com.lksnext.parking.view.activity.LoginActivity;
 import com.lksnext.parking.view.activity.MainActivity;
 import com.lksnext.parking.viewmodel.LoginViewModel;
 
-import org.w3c.dom.Text;
+
 
 public class LoginFragment extends Fragment {
 
@@ -142,6 +138,7 @@ public class LoginFragment extends Fragment {
                 if (logged) {
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
+
                 }
             }
         });

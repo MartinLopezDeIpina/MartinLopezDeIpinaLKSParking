@@ -102,4 +102,8 @@ public class Parking {
                 .count();
     }
 
+    public boolean isReservaCompuesta(String result) {
+        return getReservasCompuestas().stream()
+                .anyMatch(reservaCompuesta -> reservaCompuesta.getId().equals(result));
+    }
 }

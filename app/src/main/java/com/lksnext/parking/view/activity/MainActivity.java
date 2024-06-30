@@ -15,11 +15,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.lksnext.parking.R;
 import com.lksnext.parking.data.DataBaseManager;
 import com.lksnext.parking.databinding.ActivityMainBinding;
+import com.lksnext.parking.domain.Hora;
 import com.lksnext.parking.domain.Parking;
 import com.lksnext.parking.domain.Plaza;
 import com.lksnext.parking.domain.Reserva;
 import com.lksnext.parking.domain.ReservaCompuesta;
+import com.lksnext.parking.domain.TipoPlaza;
 import com.lksnext.parking.domain.Usuario;
+import com.lksnext.parking.util.notifications.NotificationsManager;
 import com.lksnext.parking.view.fragment.DeleteBookingDialogFragment;
 import com.lksnext.parking.viewmodel.BookViewModel;
 import com.lksnext.parking.viewmodel.MainViewModel;
@@ -83,7 +86,6 @@ public class MainActivity extends BaseActivity implements OnEditClickListener, O
 
         // Establece el color de la barra de navegación
         getWindow().setNavigationBarColor(color);
-
     }
 
     @Override
@@ -93,8 +95,14 @@ public class MainActivity extends BaseActivity implements OnEditClickListener, O
 
     @Override
     public void onEditClick(List<Reserva> reservations, ReservaCompuesta reservaCompuesta) {
+        for(Reserva reserva : reservations){
+            cancelBookingNotifications(reserva.getId());
+        }
         bookViewModel.setReservationsToEdit(reservations, reservaCompuesta);
         mainViewModel.setShouldNavigateTooBookingFragment(new Pair<>(2, true));
+    }
+    private void cancelBookingNotifications(String reservationID){
+        NotificationsManager.cancelBookingNotifications(reservationID,this, this);
     }
 
     @Override
@@ -106,6 +114,7 @@ public class MainActivity extends BaseActivity implements OnEditClickListener, O
         deleteDialog.getDeleteClicked().observe(this, result -> {
             LiveData<Boolean> bookingDeleted;
             if(result){
+                bookViewModel.eliminarNotificaciones(reservationID, this, this);
                 if(esCompuesta){
                     bookingDeleted = mainViewModel.deleteReservaCompuestaAndChilds(reservationID);
                 }else{
@@ -120,6 +129,9 @@ public class MainActivity extends BaseActivity implements OnEditClickListener, O
             }
         });
     }
+
+
+
 
 
 

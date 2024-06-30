@@ -1,30 +1,29 @@
 package com.lksnext.parking.view.activity;
 
+import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.res.Resources;
+import android.content.pm.PackageManager;
+import android.icu.util.Calendar;
+import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.TextWatcher;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.UnderlineSpan;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.ViewModelProvider;
+import android.Manifest;
+import android.widget.Toast;
 
-import com.lksnext.parking.data.DataBaseManager;
 import com.lksnext.parking.util.DataBaseFiller;
+import com.lksnext.parking.util.notifications.NotificationsManager;
 import com.lksnext.parking.viewmodel.LoginViewModel;
 import com.lksnext.parking.R;
 import com.lksnext.parking.databinding.ActivityLoginBinding;
-import com.lksnext.parking.view.fragment.RegisterFragment;
 
 public class LoginActivity extends BaseActivity {
 
@@ -34,23 +33,6 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int screenHeight = displayMetrics.heightPixels;
-        System.out.println("Screen Height: " + screenHeight);
-
-        Resources resources = getResources();
-        int dpValue = 197; // replace with your dp value
-        int pxValue = (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                dpValue,
-                resources.getDisplayMetrics()
-        );
-
-        float percentage = (float) pxValue / screenHeight * 100;
-        System.out.println("Percentage: " + percentage);
-
 
         DataBaseFiller dataBaseFiller = new DataBaseFiller();
         //dataBaseFiller.fillReservas();
