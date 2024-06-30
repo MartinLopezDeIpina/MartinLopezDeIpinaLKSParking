@@ -1,4 +1,4 @@
-package com.lksnext.parking.view.activity;
+package com.lksnext.parking.util.notifications;
 
 import android.Manifest;
 import android.app.Notification;
@@ -18,7 +18,7 @@ import androidx.core.app.NotificationManagerCompat;
 import com.lksnext.parking.R;
 
 public class NotificationReceiver extends BroadcastReceiver {
-    private static final String CHANNEL_ID = "channelID";
+    private static final String CHANNEL_ID = "canal1";
     private static final int NOTIFICATION_ID = 1;
 
     @Override

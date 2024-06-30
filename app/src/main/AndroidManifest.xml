@@ -13,7 +13,7 @@
         android:theme="@style/Dark">
 
         <receiver
-            android:name=".view.activity.NotificationReceiver"
+            android:name=".util.notifications.NotificationReceiver"
             android:enabled="true"
             android:exported="false"/>
 
