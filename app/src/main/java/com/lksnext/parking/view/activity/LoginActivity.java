@@ -29,6 +29,8 @@ import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.identity.Identity;
 import com.google.android.gms.auth.api.identity.SignInClient;
 import com.google.android.gms.auth.api.identity.SignInCredential;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -99,11 +101,17 @@ public class LoginActivity extends BaseActivity implements LoginFragment.SignInH
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
                                             // Sign in success, update UI with the signed-in user's information
-                                            Log.d(TAG, "signInWithCredential:success");
                                             FirebaseUser user = mAuth.getCurrentUser();
-                                            String email = user.getEmail();
-                                            String name = user.getDisplayName();
-                                            Toast.makeText(LoginActivity.this, "Authentication success.", Toast.LENGTH_SHORT).show();
+                                            GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+                                            if (acct != null) {
+                                                String name = acct.getDisplayName();
+                                                String personEmail = acct.getEmail();
+
+                                                String personId = acct.getId();
+                                            }else{
+                                                Log.w(TAG, "signInWithCredential:failure", task.getException());
+                                                Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                            }
                                         } else {
                                             // If sign in fails, display a message to the user.
                                             Log.w(TAG, "signInWithCredential:failure", task.getException());
