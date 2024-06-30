@@ -40,6 +40,11 @@ public class MainActivity extends BaseActivity implements OnEditClickListener, O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //NotificationsManager.createNotificationChannel(this);
+        //NotificationsManager.scheduleNotification(this);
+
+
+
         //Asignamos la vista/interfaz main (layout)
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
