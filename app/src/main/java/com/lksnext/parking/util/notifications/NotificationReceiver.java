@@ -17,9 +17,11 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.lksnext.parking.R;
 
+import java.util.UUID;
+
 public class NotificationReceiver extends BroadcastReceiver {
     private static final String CHANNEL_ID = "canal1";
-    private static final int NOTIFICATION_ID = 1;
+    private static final int NOTIFICATION_ID = UUID.randomUUID().hashCode();
 
     @Override
     public void onReceive(Context context, Intent intent) {
