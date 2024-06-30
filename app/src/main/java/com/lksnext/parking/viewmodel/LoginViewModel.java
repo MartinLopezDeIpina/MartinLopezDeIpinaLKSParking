@@ -49,5 +49,9 @@ public class LoginViewModel extends ViewModel {
             }
         });
     }
+
+    public void setIsLogged(boolean b) {
+        logged.setValue(b);
+    }
 }
 

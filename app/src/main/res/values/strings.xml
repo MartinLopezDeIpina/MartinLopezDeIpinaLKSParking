@@ -89,6 +89,7 @@
     <string name="password_recovery">Recuperar constraseña</string>
     <string name="password_recovery_message">No te preocupes, te enviaremos un correo para cambiar la contraseña</string>
 
+    <string name="google_client_id">298070462578-4fbr1vkdb67o6ubujl9fim7o9afm5s80.apps.googleusercontent.com></string>
 
 
 </resources>
