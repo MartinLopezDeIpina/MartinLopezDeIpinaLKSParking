@@ -1,232 +1,261 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.core.widget.NestedScrollView app:layout_constraintTop_toTopOf="parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.fragment.MainFragment">
+    app:layout_constraintBottom_toBottomOf="parent"
+    android:fillViewport="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        android:id="@+id/heading"
-        style="@style/HeadingStyle"
-        android:text="@string/active_reservations"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <FrameLayout
-        android:id="@+id/book_container"
-        android:layout_width="325dp"
-        android:layout_height="274dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/heading" />
-
-    <LinearLayout
-        android:id="@+id/layout_principal"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:minHeight="800dp"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/book_container">
+        android:layout_height="match_parent"
+        tools:context=".view.fragment.MainFragment">
+
+        <TextView
+            android:id="@+id/heading"
+            style="@style/HeadingStyleConstrainted"
+            android:text="@string/active_reservations"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.02"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            />
+
+        <FrameLayout
+            android:id="@+id/book_container"
+            android:layout_width="325dp"
+            android:layout_height="274dp"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.12"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/layout_principal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="50dp"
-            android:orientation="vertical">
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="horizontal"
 
-            <ImageButton
-                android:id="@+id/add_button"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:background="@drawable/main_button"
-                android:contentDescription="@string/add"
-                android:src="@drawable/addicon"
-                app:backgroundTint="?attr/colorPrimaryContainer" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.48"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/add"
-                android:textAlignment="center"
-                android:textColor="?attr/colorOnSecondaryContainer"
-                android:textSize="16sp"
-                android:textStyle="bold"></TextView>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/view_more_button"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:background="@drawable/main_button"
-                android:contentDescription="@string/more"
-                android:src="@drawable/moreicon"
-                app:backgroundTint="?attr/colorPrimaryContainer" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/more"
-                android:textAlignment="center"
-                android:textColor="?attr/colorOnSecondaryContainer"
-                android:textSize="16sp"
-                android:textStyle="bold"></TextView>
-
-        </LinearLayout>
-    </LinearLayout>
-
-    <View
-        android:id="@+id/divider"
-        android:layout_width="340dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="40dp"
-        android:background="?attr/colorOutline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_principal" />
-
-    <LinearLayout
-        android:id="@+id/layoutDonut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/donutContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <app.futured.donut.DonutProgressView
-                android:id="@+id/dpvChart"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                app:donut_bgLineColor="?attr/colorSurface"
-                app:donut_gapAngle="270"
-                app:donut_gapWidth="0"
-                app:donut_strokeWidth="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/donutText"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/robotobold"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginEnd="50dp"
+                android:orientation="vertical">
 
-            <ProgressBar
-                android:id="@+id/donut_progress_bar"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:indeterminate="true"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageButton
+                    android:id="@+id/add_button"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@drawable/main_button"
+                    android:contentDescription="@string/add"
+                    android:src="@drawable/addicon"
+                    app:backgroundTint="?attr/colorPrimaryContainer" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/add"
+                    android:textAlignment="center"
+                    android:textColor="?attr/colorOnSecondaryContainer"
+                    android:textSize="16sp"
+                    android:textStyle="bold"></TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/view_more_button"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@drawable/main_button"
+                    android:contentDescription="@string/more"
+                    android:src="@drawable/moreicon"
+                    app:backgroundTint="?attr/colorPrimaryContainer" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/more"
+                    android:textAlignment="center"
+                    android:textColor="?attr/colorOnSecondaryContainer"
+                    android:textSize="16sp"
+                    android:textStyle="bold"></TextView>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="340dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="40dp"
+            android:background="?attr/colorOutline"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.60"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 
         <LinearLayout
+            android:id="@+id/layoutDonut"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:orientation="vertical">
+            android:layout_marginTop="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipCar"
-                style="@style/plazaChip"
-                android:layout_width="75dp"
-                android:layout_height="50dp"
-                android:enabled="false"
-                android:textColor="@color/donut_white_text"
-                app:chipBackgroundColor="@color/donut_car"
-                app:chipCornerRadius="10dp"
-                app:chipEndPadding="10dp"
-                app:chipIcon="@drawable/car2icon"
-                app:chipIconTint="@color/donut_white_text"
-                app:chipIconVisible="true"
-                app:chipStartPadding="10dp" />
+            app:layout_constraintVertical_bias="0.82"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+            >
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipMoto"
-                style="@style/plazaChip"
-                android:layout_width="75dp"
-                android:layout_height="50dp"
-                android:enabled="false"
-                android:textColor="@color/donut_black_text"
-                app:chipBackgroundColor="@color/donut_moto"
-                app:chipCornerRadius="10dp"
-                app:chipEndPadding="10dp"
-                app:chipIcon="@drawable/moto2icon"
-                app:chipIconTint="@color/donut_black_text"
-                app:chipIconVisible="true"
-                app:chipStartPadding="10dp" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/donutContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipElectric"
-                style="@style/plazaChip"
-                android:layout_width="75dp"
-                android:layout_height="50dp"
-                android:enabled="false"
-                android:textColor="@color/donut_black_text"
-                app:chipBackgroundColor="@color/donut_electric"
-                app:chipCornerRadius="10dp"
-                app:chipEndPadding="10dp"
-                app:chipIcon="@drawable/eelcric2icon"
-                app:chipIconTint="@color/donut_black_text"
-                app:chipIconVisible="true"
-                app:chipStartPadding="10dp" />
+                <app.futured.donut.DonutProgressView
+                    android:id="@+id/dpvChart"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    app:donut_bgLineColor="?attr/colorSurface"
+                    app:donut_gapAngle="270"
+                    app:donut_gapWidth="0"
+                    app:donut_strokeWidth="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipSpecial"
-                style="@style/plazaChip"
-                android:layout_width="75dp"
-                android:layout_height="50dp"
-                android:enabled="false"
-                android:textColor="@color/donut_black_text"
-                app:chipBackgroundColor="@color/donut_special"
-                app:chipCornerRadius="10dp"
-                app:chipEndPadding="10dp"
-                app:chipIcon="@drawable/discapacitado2icon"
-                app:chipIconTint="@color/donut_black_text"
-                app:chipIconVisible="true"
-                app:chipStartPadding="10dp" />
+                <TextView
+                    android:id="@+id/donutText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/robotobold"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ProgressBar
+                    android:id="@+id/donut_progress_bar"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:indeterminate="true"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:orientation="vertical">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipCar"
+                    style="@style/plazaChip"
+                    android:layout_width="75dp"
+                    android:layout_height="50dp"
+                    android:enabled="false"
+                    android:textColor="@color/donut_white_text"
+                    app:chipBackgroundColor="@color/donut_car"
+                    app:chipCornerRadius="10dp"
+                    app:chipEndPadding="10dp"
+                    app:chipIcon="@drawable/car2icon"
+                    app:chipIconTint="@color/donut_white_text"
+                    app:chipIconVisible="true"
+                    app:chipStartPadding="10dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipMoto"
+                    style="@style/plazaChip"
+                    android:layout_width="75dp"
+                    android:layout_height="50dp"
+                    android:enabled="false"
+                    android:textColor="@color/donut_black_text"
+                    app:chipBackgroundColor="@color/donut_moto"
+                    app:chipCornerRadius="10dp"
+                    app:chipEndPadding="10dp"
+                    app:chipIcon="@drawable/moto2icon"
+                    app:chipIconTint="@color/donut_black_text"
+                    app:chipIconVisible="true"
+                    app:chipStartPadding="10dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipElectric"
+                    style="@style/plazaChip"
+                    android:layout_width="75dp"
+                    android:layout_height="50dp"
+                    android:enabled="false"
+                    android:textColor="@color/donut_black_text"
+                    app:chipBackgroundColor="@color/donut_electric"
+                    app:chipCornerRadius="10dp"
+                    app:chipEndPadding="10dp"
+                    app:chipIcon="@drawable/eelcric2icon"
+                    app:chipIconTint="@color/donut_black_text"
+                    app:chipIconVisible="true"
+                    app:chipStartPadding="10dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipSpecial"
+                    style="@style/plazaChip"
+                    android:layout_width="75dp"
+                    android:layout_height="50dp"
+                    android:enabled="false"
+                    android:textColor="@color/donut_black_text"
+                    app:chipBackgroundColor="@color/donut_special"
+                    app:chipCornerRadius="10dp"
+                    app:chipEndPadding="10dp"
+                    app:chipIcon="@drawable/discapacitado2icon"
+                    app:chipIconTint="@color/donut_black_text"
+                    app:chipIconVisible="true"
+                    app:chipStartPadding="10dp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="20dp" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="20dp" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
