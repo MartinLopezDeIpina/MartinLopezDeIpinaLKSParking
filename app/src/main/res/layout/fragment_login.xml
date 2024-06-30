@@ -24,6 +24,21 @@
         android:minHeight="600dp"
         >
 
+        <ProgressBar
+            android:id="@+id/login_top_progressbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@android:style/Widget.Material.ProgressBar.Horizontal"
+            android:indeterminate="true"
+            android:visibility="gone"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.00"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
 
         <TextView
             android:id="@+id/title"

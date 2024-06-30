@@ -62,6 +62,13 @@ public class LoginFragment extends Fragment {
 
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        binding.loginTopProgressbar.setVisibility(View.GONE);
+    }
+
     private void bindRegisterButton(){
         binding.createAccount.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(v);
@@ -70,6 +77,7 @@ public class LoginFragment extends Fragment {
     }
     private void bindLoginButton(){
         binding.loginButton.setOnClickListener(v -> {
+            binding.loginTopProgressbar.setVisibility(View.VISIBLE);
             String email = binding.loginEmailText.getText().toString();
             String password = binding.loginPasswordText.getText().toString();
             loginViewModel.loginUser(email, password);
@@ -138,7 +146,6 @@ public class LoginFragment extends Fragment {
                 if (logged) {
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
-
                 }
             }
         });
@@ -146,6 +153,7 @@ public class LoginFragment extends Fragment {
 
     private void observeLoginError(){
         loginViewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
+            binding.loginTopProgressbar.setVisibility(View.GONE);
             if (error == null) return;
             switch (error) {
                 case EMPTY_EMAIL:

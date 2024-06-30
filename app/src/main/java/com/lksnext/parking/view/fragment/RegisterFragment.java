@@ -60,6 +60,12 @@ public class RegisterFragment extends Fragment {
                 navController = Navigation.findNavController(view);
         }
 
+        @Override
+        public void onResume() {
+                super.onResume();
+                binding.registerTopProgressbar.setVisibility(View.GONE);
+        }
+
         private void bindReturnButton(){
                 binding.returning.setOnClickListener(v -> {
                         navController = Navigation.findNavController(v);
@@ -69,6 +75,7 @@ public class RegisterFragment extends Fragment {
 
         private void bindCreateAccountButton(){
                 binding.createAccountButton.setOnClickListener(v -> {
+                        binding.registerTopProgressbar.setVisibility(View.VISIBLE);
 
                         String user = binding.userInputText.getText().toString();
                         String password = binding.passwordInputText.getText().toString();
@@ -311,6 +318,7 @@ public class RegisterFragment extends Fragment {
                                         binding.termsError.setVisibility(View.VISIBLE);
                                         break;
                         }
+                        binding.registerTopProgressbar.setVisibility(View.GONE);
                 });
         }
 
