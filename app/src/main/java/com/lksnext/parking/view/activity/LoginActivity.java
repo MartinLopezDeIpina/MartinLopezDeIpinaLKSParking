@@ -111,7 +111,6 @@ public class LoginActivity extends BaseActivity implements LoginFragment.SignInH
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
-                                            // Sign in success, update UI with the signed-in user's information
                                             FirebaseUser user = mAuth.getCurrentUser();
                                             GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
                                             if (acct != null) {
@@ -139,10 +138,12 @@ public class LoginActivity extends BaseActivity implements LoginFragment.SignInH
                                             }else{
                                                 Log.w(TAG, "signInWithCredential:failure", task.getException());
                                                 Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                                binding.getRoot().findViewById(R.id.login_top_progressbar).setVisibility(View.GONE);
                                             }
                                         } else {
                                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                                             Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                            binding.getRoot().findViewById(R.id.login_top_progressbar).setVisibility(View.GONE);
                                         }
                                     }
                                 });
