@@ -79,6 +79,7 @@ xmlns:bind="http://schemas.android.com/tools">
             android:layout_width="wrap_content"
             />
         <include
+            android:id="@+id/hour_chip_10"
             layout="@layout/hour_chip"
             bind:hour='@{"10:00"}'
             android:layout_height="wrap_content"
@@ -104,6 +105,7 @@ xmlns:bind="http://schemas.android.com/tools">
             />
         <include
             layout="@layout/hour_chip"
+            android:id="@+id/hour_chip_14"
             bind:hour='@{"14:00"}'
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
