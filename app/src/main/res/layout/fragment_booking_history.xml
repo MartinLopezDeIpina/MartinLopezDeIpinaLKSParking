@@ -1,164 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<androidx.core.widget.NestedScrollView android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".view.fragment.BookingFragment">
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    android:fillViewport="true"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:minHeight="700dp"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.fragment.BookingFragment">
 
-    <TextView
-        android:id="@+id/heading"
-        style="@style/HeadingStyle"
-        android:text="@string/booking_history"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="0.02"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
-
-    <LinearLayout
-        android:id="@+id/sortingChips"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="0.15"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        >
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/fechaChip"
-            style="@style/sortingChip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/date"
-            app:chipMinHeight="40dp"
-            app:chipCornerRadius="15dp"
-            app:chipEndPadding="10dp"
-            app:chipStartPadding="10dp" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/horaChip"
-            style="@style/sortingChip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/time"
-            app:chipMinHeight="40dp"
-            app:chipCornerRadius="15dp"
-            app:chipStartPadding="10dp"
-            app:chipEndPadding="10dp"
-            />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/plazaChip"
-            style="@style/sortingChip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorOnSecondaryContainer"
-            android:text="@string/spot"
-            app:chipMinHeight="40dp"
-            app:chipCornerRadius="15dp"
-            app:chipEndPadding="10dp"
-            app:chipStartPadding="10dp" />
-        <com.google.android.material.chip.Chip
-            android:id="@+id/vehiculoChip"
-            style="@style/sortingChip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/vehicle"
-            app:chipMinHeight="40dp"
-            app:chipCornerRadius="15dp"
-            app:chipStartPadding="10dp"
-            app:chipEndPadding="10dp"
-            />
-    </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/commposed_book_container"
-        android:layout_width="325dp"
-        android:layout_height="186dp"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="0.3"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
-
-
-    <View
-        android:id="@+id/divider"
-        android:layout_width="340dp"
-        android:layout_height="1dp"
-        android:background="?attr/colorOutline"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="0.5"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/passed_bookings_recyclerView"
-        android:layout_width="325dp"
-        android:layout_height="342dp"
-        android:paddingBottom="5dp"
-        android:clipToPadding="false"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="0.93"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
-
-    <LinearLayout
-        android:visibility="gone"
-        android:id="@+id/no_passed_bookings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="0.7"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        >
-        <ImageView
-            android:id="@+id/no_passed_bookings_icon"
-            android:src="@drawable/book"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:tint="@color/color_icons"
-            />
         <TextView
-            android:textSize="25sp"
-            android:fontFamily="@font/robotobold"
-            android:layout_marginTop="20dp"
-            android:text="@string/no_passed_bookings"
+            android:id="@+id/heading"
+            style="@style/HeadingStyle"
+            android:text="@string/booking_history"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.02"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+        <LinearLayout
+            android:id="@+id/sortingChips"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/color_icons"
+            android:orientation="horizontal"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.15"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/fechaChip"
+                style="@style/sortingChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/date"
+                app:chipMinHeight="40dp"
+                app:chipCornerRadius="15dp"
+                app:chipEndPadding="10dp"
+                app:chipStartPadding="10dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/horaChip"
+                style="@style/sortingChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/time"
+                app:chipMinHeight="40dp"
+                app:chipCornerRadius="15dp"
+                app:chipStartPadding="10dp"
+                app:chipEndPadding="10dp"
+                />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/plazaChip"
+                style="@style/sortingChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorOnSecondaryContainer"
+                android:text="@string/spot"
+                app:chipMinHeight="40dp"
+                app:chipCornerRadius="15dp"
+                app:chipEndPadding="10dp"
+                app:chipStartPadding="10dp" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/vehiculoChip"
+                style="@style/sortingChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/vehicle"
+                app:chipMinHeight="40dp"
+                app:chipCornerRadius="15dp"
+                app:chipStartPadding="10dp"
+                app:chipEndPadding="10dp"
+                />
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/commposed_book_container"
+            android:layout_width="325dp"
+            android:layout_height="186dp"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.29"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             />
 
 
-    </LinearLayout>
-    <ProgressBar
-        android:id="@+id/passed_bookings_progressbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:visibility="visible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/no_passed_bookings"
-        app:layout_constraintBottom_toBottomOf="@id/no_passed_bookings" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <View
+            android:id="@+id/divider"
+            android:layout_width="340dp"
+            android:layout_height="1dp"
+            android:background="?attr/colorOutline"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/passed_bookings_recyclerView"
+            android:layout_width="325dp"
+            android:layout_height="342dp"
+            android:paddingBottom="5dp"
+            android:clipToPadding="false"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.93"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/no_passed_bookings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.7"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+            <ImageView
+                android:id="@+id/no_passed_bookings_icon"
+                android:src="@drawable/book"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:tint="@color/color_icons"
+                />
+            <TextView
+                android:textSize="25sp"
+                android:fontFamily="@font/robotobold"
+                android:layout_marginTop="20dp"
+                android:text="@string/no_passed_bookings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_icons"
+                />
+
+
+        </LinearLayout>
+        <ProgressBar
+            android:id="@+id/passed_bookings_progressbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/no_passed_bookings"
+            app:layout_constraintBottom_toBottomOf="@id/no_passed_bookings" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
