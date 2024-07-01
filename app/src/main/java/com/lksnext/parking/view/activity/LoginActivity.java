@@ -110,36 +110,38 @@ public class LoginActivity extends BaseActivity implements LoginFragment.SignInH
                                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
+                                        //Si sacar los datos desde la cuenta de google no funciona se sacan desde acct, sino pues se ponen a ""
+                                        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
                                         if (task.isSuccessful()) {
-                                            FirebaseUser user = mAuth.getCurrentUser();
-                                            GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-                                            if (acct != null) {
-
-                                                String emailUsuario = acct.getEmail();
-                                                String uid = mAuth.getUid();
-                                                LiveData<Boolean> exists = DataBaseManager.getInstance().getUserExists(emailUsuario);
-                                                exists.observe(LoginActivity.this, userExists -> {
-                                                    if (!userExists) {
-                                                        //Para tener los datos de los usuarios de firebase en la base de datos
-                                                        String name = acct.getDisplayName();
-                                                        Usuario usuario = new Usuario(uid, name, emailUsuario, "");
-
-                                                        LiveData<Boolean> registered = DataBaseManager.getInstance().addUserToDB(usuario);
-                                                        registered.observe(LoginActivity.this, registeredUser -> {
-                                                            if (registeredUser) {
-                                                                loginViewModel.setIsLogged(true);
-                                                            }
-                                                        });
-                                                    }else{
-                                                        loginViewModel.setIsLogged(true);
-                                                    }
-                                                });
-
-                                            }else{
-                                                Log.w(TAG, "signInWithCredential:failure", task.getException());
-                                                Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                                                binding.getRoot().findViewById(R.id.login_top_progressbar).setVisibility(View.GONE);
+                                            String uuid = mAuth.getCurrentUser().getUid();
+                                            String email = mAuth.getCurrentUser().getEmail();
+                                            if(email == null){
+                                               email = acct.getEmail();
+                                               if(email == null){
+                                                   email = "";
+                                               }
                                             }
+                                            String name = mAuth.getCurrentUser().getDisplayName();
+                                            if(name == null){
+                                                name = acct.getDisplayName();
+                                                if(name == null){
+                                                    name = "";
+                                                }
+                                            }
+                                            Usuario usuario = new Usuario(uuid, name, email, "");
+                                            LiveData<Boolean> exists = DataBaseManager.getInstance().getUserExists(uuid);
+                                            exists.observe(LoginActivity.this, userExists -> {
+                                                if (!userExists) {
+                                                    LiveData<Boolean> registered = DataBaseManager.getInstance().addUserToDB(usuario);
+                                                    registered.observe(LoginActivity.this, registeredUser -> {
+                                                        if (registeredUser) {
+                                                            loginViewModel.setIsLogged(true);
+                                                        }
+                                                    });
+                                                }else{
+                                                    loginViewModel.setIsLogged(true);
+                                                }
+                                            });
                                         } else {
                                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                                             Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
