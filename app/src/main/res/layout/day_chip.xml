@@ -27,6 +27,8 @@
         </TextView>
         <com.google.android.material.chip.Chip
             android:id="@+id/chip"
+            android:minWidth="40dp"
+            android:textAlignment="center"
             style="@style/dateChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
