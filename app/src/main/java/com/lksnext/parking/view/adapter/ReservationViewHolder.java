@@ -15,7 +15,6 @@ import com.lksnext.parking.domain.TipoPlaza;
 import com.lksnext.parking.view.activity.MainActivity;
 import com.lksnext.parking.view.activity.OnDeleteClickListener;
 import com.lksnext.parking.view.activity.OnEditClickListener;
-import com.lksnext.parking.view.fragment.DeleteBookingDialogFragment;
 
 import java.util.ArrayList;
 

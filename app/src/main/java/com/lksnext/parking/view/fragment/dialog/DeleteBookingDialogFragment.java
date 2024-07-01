@@ -1,4 +1,4 @@
-package com.lksnext.parking.view.fragment;
+package com.lksnext.parking.view.fragment.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

@@ -529,6 +529,7 @@ private FragmentAddBookingBinding binding;
             return true;
         }
 
+
         String hourToCheck = bookViewModel.getLastSelectedHour();
         if(bookViewModel.getSelectedHora1().getValue() == null){
             hourToCheck = bookViewModel.getSelectedHora2().getValue();
@@ -587,6 +588,10 @@ private FragmentAddBookingBinding binding;
         Integer[] indexes = getHoursIndexes(hour1, hour2);
         int hour1Index = indexes[0];
         int hour2Index = indexes[1];
+
+        if(Math.abs(hour1Index - hour2Index) > 9){
+            return false;
+        }
 
         boolean available = true;
         for(int i = hour1Index; i <= hour2Index; i++){

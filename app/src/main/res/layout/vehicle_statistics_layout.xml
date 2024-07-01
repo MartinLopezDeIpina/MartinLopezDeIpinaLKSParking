@@ -49,9 +49,10 @@
                 android:layout_marginStart="40dp"
                 />
             <TextView
+                android:id="@+id/numberTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{number}"
+                android:text="0"
                 style="@style/ProfileInfo"
                 app:layout_constraintStart_toStartOf="@id/vehicleNameTextView"
                 app:layout_constraintTop_toTopOf="parent"

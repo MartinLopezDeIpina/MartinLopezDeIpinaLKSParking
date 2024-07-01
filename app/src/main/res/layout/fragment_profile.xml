@@ -7,7 +7,17 @@
             type="com.lksnext.parking.viewmodel.MainViewModel" />
     </data>
 
+
+
+    <androidx.core.widget.NestedScrollView app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:fillViewport="true"
+        >
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:minHeight="700dp"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -110,22 +120,24 @@
                 >
             </TextView>
 
-            <!--TODO: poner estos con los datos reales del modelo-->
             <include
+                android:id="@+id/coche_num"
                 layout="@layout/vehicle_statistics_layout"
-                bind:number='@{"3"}'
+                bind:number='@{"0"}'
                 bind:vehicleName='@{"Coche"}'
                 bind:vehicleIcon="@{@drawable/cocheicono}"
                 >
             </include>
             <include
+                android:id="@+id/moto_num"
                 layout="@layout/vehicle_statistics_layout"
-                bind:number='@{"1"}'
+                bind:number='@{"0"}'
                 bind:vehicleName='@{"Moto"}'
                 bind:vehicleIcon="@{@drawable/motoicono}"
                 >
             </include>
             <include
+                android:id="@+id/electrico_num"
                 layout="@layout/vehicle_statistics_layout"
                 bind:number='@{"0"}'
                 bind:vehicleName='@{"Electrico"}'
@@ -133,6 +145,7 @@
                 >
             </include>
             <include
+                android:id="@+id/especial_num"
                 layout="@layout/vehicle_statistics_layout"
                 bind:number='@{"0"}'
                 bind:vehicleName='@{"Especial"}'
@@ -157,12 +170,12 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     />
-                <!--TODO: poner estos con los datos reales del modelo-->
                 <TextView
+                    android:id="@+id/totalNumberTextView"
                     style="@style/ProfileInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="4"
+                    android:text="0"
                     app:layout_constraintStart_toStartOf="@id/totalTextView"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -172,5 +185,6 @@
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>
 

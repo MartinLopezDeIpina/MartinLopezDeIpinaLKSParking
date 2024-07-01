@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "298070462578",
+    "firebase_url": "https://martinlopezdeipinalksparking-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "martinlopezdeipinalksparking",
     "storage_bucket": "martinlopezdeipinalksparking.appspot.com"
   },
@@ -12,7 +13,12 @@
           "package_name": "com.lksnext.parking"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "298070462578-4fbr1vkdb67o6ubujl9fim7o9afm5s80.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCEczR9v97v1TICpQMx9oUKyeM06hwsg1o"
@@ -20,7 +26,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "298070462578-4fbr1vkdb67o6ubujl9fim7o9afm5s80.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

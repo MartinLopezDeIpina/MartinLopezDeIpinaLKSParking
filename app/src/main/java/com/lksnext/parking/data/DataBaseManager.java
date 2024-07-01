@@ -50,8 +50,12 @@ public class DataBaseManager {
     }
 
 
-    public void addUserToDB(Usuario usuario){
-        db.collection("usuario").document(usuario.getID()).set(usuario);
+    public LiveData<Boolean> addUserToDB(Usuario usuario){
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+        db.collection("usuario").document(usuario.getID()).set(usuario)
+                .addOnSuccessListener(aVoid -> result.setValue(true))
+                .addOnFailureListener(e -> result.setValue(false));
+        return result;
     }
     public void addSpotToDB(Plaza plaza){
         db.collection("plaza").document(Long.toString(plaza.getId())).set(plaza);
@@ -387,10 +391,10 @@ public class DataBaseManager {
         return result;
     }
 
-    public LiveData<Boolean> getUserExists(String email) {
+    public LiveData<Boolean> getUserExists(String uuid) {
         MutableLiveData<Boolean> result = new MutableLiveData<>();
         db.collection("usuario")
-                .whereEqualTo("email", email)
+                .whereEqualTo("id", uuid)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -402,4 +406,6 @@ public class DataBaseManager {
                 });
         return result;
     }
+
+
 }
